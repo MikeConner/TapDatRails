@@ -1,47 +1,31 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.18'
-gem 'pg'
-gem 'devise'
+gem 'pg', '0.17.1'
+gem 'devise', '2.2.8'
 
-gem 'activeadmin'
+gem 'activeadmin', '0.6.0'
 gem 'meta_search', '>= 1.1.0.pre' # activeadmin needs this if Rails >= 3.1
 gem 'haml', '4.0.5'
 gem 'haml-rails', '0.4'
 
-
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
-
-
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
-
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer', :platforms => :ruby
-
-  gem 'uglifier', '>= 1.0.3'
+  gem 'sass-rails', '3.2.6'
+  gem 'coffee-rails', '3.2.2'
+  gem 'uglifier', '2.5.3'
 end
 
-gem 'jquery-rails'
+gem 'jquery-rails', '3.1.2'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
+gem 'thin', '1.6.2'
 
-# Use unicorn as the app server
-# gem 'unicorn'
-
-gem 'thin', '1.5.1'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger
-# gem 'debugger'
+group :development, :test do
+  gem 'annotate', '2.6.1'
+  gem 'better_errors', '1.1.0'
+  gem 'binding_of_caller', '0.7.2'
+end

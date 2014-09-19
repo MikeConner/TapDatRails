@@ -1,0 +1,31 @@
+# == Schema Information
+#
+# Table name: transactions
+#
+#  id             :integer          not null, primary key
+#  user_id        :integer
+#  nfc_tag_id     :integer
+#  payload_id     :integer
+#  dest_id        :integer
+#  satoshi_amount :integer
+#  dollar_amount  :integer
+#  comment        :string(255)
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  source_id: 1
+  dest_id: 1
+  satoshi_amount: 1
+  dollar_amount: 1
+  comment: MyString
+
+two:
+  source_id: 1
+  dest_id: 1
+  satoshi_amount: 1
+  dollar_amount: 1
+  comment: MyString
