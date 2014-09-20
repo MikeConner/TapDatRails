@@ -5,38 +5,23 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-Nickname.create(:column => 1, :word => 'Whip')
-Nickname.create(:column => 1, :word => 'Beef')
-Nickname.create(:column => 1, :word => 'Punt')
-Nickname.create(:column => 1, :word => 'Splint')
-Nickname.create(:column => 1, :word => 'Dick')
-Nickname.create(:column => 1, :word => 'Smash')
-Nickname.create(:column => 1, :word => 'Rick')
-Nickname.create(:column => 1, :word => 'Fridge')
-Nickname.create(:column => 1, :word => 'Stag')
-Nickname.create(:column => 1, :word => 'Rod')
-Nickname.create(:column => 1, :word => 'Thrush')
-Nickname.create(:column => 1, :word => 'Butch')
-Nickname.create(:column => 1, :word => 'Savage')
-Nickname.create(:column => 1, :word => 'Thrust')
-Nickname.create(:column => 1, :word => 'Touch')
-Nickname.create(:column => 1, :word => 'Fist')
 
-Nickname.create(:column => 2, :word => 'SquatThrust')
-Nickname.create(:column => 2, :word => 'McBrothRun')
-Nickname.create(:column => 2, :word => 'PlankSplint')
-Nickname.create(:column => 2, :word => 'ManlyButt')
-Nickname.create(:column => 2, :word => 'McFistSquat')
-Nickname.create(:column => 2, :word => 'McLargeStag')
-Nickname.create(:column => 2, :word => 'HackPec')
-Nickname.create(:column => 2, :word => 'McNeckGnaw')
-Nickname.create(:column => 2, :word => 'QuadsBlow')
-Nickname.create(:column => 2, :word => 'AbsHair')
-Nickname.create(:column => 2, :word => 'BrothLift')
-Nickname.create(:column => 2, :word => 'ManTooth')
-Nickname.create(:column => 2, :word => 'HardMeat')
-Nickname.create(:column => 2, :word => 'VanderSmash')
-Nickname.create(:column => 2, :word => 'HunkyBeef')
-Nickname.create(:column => 2, :word => 'McSlamBulk')
-Nickname.create(:column => 2, :word => 'SmackDown')
-Nickname.create(:column => 2, :word => 'BuffMeat')
+require 'nickname_generator'
+
+# Assuming tough guy generator, which doesn't need external files to intiialize
+raise 'Column assumption violated' if NICKNAME_GENERATORS[NicknameGenerator::TOUGH_GENERATOR].nil?
+
+first_name_col = NICKNAME_GENERATORS[NicknameGenerator::TOUGH_GENERATOR].min
+last_name_col = NICKNAME_GENERATORS[NicknameGenerator::TOUGH_GENERATOR].max
+
+raise 'Invalid range' if first_name_col == last_name_col
+
+Nickname.where(:column => first_name_col).delete_all
+Nickname.where(:column => last_name_col).delete_all
+
+100.times do
+  @first, @last = NicknameGenerator.generate_tough_guy.split
+  
+  Nickname.create!(:column => first_name_col, :word => @first)
+  Nickname.create!(:column => last_name_col, :word => @last)
+end

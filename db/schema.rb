@@ -32,8 +32,6 @@ ActiveRecord::Schema.define(:version => 20140920042814) do
     t.datetime "updated_at", :null => false
   end
 
-  add_index "nicknames", ["word"], :name => "index_nicknames_on_word", :unique => true
-
   create_table "opportunities", :force => true do |t|
     t.string   "name"
     t.string   "email",      :null => false

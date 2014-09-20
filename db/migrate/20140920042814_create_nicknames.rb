@@ -6,7 +6,8 @@ class CreateNicknames < ActiveRecord::Migration
 
       t.timestamps
     end
-    
-    add_index :nicknames, :word, :unique => true
+
+    # Don't constraint with an index. They don't have to be unique.
+    # Often they will be (as with the generic generator), but for some we might want to use a smaller subset and use duplicates to indicate frequency    
   end
 end
