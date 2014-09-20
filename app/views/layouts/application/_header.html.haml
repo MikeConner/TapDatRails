@@ -1,0 +1,19 @@
+%nav.top-bar{class: 'white-header'}
+  %ul.title-area
+    %li.name
+      %h1= link_to(image_tag("TapDatLogo.png", :style => 'width:150px; padding-top:18px;'), root_path)
+    %li.toggle-topbar.menu-icon
+      %a{:href => "#"}
+        %span Menu
+  %section.top-bar-section
+    %ul.left
+    %ul.right
+      %li= link_to 'How it works', how_it_works_path
+      %li= link_to 'Contact Us', contact_path
+      %li
+        - if current_user.nil?
+          = link_to 'Log In', new_user_session_path
+        - else
+          %li
+            = link_to 'Log Out', destroy_user_session_path, :method => :delete
+= render :partial => 'shared/flash_messages'
