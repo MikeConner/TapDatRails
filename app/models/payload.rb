@@ -15,4 +15,15 @@ class Payload < ActiveRecord::Base
   attr_accessible :content, :threshold, :uri
   
   belongs_to :nfc_tag
+  
+  validates :threshold, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
+  
+  validate :has_content
+  
+private
+  def has_content
+    if self.uri.blank? and self.content.blank?
+      self.errors.add :base, I18n.t('empty_payload')
+    end
+  end
 end

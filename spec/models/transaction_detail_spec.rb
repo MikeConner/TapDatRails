@@ -1,0 +1,63 @@
+# == Schema Information
+#
+# Table name: transaction_details
+#
+#  id              :integer          not null, primary key
+#  transaction_id  :integer
+#  subject_id      :integer          not null
+#  target_id       :integer          not null
+#  credit_satoshi  :integer
+#  debit_satoshi   :integer
+#  conversion_rate :decimal(, )      not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#
+
+describe TransactionDetail do
+  let(:user) { FactoryGirl.create(:user) }
+  let(:other) { FactoryGirl.create(:user) }
+  let(:tag) { FactoryGirl.create(:nfc_tag, :user => other) }
+  let(:payload) { FactoryGirl.create(:payload, :nfc_tag => tag) }
+  let(:transaction) { FactoryGirl.create(:transaction, :user => user, :dest_id => other.id, :nfc_tag => tag, :payload => payload) }
+  let(:detail) { FactoryGirl.create(:transaction_detail, :transaction => transaction, :subject_id => user.id, :target_id => other.id) }
+  
+  subject { detail }
+  
+  it "should respond to everything" do
+    detail.should respond_to(:credit_satoshi)
+    detail.should respond_to(:debit_satoshi)  
+    detail.should respond_to(:conversion_rate)  
+  end
+  
+  its(:transaction) { should be == transaction }
+  it { should be_valid }
+  
+  describe "missing subject" do
+    before { detail.subject_id = nil }
+    
+    it { should_not be_valid }
+  end
+  
+  describe "missing target" do
+    before { detail.target_id = nil }
+    
+    it { should_not be_valid }
+  end
+  
+  describe "Invalid conversion rate" do
+    [-1, 0, 'abc', nil].each do |rate|
+      before { detail.conversion_rate = rate }
+      
+      it { should_not be_valid }
+    end
+  end
+
+  describe "No amount at all" do
+    before do
+      detail.credit_satoshi = nil
+      detail.debit_satoshi = nil
+    end
+    
+    it { should_not be_valid }
+  end
+end

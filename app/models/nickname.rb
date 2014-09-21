@@ -3,8 +3,8 @@
 # Table name: nicknames
 #
 #  id         :integer          not null, primary key
-#  column     :integer
-#  word       :string(255)
+#  column     :integer          not null
+#  word       :string(255)      not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

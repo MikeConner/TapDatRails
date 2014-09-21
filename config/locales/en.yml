@@ -2,4 +2,11 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  already_logged_in: 'User already logged in'
+  auth_token_not_found: 'Authentication token not recognized'
+  empty_payload: 'Payload has no content'
+  invalid_auth_token: 'Invalid authentication token'
+  invalid_transaction_amt: 'No transaction amount specified'
+  missing_phone_secret: 'Phone secret key missing'
+  missing_argument: "Missing argument: %{arg}"
+  no_generator: 'Generator has no names'

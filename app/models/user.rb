@@ -17,13 +17,15 @@
 #  authentication_token   :string(255)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
-#  phone_secret_key       :string(16)
+#  phone_secret_key       :string(16)       not null
 #  inbound_btc_address    :string(255)
 #  outbound_btc_address   :string(255)
-#  satoshi_balance        :integer
+#  satoshi_balance        :integer          default(0), not null
 #
 
 class User < ActiveRecord::Base
+  include ApplicationHelper
+
   before_save :ensure_authentication_token
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -31,11 +33,21 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :token_authenticatable
 
+  # SNL Skit; Google it
+  UNKNOWN_EMAIL_DOMAIN = '@clownpenis.fart'
+  SECRET_KEY_LEN = 16
+  
   # Setup accessible (or protected) attributes for your model
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me, 
-                  :inbound_btc_address, :outbound_btc_address   
+                  :inbound_btc_address, :outbound_btc_address, :phone_secret_key   
                   
   has_many :nfc_tags, :dependent => :destroy
   has_many :transactions, :dependent => :restrict 
-  has_many :transaction_details, :through => :transactions              
+  has_many :transaction_details, :through => :transactions   
+  
+  validates :email, :uniqueness => { case_sensitive: false },
+                    :format => { with: EMAIL_REGEX }
+  validates_presence_of :name
+  validates :phone_secret_key, :presence => true, :length => { :maximum => SECRET_KEY_LEN }
+  validates :satoshi_balance, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }         
 end

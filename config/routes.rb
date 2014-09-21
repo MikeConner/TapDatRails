@@ -21,4 +21,14 @@ TapDatRails::Application.routes.draw do
       get 'tasks' => 'tasks#index', :as => 'tasks'
     end
   end
+  
+  namespace :mobile do
+    api :version => 1, :module => "v1" do
+      resources :sessions, :only => [:create, :destroy]      
+      resources :registrations, :only => [:create]   
+      resources :users, :only => [:show, :update] do
+        put 'reset_nickname', :on => :collection
+      end   
+    end    
+  end  
 end

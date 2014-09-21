@@ -19,12 +19,14 @@ module NicknameGenerator
   
   # single_words_only guards against excessively long nicknames; if set, it will filter out multi-word terms
   def self.generate_nickname(generator_name = DEFAULT_GENERATOR, single_words_only = true)
-    load_nicknames if @@nicknames.nil?
+    load_nicknames if @@nicknames.nil? or @@nicknames.empty?
     
     raise ArgumentError.new('Unknown Nickname Generator') unless NICKNAME_GENERATORS.has_key?(generator_name)
-      
+       
     words = []
     for n in NICKNAME_GENERATORS[generator_name] do
+      raise 'Generator has no names' if @@nicknames[n].nil? or (0 == @@nicknames[n].count)
+      
       attempts = 0 # Make sure there's no infinite loop; it's possible there aren't any single words (data-dependent)
       begin
         next_name = @@nicknames[n][Random.rand(@@nicknames[n].count)] 
@@ -47,6 +49,11 @@ module NicknameGenerator
     "#{@@first_names[Random.rand(@@first_names.count)]} #{@@last_names[r1]}#{@@last_names[r2]}"
   end
 
+  # Used for testing
+  def self.reset
+    @@nicknames = nil if Rails.env.test?
+  end
+  
 private
   @@first_names = ['Biff', 'Blake', 'Chuck', 'Slab', 'Beef', 'Dirk', 'Brock', 'Brent', 'Norris', 'Bram', 'Hank', 
                    'Denzel', 'Gunner', 'Harley', 'Heath', 'Kip', 'Kolt', 'Locke', 'Mick', 'Nick', 'Pierce', 'Rex',

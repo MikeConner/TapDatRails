@@ -22,4 +22,18 @@ class Transaction < ActiveRecord::Base
   belongs_to :payload
   
   has_many :transaction_details, :dependent => :destroy
+  
+  validates_presence_of :user_id
+  validates_presence_of :dest_id
+  validates :satoshi_amount, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0}, :allow_nil => true
+  validates :dollar_amount, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0}, :allow_nil => true
+  
+  validate :has_amount
+
+private
+  def has_amount
+    if self.satoshi_amount.nil? and self.dollar_amount.nil?
+      self.errors.add :base, I18n.t('invalid_transaction_amt')
+    end
+  end
 end

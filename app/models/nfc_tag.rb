@@ -18,4 +18,7 @@ class NfcTag < ActiveRecord::Base
   belongs_to :user
   
   has_many :payloads, :dependent => :destroy
+  
+  validates_presence_of :tag_id
+  validates :lifetime_balance, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0}
 end

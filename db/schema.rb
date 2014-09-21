@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140920042814) do
+ActiveRecord::Schema.define(:version => 20140921043827) do
 
   create_table "nfc_tags", :force => true do |t|
     t.integer  "user_id"
@@ -109,14 +109,15 @@ ActiveRecord::Schema.define(:version => 20140920042814) do
     t.string   "authentication_token"
     t.datetime "created_at",                                           :null => false
     t.datetime "updated_at",                                           :null => false
-    t.string   "phone_secret_key",       :limit => 16
+    t.string   "phone_secret_key",       :limit => 16,                 :null => false
     t.string   "inbound_btc_address"
     t.string   "outbound_btc_address"
-    t.integer  "satoshi_balance"
+    t.integer  "satoshi_balance",                      :default => 0,  :null => false
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+  add_index "users", ["phone_secret_key"], :name => "index_users_on_phone_secret_key", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
 end

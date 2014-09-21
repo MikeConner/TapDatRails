@@ -17,4 +17,17 @@ class TransactionDetail < ActiveRecord::Base
   attr_accessible :conversion_rate, :credit_satoshi, :debit_satoshi, :subject_id, :target_id
   
   belongs_to :transaction
+  
+  validates_presence_of :subject_id
+  validates_presence_of :target_id
+  validates :conversion_rate, :numericality => { :greater_than => 0 }
+  
+  validate :has_amount
+  
+private
+  def has_amount
+    if self.credit_satoshi.nil? and self.debit_satoshi.nil?
+      self.errors.add :base, I18n.t('invalid_transaction_amt')
+    end
+  end
 end

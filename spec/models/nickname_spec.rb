@@ -3,8 +3,8 @@
 # Table name: nicknames
 #
 #  id         :integer          not null, primary key
-#  column     :integer
-#  word       :string(255)
+#  column     :integer          not null
+#  word       :string(255)      not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
@@ -39,13 +39,5 @@ describe Nickname do
     before { nickname.word = ' ' }
     
     it { should_not be_valid }
-  end
-  
-  describe "duplicate" do
-    before { @dup = nickname.dup }
-    
-    it "should not save" do
-      expect { @dup.save! }.to raise_exception(ActiveRecord::RecordNotUnique)
-    end
   end
 end
