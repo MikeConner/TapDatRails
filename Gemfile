@@ -28,9 +28,11 @@ gem 'jquery-rails', '3.1.2'
 
 gem 'thin', '1.6.2'
 
+# Move into dev/test when we no longer need fake Bitcoin addresses
+gem 'faker', '1.4.2'
+
 group :development, :test do
   gem 'rspec-rails', '2.13.1'
-  gem 'faker', '1.4.2'
   gem 'annotate', '2.6.1'
   gem 'better_errors', '1.1.0'
   gem 'binding_of_caller', '0.7.2'

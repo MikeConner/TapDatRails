@@ -41,6 +41,7 @@ describe Mobile::V1::RegistrationsController, :type => :controller do
       subject.current_user.email.should be == email
       subject.current_user.name.should be == nickname
       subject.current_user.phone_secret_key.should be == secret_key
+      subject.current_user.inbound_btc_address.should_not be_nil
       
       result = JSON.parse(response.body)
       result['response'].keys.include?('nickname').should be_true

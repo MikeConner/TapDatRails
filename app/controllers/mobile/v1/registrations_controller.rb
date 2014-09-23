@@ -13,6 +13,8 @@ class Mobile::V1::RegistrationsController < ApiController
                               :password => password, 
                               :password_confirmation => password, 
                               :name => name,
+                              # Temporarily create with a bitcoin address
+                              :inbound_btc_address => Faker::Bitcoin.address,
                               :phone_secret_key => params[:user][:phone_secret_key])                             
           sign_in user
 
