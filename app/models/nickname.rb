@@ -9,6 +9,15 @@
 #  updated_at :datetime         not null
 #
 
+# CHARTER
+#   Class to store the raw data for nickname generators. The nicknames table consists of n columns of words/phrases.
+# A generator is defined by a range of columns (e.g., 1..2, 17..19); a nickname consists of the concatenation of 
+# one word drawn at random from each of the specified columns.
+#
+# USAGE
+#
+# NOTES AND WARNINGS
+#
 class Nickname < ActiveRecord::Base
   attr_accessible :column, :word
   

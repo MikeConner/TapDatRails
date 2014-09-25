@@ -11,6 +11,7 @@
 #  conversion_rate :decimal(, )      not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  currency        :string(16)       default("USD"), not null
 #
 
 describe TransactionDetail do
@@ -27,6 +28,7 @@ describe TransactionDetail do
     detail.should respond_to(:credit_satoshi)
     detail.should respond_to(:debit_satoshi)  
     detail.should respond_to(:conversion_rate)  
+    detail.should respond_to(:currency)  
   end
   
   its(:transaction) { should be == transaction }
@@ -40,6 +42,18 @@ describe TransactionDetail do
   
   describe "missing target" do
     before { detail.target_id = nil }
+    
+    it { should_not be_valid }
+  end
+  
+  describe "missing currency" do
+    before { detail.currency = nil }
+    
+    it { should_not be_valid }
+  end
+  
+  describe "currency too long" do
+    before { detail.currency = '$'*(TransactionDetail::MAX_CURRENCY_LEN + 1) }
     
     it { should_not be_valid }
   end

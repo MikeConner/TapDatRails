@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140921043827) do
+ActiveRecord::Schema.define(:version => 20140924233316) do
 
   create_table "nfc_tags", :force => true do |t|
     t.integer  "user_id"
@@ -66,13 +66,14 @@ ActiveRecord::Schema.define(:version => 20140921043827) do
 
   create_table "transaction_details", :force => true do |t|
     t.integer  "transaction_id"
-    t.integer  "subject_id",      :null => false
-    t.integer  "target_id",       :null => false
+    t.integer  "subject_id",                                       :null => false
+    t.integer  "target_id",                                        :null => false
     t.integer  "credit_satoshi"
     t.integer  "debit_satoshi"
-    t.decimal  "conversion_rate", :null => false
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.decimal  "conversion_rate",                                  :null => false
+    t.datetime "created_at",                                       :null => false
+    t.datetime "updated_at",                                       :null => false
+    t.string   "currency",        :limit => 16, :default => "USD", :null => false
   end
 
   add_index "transaction_details", ["subject_id"], :name => "index_transaction_details_on_subject_id"

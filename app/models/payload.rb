@@ -11,6 +11,14 @@
 #  updated_at :datetime         not null
 #
 
+# CHARTER
+#   Define the "reward" for tapping at or above a given threshold
+#
+# USAGE
+#   
+# NOTES AND WARNINGS
+#   Content is either a URI or text (or both)
+#
 class Payload < ActiveRecord::Base
   attr_accessible :content, :threshold, :uri
   

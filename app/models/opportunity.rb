@@ -10,6 +10,14 @@
 #  updated_at :datetime         not null
 #
 
+# CHARTER
+#   Capture emails for later spamming.
+#
+# USAGE
+#   Location and name are optional; store if given.
+#
+# NOTES AND WARNINGS
+#
 class Opportunity < ActiveRecord::Base
   include ApplicationHelper
   

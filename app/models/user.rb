@@ -23,6 +23,17 @@
 #  satoshi_balance        :integer          default(0), not null
 #
 
+# CHARTER
+#   Encapsulate a TapDat user (web or mobile)
+#
+# USAGE
+#  There is a 16-character phone secret key, which needs to be generated on the phone and passed in. Upon success, devise will generate
+# an authentication token.
+#
+# NOTES AND WARNINGS
+#   Authenticates by token, through devise (not email/password). Email can be set by the user, but defaults to an auto-generated one
+# in a fake "UNKNOWN_EMAIL_DOMAIN". 
+#
 class User < ActiveRecord::Base
   include ApplicationHelper
 

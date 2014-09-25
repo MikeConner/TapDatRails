@@ -10,7 +10,9 @@ FactoryGirl.define do
   sequence(:random_word) { |n| Faker::Lorem.word }
   sequence(:random_url) { |n| "http://www." + Faker::Internet.domain_name }
   sequence(:random_sentences) { |n| Faker::Lorem.sentences.join(' ') }
-
+  sequence(:random_bitcoin_address) { |n| Faker::Bitcoin.address }
+  sequence(:sequential_tag) { |n| "Tag #{n}"}
+  
   factory :opportunity do
     email { generate(:random_email) }
     name { generate(:random_name) }
@@ -27,8 +29,8 @@ FactoryGirl.define do
     email { generate(:random_email) }
     password { generate(:random_phrase) }
     phone_secret_key { SecureRandom.hex(8) }
-    inbound_btc_address { SecureRandom.hex(16) }
-    outbound_btc_address { SecureRandom.hex(16) }
+    inbound_btc_address { generate(:random_bitcoin_address) }
+    outbound_btc_address { generate(:random_bitcoin_address) }
     satoshi_balance { (SecureRandom.random_number * 10000000).round }
     
     factory :user_with_tags do
@@ -100,7 +102,8 @@ FactoryGirl.define do
   factory :nfc_tag do
     user
     
-    tag_id { SecureRandom.uuid }
+    tag_id { SecureRandom.hex(5) }
+    name "Tag name"
     
     factory :nfc_tag_with_payloads do
       ignore do

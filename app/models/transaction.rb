@@ -14,6 +14,14 @@
 #  updated_at     :datetime         not null
 #
 
+# CHARTER
+#   Summary record of a bitcoin transaction.
+#
+# USAGE
+#   Details are recorded in a separate dependent model (credits and debits)
+#
+# NOTES AND WARNINGS
+#
 class Transaction < ActiveRecord::Base
   attr_accessible :comment, :dest_id, :dollar_amount, :satoshi_amount, :source_id
   

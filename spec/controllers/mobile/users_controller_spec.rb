@@ -132,7 +132,7 @@ describe Mobile::V1::UsersController, :type => :controller do
     end
     
     it "creates session successfully" do
-      put :reset_nickname, :version => 1, :id => 0, :auth_token => user.authentication_token
+      put :reset_nickname, :version => 1, :auth_token => user.authentication_token
       
       subject.current_user.should_not be_nil
       subject.current_user.name.should_not be_blank
@@ -144,5 +144,5 @@ describe Mobile::V1::UsersController, :type => :controller do
       result['response']['nickname'].should_not be == @old_name
       result.keys.include?('error').should be_false
     end
-  end  
+  end    
 end

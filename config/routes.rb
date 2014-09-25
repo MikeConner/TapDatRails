@@ -29,6 +29,7 @@ TapDatRails::Application.routes.draw do
       resources :users, :only => [:show, :update] do
         put 'reset_nickname', :on => :collection
       end   
+      resources :nfc_tags, :only => [:create, :update, :index]
     end    
   end  
 end

@@ -9,4 +9,5 @@ en:
   invalid_transaction_amt: 'No transaction amount specified'
   missing_phone_secret: 'Phone secret key missing'
   missing_argument: "Missing argument: %{arg}"
+  object_not_found: "%{obj} not found!"
   no_generator: 'Generator has no names'
