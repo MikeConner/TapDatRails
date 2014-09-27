@@ -37,4 +37,18 @@ class NfcTag < ActiveRecord::Base
   def legible_id
     10 == self.tag_id.length ? "#{self.tag_id[0..2]}-#{self.tag_id[3..5]}-#{self.tag_id[6..9]}" : self.tag_id
   end
+  
+  def find_payload(amount)
+    # Return a payload given an amount (by threshold)
+    result = self.payloads.order(:threshold).first
+    
+    self.payloads.order('threshold DESC').each do |payload|
+      if amount >= payload.threshold
+        result = payload
+        break
+      end
+    end
+    
+    result
+  end
 end

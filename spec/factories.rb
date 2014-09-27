@@ -96,7 +96,7 @@ FactoryGirl.define do
     
     uri { generate(:random_url) }
     content { generate(:random_sentences) }
-    threshold { Random.rand(100) }
+    threshold { Random.rand(1000) }
   end
   
   factory :nfc_tag do

@@ -5,9 +5,14 @@ en:
   already_logged_in: 'User already logged in'
   auth_token_not_found: 'Authentication token not recognized'
   empty_payload: 'Payload has no content'
+  insufficient_funds: 'Insufficient funds for this transaction'
+  invalid_amount: 'Amount invalid'
   invalid_auth_token: 'Invalid authentication token'
+  invalid_parameters: 'Invalid parameters'
+  invalid_tag_for_payload: 'Payload invalid for the given tag'
   invalid_transaction_amt: 'No transaction amount specified'
   missing_phone_secret: 'Phone secret key missing'
   missing_argument: "Missing argument: %{arg}"
   object_not_found: "%{obj} not found!"
   no_generator: 'Generator has no names'
+  rate_not_found: 'Cannot access bitcoin conversion rate; please try again later!'

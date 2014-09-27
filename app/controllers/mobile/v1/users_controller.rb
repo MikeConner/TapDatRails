@@ -11,6 +11,9 @@ class Mobile::V1::UsersController < ApiController
                 :outbound_btc_address => current_user.outbound_btc_address,
                 :satoshi_balance => current_user.satoshi_balance}    
     expose response
+
+  rescue Exception => ex
+    error! :bad_request, :metadata => {:error_description => ex.message}
   end
   
   # PUT /mobile/:version/users/:id
@@ -27,6 +30,7 @@ class Mobile::V1::UsersController < ApiController
                   :outbound_btc_address => current_user.outbound_btc_address}    
       expose response     
     end
+
   rescue Exception => ex
     error! :bad_request, :metadata => {:error_description => ex.message}
   end  
@@ -37,6 +41,7 @@ class Mobile::V1::UsersController < ApiController
     
     response = {:nickname => current_user.name}
     expose response
+    
   rescue Exception => ex
     error! :bad_request, :metadata => {:error_description => ex.message}
   end

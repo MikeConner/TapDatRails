@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140924233316) do
+ActiveRecord::Schema.define(:version => 20140925043303) do
 
   create_table "nfc_tags", :force => true do |t|
     t.integer  "user_id"
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(:version => 20140924233316) do
     t.datetime "updated_at",                :null => false
   end
 
+  add_index "payloads", ["nfc_tag_id", "threshold"], :name => "index_payloads_on_nfc_tag_id_and_threshold", :unique => true
   add_index "payloads", ["nfc_tag_id"], :name => "index_payloads_on_nfc_tag_id"
 
   create_table "rails_admin_histories", :force => true do |t|

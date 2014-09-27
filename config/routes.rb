@@ -25,11 +25,13 @@ TapDatRails::Application.routes.draw do
   namespace :mobile do
     api :version => 1, :module => "v1" do
       resources :sessions, :only => [:create, :destroy]      
-      resources :registrations, :only => [:create]   
+      resources :registrations, :only => [:create]  
+      resources :transactions, :only => [:create] 
       resources :users, :only => [:show, :update] do
         put 'reset_nickname', :on => :collection
       end   
-      resources :nfc_tags, :only => [:create, :update, :index]
+      resources :nfc_tags, :only => [:create, :update, :index, :destroy]
+      resources :payloads, :except => [:new, :edit]
     end    
   end  
 end
