@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.18'
 gem 'pg', '0.17.1'
 gem 'devise', '2.2.8'
+gem 'devise-async', '0.7.0'
 
 gem 'haml', '4.0.5'
 gem 'haml-rails', '0.4'
@@ -30,6 +31,16 @@ gem 'thin', '1.6.2'
 
 # Move into dev/test when we no longer need fake Bitcoin addresses
 gem 'faker', '1.4.2'
+
+# for images on s3
+gem 'carrierwave', '0.10.0'
+gem 'fog', '1.22.0'
+#for heroku, have to use this to get to imagemagick
+gem 'rmagick', '2.13.1', :require => false
+gem 'mini_magick'
+gem 'carrierwave_backgrounder', '0.2.1'
+gem 'newrelic_rpm', '3.9.3.241'
+gem 'delayed_job_active_record', '0.3.3'
 
 group :development, :test do
   gem 'rspec-rails', '2.13.1'

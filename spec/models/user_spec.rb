@@ -36,6 +36,7 @@ describe User do
     user.should respond_to(:outbound_btc_address)
     user.should respond_to(:satoshi_balance)
     user.should respond_to(:authentication_token)
+    user.should respond_to(:profile_image)
   end
   
   it { should be_valid }

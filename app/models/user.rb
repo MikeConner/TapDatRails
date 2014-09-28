@@ -47,10 +47,13 @@ class User < ActiveRecord::Base
   # SNL Skit; Google it
   UNKNOWN_EMAIL_DOMAIN = '@clownpenis.fart'
   SECRET_KEY_LEN = 16
+
+  mount_uploader :profile_image, ImageUploader
   
   # Setup accessible (or protected) attributes for your model
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me, 
-                  :inbound_btc_address, :outbound_btc_address, :phone_secret_key   
+                  :inbound_btc_address, :outbound_btc_address, :phone_secret_key,
+                  :profile_image, :remote_profile_image_url   
                   
   has_many :nfc_tags, :dependent => :destroy
   has_many :transactions, :dependent => :restrict 
