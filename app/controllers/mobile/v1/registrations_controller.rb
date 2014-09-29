@@ -1,4 +1,5 @@
 require 'nickname_generator'
+require 'coinbase_api'
 
 class Mobile::V1::RegistrationsController < ApiController
   def create
@@ -8,13 +9,19 @@ class Mobile::V1::RegistrationsController < ApiController
           email = params[:user][:email] || SecureRandom.hex(16) + User::UNKNOWN_EMAIL_DOMAIN
           password = params[:user][:password] || SecureRandom.hex(32)
           name = params[:user][:nickname] || NicknameGenerator.generate_nickname
+          # Strip off domain
+          if Rails.env.production?
+            btc_address = CoinbaseAPI.instance.create_inbound_address(/(.*?)@/.match(email)[1]) rescue nil
+          else
+            btc_address = Faker::Bitcoin.address 
+          end
           
           user = User.create!(:email => email, 
                               :password => password, 
                               :password_confirmation => password, 
                               :name => name,
                               # Temporarily create with a bitcoin address
-                              :inbound_btc_address => Faker::Bitcoin.address,
+                              :inbound_btc_address => btc_address,
                               :phone_secret_key => params[:user][:phone_secret_key])                             
           sign_in user
 
