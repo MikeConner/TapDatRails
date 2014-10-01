@@ -2,13 +2,15 @@
 #
 # Table name: payloads
 #
-#  id         :integer          not null, primary key
-#  nfc_tag_id :integer          not null
-#  uri        :string(255)
-#  content    :text
-#  threshold  :integer          default(0), not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id            :integer          not null, primary key
+#  nfc_tag_id    :integer          not null
+#  uri           :string(255)
+#  content       :text
+#  threshold     :integer          default(0), not null
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  payload_image :string(255)
+#  payload_thumb :string(255)
 #
 
 describe Payload do
@@ -19,6 +21,8 @@ describe Payload do
   
   it "should respond to everything" do
     payload.should respond_to(:uri)
+    payload.should respond_to(:payload_image)
+    payload.should respond_to(:payload_thumb)
     payload.should respond_to(:content)  
     payload.should respond_to(:threshold)  
   end

@@ -21,6 +21,8 @@
 #  inbound_btc_address    :string(255)
 #  outbound_btc_address   :string(255)
 #  satoshi_balance        :integer          default(0), not null
+#  profile_image          :string(255)
+#  profile_thumb          :string(255)
 #
 
 describe User do  
@@ -37,6 +39,7 @@ describe User do
     user.should respond_to(:satoshi_balance)
     user.should respond_to(:authentication_token)
     user.should respond_to(:profile_image)
+    user.should respond_to(:profile_thumb)
   end
   
   it { should be_valid }

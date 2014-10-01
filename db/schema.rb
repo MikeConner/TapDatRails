@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140927165051) do
+ActiveRecord::Schema.define(:version => 20141001202847) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -57,12 +57,14 @@ ActiveRecord::Schema.define(:version => 20140927165051) do
   end
 
   create_table "payloads", :force => true do |t|
-    t.integer  "nfc_tag_id",                :null => false
+    t.integer  "nfc_tag_id",                   :null => false
     t.string   "uri"
     t.text     "content"
-    t.integer  "threshold",  :default => 0, :null => false
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.integer  "threshold",     :default => 0, :null => false
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
+    t.string   "payload_image"
+    t.string   "payload_thumb"
   end
 
   add_index "payloads", ["nfc_tag_id", "threshold"], :name => "index_payloads_on_nfc_tag_id_and_threshold", :unique => true
@@ -132,6 +134,7 @@ ActiveRecord::Schema.define(:version => 20140927165051) do
     t.string   "outbound_btc_address"
     t.integer  "satoshi_balance",                      :default => 0,  :null => false
     t.string   "profile_image"
+    t.string   "profile_thumb"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true

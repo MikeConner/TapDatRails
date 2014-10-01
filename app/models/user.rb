@@ -21,6 +21,8 @@
 #  inbound_btc_address    :string(255)
 #  outbound_btc_address   :string(255)
 #  satoshi_balance        :integer          default(0), not null
+#  profile_image          :string(255)
+#  profile_thumb          :string(255)
 #
 
 # CHARTER
@@ -49,11 +51,12 @@ class User < ActiveRecord::Base
   SECRET_KEY_LEN = 16
 
   mount_uploader :profile_image, ImageUploader
+  mount_uploader :profile_thumb, ImageUploader
   
   # Setup accessible (or protected) attributes for your model
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me, 
                   :inbound_btc_address, :outbound_btc_address, :phone_secret_key,
-                  :profile_image, :remote_profile_image_url   
+                  :profile_image, :remote_profile_image_url, :profile_thumb, :remote_profile_thumb_url   
                   
   has_many :nfc_tags, :dependent => :destroy
   has_many :transactions, :dependent => :restrict 
