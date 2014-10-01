@@ -21,6 +21,7 @@ class Mobile::V1::UsersController < ApiController
     # Ensure we don't update fields we aren't allowed to change
     params[:user].delete(:phone_secret_key)
     params[:user].delete(:authentication_token)
+    params[:user].delete(:inbound_btc_address)
     params[:user].delete(:satoshi_balance)
     
     if current_user.update_attributes(params[:user])

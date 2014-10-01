@@ -47,6 +47,19 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
         response.status.should be == 200
       end    
 
+      it "should update by legible tag_id" do
+        put :update, :version => 1, :id => 0, :auth_token => user.authentication_token, :name => @new_name, :tag_id => user.nfc_tags.first.legible_id
+  
+        sleep 2
+        
+        subject.current_user.should_not be_nil
+        user.nfc_tags.count.should be == 5
+        NfcTag.count.should be == 5
+        user.nfc_tags.first.reload.name.should be == @new_name
+              
+        response.status.should be == 200
+      end    
+
       it "should update by system id" do
         put :update, :version => 1, :id => user.nfc_tags.first.id, :auth_token => user.authentication_token, :name => @new_name
   
@@ -154,6 +167,20 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
       user.nfc_tags.count.should be == 5
 
       delete :destroy, :version => 1, :id => 0, :auth_token => user.authentication_token, :tag_id => user.nfc_tags.first.tag_id
+
+      subject.current_user.should_not be_nil
+      user.nfc_tags.count.should be == 4
+      NfcTag.count.should be == 4
+            
+      response.status.should be == 200      
+    end    
+
+    it "should destroy one (by legible tag id)" do      
+      user.nfc_tags.count.should be == 5
+
+      user.nfc_tags.first.legible_id.include?('-').should be_true
+      
+      delete :destroy, :version => 1, :id => 0, :auth_token => user.authentication_token, :tag_id => user.nfc_tags.first.legible_id
 
       subject.current_user.should_not be_nil
       user.nfc_tags.count.should be == 4

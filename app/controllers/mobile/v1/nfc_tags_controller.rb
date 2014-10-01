@@ -32,7 +32,8 @@ class Mobile::V1::NfcTagsController < ApiController
     elsif params[:name].blank?  
       error! :bad_request, :metadata => {:error_description => I18n.t('missing_argument', :arg => 'name')}
     else
-      tag = params[:tag_id].blank? ? current_user.nfc_tags.find_by_id(params[:id]) : current_user.nfc_tags.find_by_tag_id(params[:tag_id])
+      tag = params[:tag_id].blank? ? current_user.nfc_tags.find_by_id(params[:id]) : 
+                                     current_user.nfc_tags.find_by_tag_id(params[:tag_id].gsub('-', ''))
       
       if tag.nil?
         error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'NFC Tag')}
@@ -53,7 +54,8 @@ class Mobile::V1::NfcTagsController < ApiController
     if params[:tag_id].blank? and (0 == params[:id].to_i)
       error! :bad_request, :metadata => {:error_description => I18n.t('missing_argument', :arg => 'tag_id')}
     else
-      tag = params[:tag_id].blank? ? current_user.nfc_tags.find_by_id(params[:id]) : current_user.nfc_tags.find_by_tag_id(params[:tag_id])
+      tag = params[:tag_id].blank? ? current_user.nfc_tags.find_by_id(params[:id]) : 
+                                     current_user.nfc_tags.find_by_tag_id(params[:tag_id].gsub('-', ''))
       
       if tag.nil?
         error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'NFC Tag')}

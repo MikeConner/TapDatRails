@@ -73,8 +73,8 @@ describe Mobile::V1::UsersController, :type => :controller do
     let(:user) { FactoryGirl.create(:user) }
     let(:email) { FactoryGirl.generate(:random_email) }
     let(:nickname) { NicknameGenerator.generate_tough_guy }
-    let(:inbound_btc_address) { SecureRandom.hex(8) }
-    let(:outbound_btc_address) { SecureRandom.hex(8) }
+    let(:inbound_btc_address) { FactoryGirl.generate(:random_bitcoin_address) }
+    let(:outbound_btc_address) { FactoryGirl.generate(:random_bitcoin_address) }
     let(:satoshi_balance) { 500000000 }
     let(:authentication_token) { SecureRandom.hex(16) }
     let(:phone_secret_key) { SecureRandom.hex(8) }
@@ -85,8 +85,8 @@ describe Mobile::V1::UsersController, :type => :controller do
       Nickname.create(:column => 2, :word => 'SlamFist')
     end
     
-    it "creates session successfully" do
-      post :update, :version => 1, :id => 0, :auth_token => user.authentication_token, 
+    it "updates user successfully" do
+       put :update, :version => 1, :id => 0, :auth_token => user.authentication_token, 
                     :user => {:email => email, 
                               :name => nickname,
                               :inbound_btc_address => inbound_btc_address,
@@ -97,8 +97,8 @@ describe Mobile::V1::UsersController, :type => :controller do
       
       subject.current_user.should_not be_nil
       subject.current_user.name.should be == nickname
-      subject.current_user.inbound_btc_address.should_not be == user.inbound_btc_address
-      subject.current_user.inbound_btc_address.should be == inbound_btc_address
+      subject.current_user.inbound_btc_address.should be == user.inbound_btc_address
+      subject.current_user.inbound_btc_address.should_not be == inbound_btc_address
       subject.current_user.outbound_btc_address.should_not be == user.outbound_btc_address
       subject.current_user.outbound_btc_address.should be == outbound_btc_address
       subject.current_user.authentication_token.should be == user.authentication_token
@@ -115,7 +115,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       result = JSON.parse(response.body)
       result['response'].keys.include?('nickname').should be_true
       result['response']['nickname'].should_not be == @old_name
-      result['response']['inbound_btc_address'].should be == inbound_btc_address
+      result['response']['inbound_btc_address'].should be == user.inbound_btc_address
       result['response']['outbound_btc_address'].should be == outbound_btc_address
       result['response']['email'].should be == email
       result.keys.include?('error').should be_false
