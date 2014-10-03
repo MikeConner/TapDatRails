@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+ruby '1.9.3'
 
 gem 'rails', '3.2.18'
 gem 'pg', '0.17.1'
@@ -54,7 +55,7 @@ group :test do
   gem 'capybara', '2.1.0'
   gem 'database_cleaner', '1.0.1'
   gem 'factory_girl_rails', '4.2.0'
-  gem 'rspec-tag_matchers', '0.1.2'  
+  gem 'rspec-tag_matchers', '0.1.2'
 end
 
 group :production do
