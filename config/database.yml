@@ -30,7 +30,7 @@ production:
   adapter: postgresql
   database: tap_prod
   username: rails
-  password: rails
+  password: rails!!
   host: localhost
   encoding: utf8
   pool: 5
