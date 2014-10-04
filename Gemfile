@@ -28,7 +28,7 @@ gem 'jquery-rails', '3.1.2'
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
-gem 'unicorn' 
+gem 'thin', '1.6.2'
 
 # Move into dev/test when we no longer need fake Bitcoin addresses
 gem 'faker', '1.4.2'
