@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141006025854) do
+ActiveRecord::Schema.define(:version => 20141006033602) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -28,6 +28,17 @@ ActiveRecord::Schema.define(:version => 20141006025854) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
+
+  create_table "friendly_id_slugs", :force => true do |t|
+    t.string   "slug",                         :null => false
+    t.integer  "sluggable_id",                 :null => false
+    t.string   "sluggable_type", :limit => 40
+    t.datetime "created_at"
+  end
+
+  add_index "friendly_id_slugs", ["slug", "sluggable_type"], :name => "index_friendly_id_slugs_on_slug_and_sluggable_type", :unique => true
+  add_index "friendly_id_slugs", ["sluggable_id"], :name => "index_friendly_id_slugs_on_sluggable_id"
+  add_index "friendly_id_slugs", ["sluggable_type"], :name => "index_friendly_id_slugs_on_sluggable_type"
 
   create_table "nfc_tags", :force => true do |t|
     t.integer  "user_id"
@@ -65,10 +76,12 @@ ActiveRecord::Schema.define(:version => 20141006025854) do
     t.datetime "updated_at",                   :null => false
     t.string   "payload_image"
     t.string   "payload_thumb"
+    t.string   "slug"
   end
 
   add_index "payloads", ["nfc_tag_id", "threshold"], :name => "index_payloads_on_nfc_tag_id_and_threshold", :unique => true
   add_index "payloads", ["nfc_tag_id"], :name => "index_payloads_on_nfc_tag_id"
+  add_index "payloads", ["slug"], :name => "index_payloads_on_slug", :unique => true
 
   create_table "rails_admin_histories", :force => true do |t|
     t.text     "message"
@@ -108,10 +121,12 @@ ActiveRecord::Schema.define(:version => 20141006025854) do
     t.string   "comment"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.string   "slug"
   end
 
   add_index "transactions", ["nfc_tag_id"], :name => "index_transactions_on_nfc_tag_id"
   add_index "transactions", ["payload_id"], :name => "index_transactions_on_payload_id"
+  add_index "transactions", ["slug"], :name => "index_transactions_on_slug", :unique => true
   add_index "transactions", ["user_id"], :name => "index_transactions_on_user_id"
 
   create_table "users", :force => true do |t|

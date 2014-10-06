@@ -12,6 +12,7 @@
 #  comment        :string(255)
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#  slug           :string(255)
 #
 
 describe Transaction do
@@ -27,13 +28,18 @@ describe Transaction do
     transaction.should respond_to(:satoshi_amount)
     transaction.should respond_to(:dollar_amount)  
     transaction.should respond_to(:comment)  
+    transaction.should respond_to(:slug)  
   end
   
   its(:user) { should be == user }
   its(:nfc_tag) { should be == tag }
   its(:payload) { should be == payload }
   it { should be_valid }
-  
+
+  it "should have a slug" do
+    transaction.slug.should_not be_nil
+  end  
+    
   describe "missing user" do
     before { transaction.user_id = nil }
     

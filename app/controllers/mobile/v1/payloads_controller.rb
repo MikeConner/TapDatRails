@@ -5,7 +5,7 @@ class Mobile::V1::PayloadsController < ApiController
   # GET /mobile/:version/payloads
   # Must pass in tag_id
   def index
-    expose @tag.payloads.map { |p| p.id }
+    expose @tag.payloads.map { |p| p.slug }
 
   rescue Exception => ex
     error! :bad_request, :metadata => {:error_description => ex.message}    
@@ -19,7 +19,7 @@ class Mobile::V1::PayloadsController < ApiController
       begin
         payload.save!
         
-        expose payload.id
+        expose payload.slug
       rescue Exception => ex
         puts ex.message
         error! :bad_request, :metadata => {:error_description => ex.message} 
@@ -31,7 +31,7 @@ class Mobile::V1::PayloadsController < ApiController
 
   # GET /mobile/:version/payloads/:id
   def show
-    @payload = @tag.payloads.find_by_id(params[:id])
+    @payload = @tag.payloads.find(params[:id]) rescue nil
     
     if @payload.nil?
       error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'Payload')}
@@ -43,7 +43,7 @@ class Mobile::V1::PayloadsController < ApiController
     
   # PUT /mobile/:version/payloads/:id
   def update
-    payload = @tag.payloads.find_by_id(params[:id])
+    payload = @tag.payloads.find(params[:id]) rescue nil
     
     if payload.nil?
       error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'Payload')}
@@ -59,7 +59,7 @@ class Mobile::V1::PayloadsController < ApiController
   
   # DELETE /mobile/:version/payloads/:id
   def destroy
-    payload = @tag.payloads.find_by_id(params[:id])
+    payload = @tag.payloads.find(params[:id]) rescue nil
     
     if payload.nil?
       error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'Payload')}

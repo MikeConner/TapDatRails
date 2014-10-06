@@ -11,6 +11,7 @@
 #  updated_at    :datetime         not null
 #  payload_image :string(255)
 #  payload_thumb :string(255)
+#  slug          :string(255)
 #
 
 describe Payload do
@@ -25,6 +26,7 @@ describe Payload do
     payload.should respond_to(:payload_thumb)
     payload.should respond_to(:content)  
     payload.should respond_to(:threshold)  
+    payload.should respond_to(:slug)  
   end
   
   its(:nfc_tag) { should be == tag }
@@ -37,7 +39,11 @@ describe Payload do
       it { should_not be_valid }
     end
   end
-
+  
+  it "should have a slug" do
+    payload.slug.should_not be_nil
+  end  
+  
   describe "no content" do
     before do
       payload.uri = ' '
