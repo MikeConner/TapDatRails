@@ -40,6 +40,8 @@ describe Mobile::V1::UsersController, :type => :controller do
       result['response'].keys.include?('inbound_btc_address').should be_true
       result['response'].keys.include?('outbound_btc_address').should be_true
       result['response'].keys.include?('satoshi_balance').should be_true
+      result['response'].keys.include?('profile_image').should be_true
+      result['response'].keys.include?('profile_thumb').should be_true
       result['response']['nickname'].should be == user.name
       result['response']['email'].should be == user.email
       result['response']['inbound_btc_address'].should be == user.inbound_btc_address
