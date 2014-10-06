@@ -3,6 +3,12 @@ require 'bitcoin_ticker'
 class Mobile::V1::TransactionsController < ApiController
   before_filter :after_token_authentication
   
+  # GET /mobile/:version/transactions
+  def index
+    expose current_user.transactions.order('created_at DESC')
+  end
+  
+  # POST /mobile/:version/transactions
   def create
     # current_user has the person doing the tapping
     if !params.has_key?(:tag_id)

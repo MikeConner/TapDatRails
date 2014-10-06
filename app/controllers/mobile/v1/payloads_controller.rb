@@ -1,6 +1,6 @@
 class Mobile::V1::PayloadsController < ApiController
   before_filter :after_token_authentication
-  before_filter :ensure_own_tag
+  before_filter :ensure_own_tag, :except => [:show]
   
   # GET /mobile/:version/payloads
   # Must pass in tag_id

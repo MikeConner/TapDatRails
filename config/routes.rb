@@ -26,7 +26,7 @@ TapDatRails::Application.routes.draw do
     api :version => 1, :module => "v1" do
       resources :sessions, :only => [:create, :destroy]      
       resources :registrations, :only => [:create]  
-      resources :transactions, :only => [:create] 
+      resources :transactions, :only => [:create, :index] 
       resources :users, :only => [:show, :update] do
         put 'reset_nickname', :on => :collection
       end   
