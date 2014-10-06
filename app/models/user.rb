@@ -2,27 +2,29 @@
 #
 # Table name: users
 #
-#  id                     :integer          not null, primary key
-#  email                  :string(255)      default(""), not null
-#  encrypted_password     :string(255)      default(""), not null
-#  name                   :string(255)      default(""), not null
-#  reset_password_token   :string(255)
-#  reset_password_sent_at :datetime
-#  remember_created_at    :datetime
-#  sign_in_count          :integer          default(0)
-#  current_sign_in_at     :datetime
-#  last_sign_in_at        :datetime
-#  current_sign_in_ip     :string(255)
-#  last_sign_in_ip        :string(255)
-#  authentication_token   :string(255)
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  phone_secret_key       :string(16)       not null
-#  inbound_btc_address    :string(255)
-#  outbound_btc_address   :string(255)
-#  satoshi_balance        :integer          default(0), not null
-#  profile_image          :string(255)
-#  profile_thumb          :string(255)
+#  id                       :integer          not null, primary key
+#  email                    :string(255)      default(""), not null
+#  encrypted_password       :string(255)      default(""), not null
+#  name                     :string(255)      default(""), not null
+#  reset_password_token     :string(255)
+#  reset_password_sent_at   :datetime
+#  remember_created_at      :datetime
+#  sign_in_count            :integer          default(0)
+#  current_sign_in_at       :datetime
+#  last_sign_in_at          :datetime
+#  current_sign_in_ip       :string(255)
+#  last_sign_in_ip          :string(255)
+#  authentication_token     :string(255)
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  phone_secret_key         :string(16)       not null
+#  inbound_btc_address      :string(255)
+#  outbound_btc_address     :string(255)
+#  satoshi_balance          :integer          default(0), not null
+#  profile_image            :string(255)
+#  profile_thumb            :string(255)
+#  mobile_profile_image_url :string(255)
+#  mobile_profile_thumb_url :string(255)
 #
 
 # CHARTER
@@ -56,7 +58,8 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me, 
                   :inbound_btc_address, :outbound_btc_address, :phone_secret_key,
-                  :profile_image, :remote_profile_image_url, :profile_thumb, :remote_profile_thumb_url   
+                  :profile_image, :remote_profile_image_url, :profile_thumb, :remote_profile_thumb_url,
+                  :mobile_profile_image_url, :mobile_profile_thumb_url   
                   
   has_many :nfc_tags, :dependent => :destroy
   has_many :transactions, :dependent => :restrict 

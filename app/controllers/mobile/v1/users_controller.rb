@@ -10,8 +10,8 @@ class Mobile::V1::UsersController < ApiController
                 :inbound_btc_address => current_user.inbound_btc_address,
                 :outbound_btc_address => current_user.outbound_btc_address,
                 :satoshi_balance => current_user.satoshi_balance,
-                :profile_image => current_user.remote_profile_image_url,
-                :profile_thumb => current_user.remote_profile_thumb_url}    
+                :profile_image => current_user.remote_profile_image_url || current_user.mobile_profile_image_url,
+                :profile_thumb => current_user.remote_profile_thumb_url || current_user.mobile_profile_thumb_url}    
     expose response
 
   rescue Exception => ex
@@ -33,7 +33,7 @@ class Mobile::V1::UsersController < ApiController
                   :outbound_btc_address => current_user.outbound_btc_address}    
       expose response     
     end
-
+    
   rescue Exception => ex
     error! :bad_request, :metadata => {:error_description => ex.message}
   end  

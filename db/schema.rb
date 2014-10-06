@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141001202847) do
+ActiveRecord::Schema.define(:version => 20141006025854) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -115,26 +115,28 @@ ActiveRecord::Schema.define(:version => 20141001202847) do
   add_index "transactions", ["user_id"], :name => "index_transactions_on_user_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                                :default => "", :null => false
-    t.string   "encrypted_password",                   :default => "", :null => false
-    t.string   "name",                                 :default => "", :null => false
+    t.string   "email",                                  :default => "", :null => false
+    t.string   "encrypted_password",                     :default => "", :null => false
+    t.string   "name",                                   :default => "", :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                        :default => 0
+    t.integer  "sign_in_count",                          :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.string   "authentication_token"
-    t.datetime "created_at",                                           :null => false
-    t.datetime "updated_at",                                           :null => false
-    t.string   "phone_secret_key",       :limit => 16,                 :null => false
+    t.datetime "created_at",                                             :null => false
+    t.datetime "updated_at",                                             :null => false
+    t.string   "phone_secret_key",         :limit => 16,                 :null => false
     t.string   "inbound_btc_address"
     t.string   "outbound_btc_address"
-    t.integer  "satoshi_balance",                      :default => 0,  :null => false
+    t.integer  "satoshi_balance",                        :default => 0,  :null => false
     t.string   "profile_image"
     t.string   "profile_thumb"
+    t.string   "mobile_profile_image_url"
+    t.string   "mobile_profile_thumb_url"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
