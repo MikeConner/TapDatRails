@@ -5,7 +5,18 @@ class Mobile::V1::TransactionsController < ApiController
   
   # GET /mobile/:version/transactions
   def index
-    expose current_user.transactions.order('created_at DESC')
+    response = []
+    
+    current_user.transactions.order('created_at DESC').each do |tx|
+      payload_image = tx.payload.remote_payload_image_url || tx.payload.mobile_payload_image_url
+      payload_thumb = tx.payload.remote_payload_thumb_url || tx.payload.mobile_payload_thumb_url
+      other_user = User.find(tx.dest_id)
+      other_thumb = other_user.remote_profile_thumb_url || other_user.mobile_profile_thumb_url
+      
+      response.push({:id => tx.slug, :date => tx.created_at, :payload_image => payload_image, :payload_thumb => payload_thumb, :comment => tx.comment, :other_user_thumb => other_thumb})
+    end
+    
+    expose response
   end
   
   # POST /mobile/:version/transactions
@@ -53,6 +64,7 @@ class Mobile::V1::TransactionsController < ApiController
                   tx = current_user.transactions.create!(:nfc_tag_id => tag.id, 
                                                          :payload_id => payload.id, 
                                                          :dest_id => tag.user.id,
+                                                         :comment => payload.content,
                                                          # Store dollar amount as an integer # of cents
                                                          :dollar_amount => (amount * 100.0).round, 
                                                          :satoshi_amount => satoshi)  

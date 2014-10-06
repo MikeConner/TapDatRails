@@ -49,7 +49,7 @@ class User < ActiveRecord::Base
          :token_authenticatable
 
   # SNL Skit; Google it
-  UNKNOWN_EMAIL_DOMAIN = '@clownpenis.fart'
+  UNKNOWN_EMAIL_DOMAIN = '@noreply.fish'
   SECRET_KEY_LEN = 16
 
   mount_uploader :profile_image, ImageUploader
@@ -69,5 +69,9 @@ class User < ActiveRecord::Base
                     :format => { with: EMAIL_REGEX }
   validates_presence_of :name
   validates :phone_secret_key, :presence => true, :length => { :maximum => SECRET_KEY_LEN }
-  validates :satoshi_balance, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }         
+  validates :satoshi_balance, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }  
+  
+  def generated_email?
+    self.email.ends_with?(UNKNOWN_EMAIL_DOMAIN)
+  end       
 end

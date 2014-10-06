@@ -6,7 +6,7 @@ class Mobile::V1::UsersController < ApiController
   # GET /mobile/:version/users/:id
   def show
     response = {:nickname => current_user.name, 
-                :email => current_user.email, 
+                :email => current_user.generated_email? ? '' : current_user.email, 
                 :inbound_btc_address => current_user.inbound_btc_address,
                 :outbound_btc_address => current_user.outbound_btc_address,
                 :satoshi_balance => current_user.satoshi_balance,

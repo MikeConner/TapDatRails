@@ -31,12 +31,16 @@ class Mobile::V1::PayloadsController < ApiController
 
   # GET /mobile/:version/payloads/:id
   def show
+    set_tag
+    
     @payload = @tag.payloads.find(params[:id]) rescue nil
     
     if @payload.nil?
       error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'Payload')}
     else
-      result = {:uri => @payload.uri, :text => @payload.content, :threshold => @payload.threshold}  
+      result = {:uri => @payload.uri, :text => @payload.content, :threshold => @payload.threshold, 
+                :payload_image => @payload.remote_payload_image_url || @payload.mobile_payload_image_url,
+                :payload_thumb => @payload.remote_payload_thumb_url || @payload.mobile_payload_thumb_url}  
       expose result
     end
   end
@@ -75,13 +79,15 @@ class Mobile::V1::PayloadsController < ApiController
   end
   
 private
-  def ensure_own_tag
+  def set_tag
     @tag = NfcTag.find_by_tag_id(params[:tag_id])
-    
-    if @tag.nil?
-      error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'NFC Tag')}
-    elsif @tag.user != current_user
-      error! :forbidden, :metadata => {:error_description => I18n.t('invalid_tag_for_payload')}
-    end
+        
+    error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'NFC Tag')} if @tag.nil?    
+  end
+  
+  def ensure_own_tag
+    set_tag
+
+    error! :forbidden, :metadata => {:error_description => I18n.t('invalid_tag_for_payload')}  if @tag.user != current_user
   end
 end

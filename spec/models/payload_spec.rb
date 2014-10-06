@@ -27,6 +27,8 @@ describe Payload do
     payload.should respond_to(:content)  
     payload.should respond_to(:threshold)  
     payload.should respond_to(:slug)  
+    payload.should respond_to(:mobile_payload_image_url)
+    payload.should respond_to(:mobile_payload_thumb_url)
   end
   
   its(:nfc_tag) { should be == tag }

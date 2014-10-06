@@ -21,7 +21,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       tx.payload_id.should_not be_nil
       tx.dollar_amount.should be == 2000
       tx.satoshi_amount.should be == (tx.transaction_details.first.conversion_rate * tx.dollar_amount * 1000000.0).round
-      tx.comment.should be_nil
+      tx.comment.should be == tx.payload.content
       subject.current_user.reload.satoshi_balance.should be == INITIAL_AMOUNT - tx.satoshi_amount
       tag.user.reload.satoshi_balance.should be == INITIAL_AMOUNT + tx.satoshi_amount
       response.status.should be == 200
