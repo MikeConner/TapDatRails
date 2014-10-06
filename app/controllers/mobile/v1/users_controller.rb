@@ -10,8 +10,8 @@ class Mobile::V1::UsersController < ApiController
                 :inbound_btc_address => current_user.inbound_btc_address,
                 :outbound_btc_address => current_user.outbound_btc_address,
                 :satoshi_balance => current_user.satoshi_balance,
-                :profile_image => current_user.profile_image,
-                :profile_thumb => current_user.profile_thumb}    
+                :profile_image => current_user.remote_profile_image_url,
+                :profile_thumb => current_user.remote_profile_thumb_url}    
     expose response
 
   rescue Exception => ex
