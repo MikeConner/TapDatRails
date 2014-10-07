@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141006051930) do
+ActiveRecord::Schema.define(:version => 20141007040304) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -154,6 +154,7 @@ ActiveRecord::Schema.define(:version => 20141006051930) do
     t.string   "profile_thumb"
     t.string   "mobile_profile_image_url"
     t.string   "mobile_profile_thumb_url"
+    t.string   "inbound_btc_qrcode"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true

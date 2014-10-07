@@ -44,6 +44,7 @@ gem 'newrelic_rpm', '3.9.3.241'
 gem 'delayed_job_active_record', '0.3.3'
 gem 'coinbase', '1.3.0'
 gem 'friendly_id', '4.0.9'
+gem 'rqrcode-rails3', '0.1.7'
 
 group :development, :test do
   gem 'rspec-rails', '2.13.1'

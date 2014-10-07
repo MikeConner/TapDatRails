@@ -3,6 +3,88 @@ describe Mobile::V1::UsersController, :type => :controller do
     request.env["devise.mapping"] = Devise.mappings[:user]
   end
   
+  describe "Balance inquiry (no address)" do
+    let(:user) { FactoryGirl.create(:user, :inbound_btc_address => nil) }
+    
+    it "should fail" do
+      get :balance_inquiry, :version => 1, :auth_token => user.authentication_token
+            
+      subject.current_user.inbound_btc_address.should be_nil
+      response.status.should be == 404
+      
+      result = JSON.parse(response.body)
+      result.keys.include?('response').should be_false
+      result.keys.include?('error').should be_true
+      result["error_description"].should be == I18n.t('no_btc_address')      
+    end
+  end
+
+  describe "Balance inquiry" do
+    let(:user) { FactoryGirl.create(:user) }
+    
+    before do
+      CoinbaseAPI.any_instance.stub(:balance_inquiry).and_return(1.5)      
+      CoinbaseAPI.any_instance.stub(:sell_price).and_return(450)      
+    end
+    
+    it "should work" do
+      get :balance_inquiry, :version => 1, :auth_token => user.authentication_token
+            
+      subject.current_user.inbound_btc_address.should be == user.inbound_btc_address
+      response.status.should be == 200
+      
+      result = JSON.parse(response.body)
+      result.keys.include?('response').should be_true
+      result.keys.include?('error').should be_false
+      result["response"]["btc_balance"].should be == 1.5      
+      result["response"]["dollar_balance"].should be == 450      
+      result["response"]["exchange_rate"].should be == 300      
+    end
+  end
+
+  describe "Balance inquiry (invalid address)" do
+    let(:user) { FactoryGirl.create(:user) }
+    
+    before do
+      CoinbaseAPI.any_instance.stub(:balance_inquiry).and_return(nil)      
+      CoinbaseAPI.any_instance.stub(:sell_price).and_return(300)      
+    end
+    
+    it "should work" do
+      get :balance_inquiry, :version => 1, :auth_token => user.authentication_token
+            
+      response.status.should be == 404
+      
+      result = JSON.parse(response.body)
+      result.keys.include?('response').should be_false
+      result.keys.include?('error').should be_true
+      result["error_description"].should be == I18n.t('address_not_found')      
+    end
+  end
+
+  describe "Balance inquiry (0 balance)" do
+    let(:user) { FactoryGirl.create(:user) }
+    
+    before do
+      CoinbaseAPI.any_instance.stub(:balance_inquiry).and_return(0)      
+      CoinbaseAPI.any_instance.stub(:sell_price).and_return(0)      
+    end
+    
+    it "should work" do
+      get :balance_inquiry, :version => 1, :auth_token => user.authentication_token
+            
+      subject.current_user.inbound_btc_address.should be == user.inbound_btc_address
+      response.status.should be == 200
+      
+      result = JSON.parse(response.body)
+      result.keys.include?('response').should be_true
+      result.keys.include?('error').should be_false
+      result["response"]["btc_balance"].should be == 0      
+      result["response"]["dollar_balance"].should be == 0      
+      result["response"]["exchange_rate"].should be_nil      
+    end
+  end
+  
   describe "Try with invalid token" do
     it "should fail" do
       get :show, :version => 1, :id => 0, :auth_token => SecureRandom.hex(16)

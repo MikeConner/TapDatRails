@@ -13,7 +13,9 @@ class Mobile::V1::TransactionsController < ApiController
       other_user = User.find(tx.dest_id)
       other_thumb = other_user.remote_profile_thumb_url || other_user.mobile_profile_thumb_url
       
-      response.push({:id => tx.slug, :date => tx.created_at, :payload_image => payload_image, :payload_thumb => payload_thumb, :comment => tx.comment, :other_user_thumb => other_thumb})
+      response.push({:id => tx.slug, :date => tx.created_at, :payload_image => payload_image, :payload_thumb => payload_thumb, 
+                     :satoshi_amount => tx.satoshi_amount, :dollar_amount => tx.dollar_amount, 
+                     :comment => tx.comment, :other_user_thumb => other_thumb, :other_user_nickname => other_user.name})
     end
     
     expose response

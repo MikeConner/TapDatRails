@@ -13,6 +13,7 @@ en:
   invalid_transaction_amt: 'No transaction amount specified'
   missing_phone_secret: 'Phone secret key missing'
   missing_argument: "Missing argument: %{arg}"
+  no_btc_address: 'No bitcoin address'
   object_not_found: "%{obj} not found!"
   no_generator: 'Generator has no names'
   rate_not_found: 'Cannot access bitcoin conversion rate; please try again later!'

@@ -25,6 +25,7 @@
 #  profile_thumb            :string(255)
 #  mobile_profile_image_url :string(255)
 #  mobile_profile_thumb_url :string(255)
+#  inbound_btc_qrcode       :string(255)
 #
 
 # CHARTER
@@ -54,12 +55,14 @@ class User < ActiveRecord::Base
 
   mount_uploader :profile_image, ImageUploader
   mount_uploader :profile_thumb, ImageUploader
+  mount_uploader :inbound_btc_qrcode, ImageUploader
   
   # Setup accessible (or protected) attributes for your model
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me, 
                   :inbound_btc_address, :outbound_btc_address, :phone_secret_key,
                   :profile_image, :remote_profile_image_url, :profile_thumb, :remote_profile_thumb_url,
-                  :mobile_profile_image_url, :mobile_profile_thumb_url   
+                  :mobile_profile_image_url, :mobile_profile_thumb_url, 
+                  :inbound_btc_qrcode, :remote_inbound_btc_qrcode_url   
                   
   has_many :nfc_tags, :dependent => :destroy
   has_many :transactions, :dependent => :restrict 

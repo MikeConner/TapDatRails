@@ -80,7 +80,7 @@ class Mobile::V1::PayloadsController < ApiController
   
 private
   def set_tag
-    @tag = NfcTag.find_by_tag_id(params[:tag_id])
+    @tag = NfcTag.find_by_tag_id(params[:tag_id].gsub('-', ''))
         
     error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'NFC Tag')} if @tag.nil?    
   end

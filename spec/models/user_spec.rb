@@ -25,6 +25,7 @@
 #  profile_thumb            :string(255)
 #  mobile_profile_image_url :string(255)
 #  mobile_profile_thumb_url :string(255)
+#  inbound_btc_qrcode       :string(255)
 #
 
 describe User do  
@@ -44,6 +45,7 @@ describe User do
     user.should respond_to(:profile_thumb)
     user.should respond_to(:mobile_profile_image_url)
     user.should respond_to(:mobile_profile_thumb_url)
+    user.should respond_to(:inbound_btc_qrcode)
   end
   
   it { should be_valid }

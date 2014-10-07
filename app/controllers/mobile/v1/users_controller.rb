@@ -1,4 +1,5 @@
 require 'nickname_generator'
+require 'coinbase_api'
 
 class Mobile::V1::UsersController < ApiController
   before_filter :after_token_authentication
@@ -8,6 +9,7 @@ class Mobile::V1::UsersController < ApiController
     response = {:nickname => current_user.name, 
                 :email => current_user.generated_email? ? '' : current_user.email, 
                 :inbound_btc_address => current_user.inbound_btc_address,
+                :inbound_btc_qrcode => current_user.inbound_btc_qrcode,
                 :outbound_btc_address => current_user.outbound_btc_address,
                 :satoshi_balance => current_user.satoshi_balance,
                 :profile_image => current_user.remote_profile_image_url || current_user.mobile_profile_image_url,
@@ -16,6 +18,25 @@ class Mobile::V1::UsersController < ApiController
 
   rescue Exception => ex
     error! :bad_request, :metadata => {:error_description => ex.message}
+  end
+  
+  # GET /mobile/:version/users/balance_inquiry
+  def balance_inquiry
+    if current_user.inbound_btc_address.nil?
+      error! :not_found, :metadata => {:error_description => I18n.t('no_btc_address')}
+    else
+      balance = CoinbaseAPI.instance.balance_inquiry(current_user.inbound_btc_address)
+      if balance.nil?
+        error! :not_found, :metadata => {:error_description => I18n.t('address_not_found')}
+      else
+        price = [0, CoinbaseAPI.instance.sell_price(balance)].max
+        
+        response = {:btc_balance => balance,
+                    :dollar_balance => price,
+                    :exchange_rate => (balance.nil? or (0 == balance)) ? nil : price / balance} 
+        expose response
+      end
+    end
   end
   
   # PUT /mobile/:version/users/:id

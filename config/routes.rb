@@ -28,7 +28,10 @@ TapDatRails::Application.routes.draw do
       resources :registrations, :only => [:create]  
       resources :transactions, :only => [:create, :index] 
       resources :users, :only => [:show, :update] do
-        put 'reset_nickname', :on => :collection
+        collection do
+          put 'reset_nickname'
+          get 'balance_inquiry'
+        end
       end   
       resources :nfc_tags, :only => [:create, :update, :index, :destroy]
       resources :payloads, :except => [:new, :edit]
