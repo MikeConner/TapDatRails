@@ -6,6 +6,7 @@ class Mobile::V1::RegistrationsController < ApiController
   def create
     if params.has_key?(:user)
       if params[:user].has_key?(:phone_secret_key)
+        puts "before begin"
         begin
           email = params[:user][:email] || SecureRandom.hex(16) + User::UNKNOWN_EMAIL_DOMAIN
           password = params[:user][:password] || SecureRandom.hex(32)
