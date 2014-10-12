@@ -6,19 +6,16 @@ class Mobile::V1::RegistrationsController < ApiController
   def create
     if params.has_key?(:user)
       if params[:user].has_key?(:phone_secret_key)
-        puts "before begin"
         begin
           email = params[:user][:email] || SecureRandom.hex(16) + User::UNKNOWN_EMAIL_DOMAIN
           password = params[:user][:password] || SecureRandom.hex(32)
           name = params[:user][:nickname] || NicknameGenerator.generate_nickname
           # Strip off domain
-          puts "Pre coinbase"
           if Rails.env.production?
             btc_address = CoinbaseAPI.instance.create_inbound_address(/(.*?)@/.match(email)[1]) rescue nil
           else
             btc_address = Faker::Bitcoin.address
           end
-          puts "after coinbase"
           user = User.create!(:email => email,
                               :password => password,
                               :password_confirmation => password,
@@ -40,7 +37,6 @@ class Mobile::V1::RegistrationsController < ApiController
           response = {:nickname => user.name, :auth_token => user.authentication_token}
           expose response
         rescue Exception => ex
-          puts ex.message
           error! :bad_request, :metadata => {:error_description => ex.message}
         end
       else

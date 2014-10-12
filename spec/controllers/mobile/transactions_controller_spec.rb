@@ -37,6 +37,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       result['response']['payload']['text'].should be == tx.payload.content
       result['response']['payload'].keys.include?('image').should be_true
       result['response']['payload'].keys.include?('thumb').should be_true
+      result['response']['payload'].keys.include?('uri').should be_true
       result.keys.include?('error').should be_false
     end
 

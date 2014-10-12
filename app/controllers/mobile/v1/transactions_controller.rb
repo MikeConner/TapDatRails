@@ -82,6 +82,7 @@ class Mobile::V1::TransactionsController < ApiController
                               :tapped_user_thumb => tag.user.profile_thumb || tag.user.remote_profile_thumb_url,
                               :tapped_user_name => tag.user.name,
                               :payload => {:text => payload.content,
+                                           :uri => payload.uri,
                                            :image => payload.remote_payload_image_url || payload.mobile_payload_image_url,
                                            :thumb => payload.remote_payload_thumb_url || payload.mobile_payload_thumb_url}}
                   expose response 

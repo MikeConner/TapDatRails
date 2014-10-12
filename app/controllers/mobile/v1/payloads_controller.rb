@@ -21,7 +21,6 @@ class Mobile::V1::PayloadsController < ApiController
         
         expose payload.slug
       rescue Exception => ex
-        puts ex.message
         error! :bad_request, :metadata => {:error_description => ex.message} 
       end   
     else
