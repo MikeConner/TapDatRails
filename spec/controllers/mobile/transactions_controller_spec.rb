@@ -28,11 +28,15 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       
       result = JSON.parse(response.body)
 
-      result['response'].keys.include?('satoshi').should be_true
       result['response'].keys.include?('payload').should be_true
-      result['response']['satoshi'].should be == INITIAL_AMOUNT - subject.current_user.reload.satoshi_balance 
-      result['response']['payload']['uri'].should_not be_nil
-      result['response']['payload']['text'].should_not be_nil
+      result['response']['satoshi_amount'].should be == INITIAL_AMOUNT - subject.current_user.reload.satoshi_balance
+      result['response']['dollar_amount'].should be == tx.dollar_amount
+      result['response']['final_balance'].should be == subject.current_user.reload.satoshi_balance
+      result['response']['tapped_user_thumb'].should_not be_nil
+      result['response']['tapped_user_name'].should be == stripper.name
+      result['response']['payload']['text'].should be == tx.payload.content
+      result['response']['payload'].keys.include?('image').should be_true
+      result['response']['payload'].keys.include?('thumb').should be_true
       result.keys.include?('error').should be_false
     end
 

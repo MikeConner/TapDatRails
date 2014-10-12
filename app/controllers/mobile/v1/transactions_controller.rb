@@ -76,7 +76,14 @@ class Mobile::V1::TransactionsController < ApiController
                   current_user.update_attribute(:satoshi_balance, current_user.satoshi_balance - satoshi)
                   tag.user.update_attribute(:satoshi_balance, tag.user.satoshi_balance + satoshi)  
                   
-                  response = {:satoshi => satoshi, :payload => {:uri => payload.uri, :text => payload.content}}
+                  response = {:satoshi_amount => satoshi,
+                              :dollar_amount => (amount * 100.0).round, 
+                              :final_balance => current_user.satoshi_balance,
+                              :tapped_user_thumb => tag.user.profile_thumb || tag.user.remote_profile_thumb_url,
+                              :tapped_user_name => tag.user.name,
+                              :payload => {:text => payload.content,
+                                           :image => payload.remote_payload_image_url || payload.mobile_payload_image_url,
+                                           :thumb => payload.remote_payload_thumb_url || payload.mobile_payload_thumb_url}}
                   expose response 
                 end          
               rescue ActiveRecord::Rollback => ex
