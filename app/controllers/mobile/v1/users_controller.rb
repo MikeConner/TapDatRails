@@ -54,7 +54,7 @@ class Mobile::V1::UsersController < ApiController
                   :outbound_btc_address => current_user.outbound_btc_address}
       expose response
     end
-    puts current_user.errors
+    puts current_user.errors.full_messages
   rescue Exception => ex
     puts.ex.message
     error! :bad_request, :metadata => {:error_description => ex.message}
