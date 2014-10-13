@@ -51,7 +51,9 @@ class Mobile::V1::UsersController < ApiController
       response = {:nickname => current_user.name,
                   :email => current_user.email,
                   :inbound_btc_address => current_user.inbound_btc_address,
-                  :outbound_btc_address => current_user.outbound_btc_address}
+                  :outbound_btc_address => current_user.outbound_btc_address,
+                  :mobile_profile_thumb_url => current_user.mobile_profile_thumb_url,
+                  :mobile_profile_image_url => current_user.mobile_profile_thumb_url }
       expose response
     end
     puts current_user.errors.full_messages
