@@ -12,8 +12,8 @@ class Mobile::V1::UsersController < ApiController
                 :inbound_btc_qrcode => current_user.inbound_btc_qrcode,
                 :outbound_btc_address => current_user.outbound_btc_address,
                 :satoshi_balance => current_user.satoshi_balance,
-                :profile_image => current_user.remote_profile_image_url || current_user.mobile_profile_image_url,
-                :profile_thumb => current_user.remote_profile_thumb_url || current_user.mobile_profile_thumb_url}    
+                :profile_image => current_user.profile_image.url || current_user.mobile_profile_image_url,
+                :profile_thumb => current_user.profile_thumb.url || current_user.mobile_profile_thumb_url}    
     expose response
 
   rescue Exception => ex
@@ -68,5 +68,34 @@ class Mobile::V1::UsersController < ApiController
     
   rescue Exception => ex
     error! :bad_request, :metadata => {:error_description => ex.message}
+  end
+  
+  # PUT /mobile/:version/users/cashout
+  def cashout
+    if current_user.satoshi_balance < CoinbaseAPI::WITHDRAWAL_THRESHOLD
+      error! :bad_request, :metadata => {:error_description => I18n.t('insufficient_balance')}
+    elsif current_user.inbound_btc_address.nil? or current_user.outbound_btc_address.nil?
+      error! :bad_request, :metadata => {:error_description => I18n.t('invalid_btc_addresses')}
+    else
+      ActiveRecord::Base.transaction do
+        # Create details
+        satoshi = current_user.satoshi_balance
+        
+        tx = current_user.transactions.create!(:dest_id => current_user.id, # destination is self
+                                               :comment => "Cashout of #{satoshi} (#{current_user.inbound_btc_address} to #{current_user.outbound_btc_address})",
+                                               # Store dollar amount as an integer # of cents
+                                               :satoshi_amount => satoshi)  
+        tx.transaction_details.create!(:subject_id => current_user.id, :target_id => current_user.id, :debit_satoshi => satoshi, :conversion_rate => 1.0)      
+
+        current_user.update_attribute(:satoshi_balance, 0)
+                  
+        response = CoinbaseAPI.instance.withdraw(current_user.inbound_btc_address, current_user.outbound_btc_address, satoshi)
+        unless response[:success]
+          raise "transaction aborted: #{response.inspect}"
+        end
+        
+        expose response              
+      end        
+    end
   end
 end

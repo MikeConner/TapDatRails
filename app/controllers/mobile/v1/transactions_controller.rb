@@ -8,10 +8,10 @@ class Mobile::V1::TransactionsController < ApiController
     response = []
     
     current_user.transactions.order('created_at DESC').each do |tx|
-      payload_image = tx.payload.remote_payload_image_url || tx.payload.mobile_payload_image_url
-      payload_thumb = tx.payload.remote_payload_thumb_url || tx.payload.mobile_payload_thumb_url
+      payload_image = tx.payload.payload_image.url || tx.payload.mobile_payload_image_url
+      payload_thumb = tx.payload.payload_thumb.url || tx.payload.mobile_payload_thumb_url
       other_user = User.find(tx.dest_id)
-      other_thumb = other_user.remote_profile_thumb_url || other_user.mobile_profile_thumb_url
+      other_thumb = other_user.profile_thumb.url || other_user.mobile_profile_thumb_url
       
       response.push({:id => tx.slug, :date => tx.created_at, :payload_image => payload_image, :payload_thumb => payload_thumb, 
                      :satoshi_amount => tx.satoshi_amount, :dollar_amount => tx.dollar_amount, 

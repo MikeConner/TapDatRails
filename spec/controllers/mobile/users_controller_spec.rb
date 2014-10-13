@@ -3,6 +3,80 @@ describe Mobile::V1::UsersController, :type => :controller do
     request.env["devise.mapping"] = Devise.mappings[:user]
   end
   
+  describe "Cashout (insufficient)" do
+    let(:user) { FactoryGirl.create(:user, :satoshi_balance => CoinbaseAPI::WITHDRAWAL_THRESHOLD / 2) }
+    
+    it "should fail for insufficient balance" do
+      put :cashout, :version => 1, :auth_token => user.authentication_token
+
+      subject.current_user.satoshi_balance.should be == CoinbaseAPI::WITHDRAWAL_THRESHOLD / 2
+      response.status.should be == 400
+      
+      result = JSON.parse(response.body)
+      result.keys.include?('response').should be_false
+      result.keys.include?('error').should be_true
+      result["error_description"].should be == I18n.t('insufficient_balance')            
+    end
+  end
+
+ describe "Cashout (no inbound address)" do
+    let(:user) { FactoryGirl.create(:user, :inbound_btc_address => nil, :satoshi_balance => CoinbaseAPI::WITHDRAWAL_THRESHOLD * 2) }
+    
+    it "should fail for no inbound address" do
+      put :cashout, :version => 1, :auth_token => user.authentication_token
+
+      subject.current_user.satoshi_balance.should be == CoinbaseAPI::WITHDRAWAL_THRESHOLD * 2
+      subject.current_user.inbound_btc_address.should be_nil
+      
+      response.status.should be == 400
+      
+      result = JSON.parse(response.body)
+      result.keys.include?('response').should be_false
+      result.keys.include?('error').should be_true
+      result["error_description"].should be == I18n.t('invalid_btc_addresses')            
+    end
+  end
+  
+ describe "Cashout (no outbound address)" do
+    let(:user) { FactoryGirl.create(:user, :outbound_btc_address => nil, :satoshi_balance => CoinbaseAPI::WITHDRAWAL_THRESHOLD * 10) }
+    
+    it "should fail for no outbound address" do
+      put :cashout, :version => 1, :auth_token => user.authentication_token
+
+      subject.current_user.satoshi_balance.should be == CoinbaseAPI::WITHDRAWAL_THRESHOLD * 10
+      subject.current_user.outbound_btc_address.should be_nil
+      
+      response.status.should be == 400
+      
+      result = JSON.parse(response.body)
+      result.keys.include?('response').should be_false
+      result.keys.include?('error').should be_true
+      result["error_description"].should be == I18n.t('invalid_btc_addresses')            
+    end
+  end
+
+ describe "Cashout" do
+    let(:user) { FactoryGirl.create(:user, :satoshi_balance => CoinbaseAPI::WITHDRAWAL_THRESHOLD * 2) }
+    
+    it "should succeed" do
+      put :cashout, :version => 1, :auth_token => user.authentication_token
+
+      subject.current_user.satoshi_balance.should be == 0
+      Transaction.count.should be == 1
+      TransactionDetail.count.should be == 1
+      subject.current_user.transactions.first.satoshi_amount.should be == CoinbaseAPI::WITHDRAWAL_THRESHOLD * 2
+      
+      response.status.should be == 200
+      
+      result = JSON.parse(response.body)
+      result.keys.include?('response').should be_true
+      result['response']['success'].should be_true
+      result['response']['id'].should_not be_blank
+      result['response'].keys.include?('data').should be_true
+      result.keys.include?('error').should be_false
+    end
+  end
+  
   describe "Balance inquiry (no address)" do
     let(:user) { FactoryGirl.create(:user, :inbound_btc_address => nil) }
     

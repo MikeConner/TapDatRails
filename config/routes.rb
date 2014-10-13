@@ -10,6 +10,7 @@ TapDatRails::Application.routes.draw do
   match "/legal" => "static_pages#legal"
   match "/privacy" => "static_pages#privacy"
   match "/contact" => "static_pages#contact"
+  match "/leader_board" => "static_pages#leader_board"
 
   namespace :api do
     namespace :v1 do
@@ -31,6 +32,7 @@ TapDatRails::Application.routes.draw do
         collection do
           put 'reset_nickname'
           get 'balance_inquiry'
+          put 'cashout'
         end
       end   
       resources :nfc_tags, :only => [:create, :update, :index, :destroy]
