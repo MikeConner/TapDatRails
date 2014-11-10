@@ -9,11 +9,13 @@
 #  lifetime_balance :integer          default(0), not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
+#  currency_id      :integer
 #
 
 describe NfcTag do
   let(:user) { FactoryGirl.create(:user) }
-  let(:tag) { FactoryGirl.create(:nfc_tag, :user => user) }
+  let(:currency) { FactoryGirl.create(:currency) }
+  let(:tag) { FactoryGirl.create(:nfc_tag, :user => user, :currency => currency) }
   
   subject { tag }
   
@@ -24,6 +26,7 @@ describe NfcTag do
   end
   
   its(:user) { should be == user }
+  its(:currency) { should be == currency }
   it { should be_valid }
   
   describe "missing tag id" do

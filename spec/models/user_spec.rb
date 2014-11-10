@@ -50,6 +50,22 @@ describe User do
   
   it { should be_valid }
   
+  describe "currencies" do
+    let(:user) { FactoryGirl.create(:user_with_currencies) }
+    
+    it "should have currencies" do
+      user.currencies.count.should be == 2
+    end
+    
+    describe "delete" do
+      before { user.destroy }
+      
+      it "should be gone" do
+        Currency.count.should be == 0
+      end
+    end
+  end
+  
   describe "Missing name" do
     before { user.name = ' ' }
     

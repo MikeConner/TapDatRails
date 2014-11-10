@@ -12,6 +12,7 @@ FactoryGirl.define do
   sequence(:random_sentences) { |n| Faker::Lorem.sentences.join(' ') }
   sequence(:random_bitcoin_address) { |n| Faker::Bitcoin.address }
   sequence(:sequential_tag) { |n| "Tag #{n}"}
+  sequence(:random_currency) { |n| "#{Faker::Commerce.product_name.split(' ')[0..1].join(' ')} Pts" }
   
   factory :opportunity do
     email { generate(:random_email) }
@@ -24,6 +25,60 @@ FactoryGirl.define do
     word { generate(:random_english_word) }
   end
   
+  factory :voucher do
+    currency
+    
+    amount { YAML::load(currency.denominations).sample }
+  end
+  
+  factory :currency do 
+    user
+    
+    name { generate(:random_currency) }
+    denominations { YAML.dump([1, 2, 5, 10, 20]) }
+    remote_icon_url 'http://favicon-generator.org/favicons/2014-11-09/63f9acfc66d75ec8207fe51c83556d8b.ico'
+    status Currency::ACTIVE
+    expiration_days 30
+    
+    factory :currency_with_vouchers do
+      transient do
+        num_vouchers 2
+      end
+      
+      after(:create) do |currency, evaluator|
+        evaluator.num_vouchers.times do
+          FactoryGirl.create(:voucher, :currency => currency, :amount => YAML.load(currency.denominations).sample)
+        end
+      end
+    end
+  end
+    
+  factory :balance do
+    user
+    
+    transient do
+      bal_currency { create(:currency) }
+    end    
+    
+    currency_name { bal_currency.name }
+    expiration_date 1.week.from_now
+    
+    factory :balance_with_vouchers do
+      transient do
+        num_vouchers 3
+      end
+      
+      after(:create) do |balance, evaluator|
+        evaluator.num_vouchers.times do
+          bal_currency = FactoryGirl.create(:currency)
+          
+          FactoryGirl.create(:voucher, :currency => bal_currency, :balance => balance, 
+                             :amount => YAML.load(bal_currency.denominations).sample)
+        end
+      end
+    end
+  end
+  
   factory :user do
     name { generate(:random_phrase) }
     email { generate(:random_email) }
@@ -33,8 +88,18 @@ FactoryGirl.define do
     outbound_btc_address { generate(:random_bitcoin_address) }
     satoshi_balance { (SecureRandom.random_number * 10000000).round }
     
+    factory :user_with_currencies do 
+      transient do
+        num_currencies 2
+      end
+      
+      after(:create) do |user, evaluator|
+        FactoryGirl.create_list(:currency, evaluator.num_currencies, :user => user)
+      end
+    end
+    
     factory :user_with_tags do
-      ignore do
+      transient do
         num_tags 5
       end
       
@@ -44,7 +109,7 @@ FactoryGirl.define do
     end
     
     factory :user_with_transactions do
-      ignore do
+      transient do
         num_tx 2
       end
       
@@ -54,7 +119,7 @@ FactoryGirl.define do
     end
     
     factory :user_with_details do
-      ignore do
+      transient do
         num_tx 2
       end
       
@@ -105,8 +170,12 @@ FactoryGirl.define do
     tag_id { SecureRandom.hex(5) }
     name "Tag name"
     
+    factory :nfc_tag_with_currency do
+      currency
+    end
+    
     factory :nfc_tag_with_payloads do
-      ignore do
+      transient do
         num_payloads 3
       end
       

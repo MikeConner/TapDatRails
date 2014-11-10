@@ -67,6 +67,7 @@ class User < ActiveRecord::Base
   has_many :nfc_tags, :dependent => :destroy
   has_many :transactions, :dependent => :restrict 
   has_many :transaction_details, :through => :transactions   
+  has_many :currencies, :dependent => :destroy
   
   validates :email, :uniqueness => { case_sensitive: false },
                     :format => { with: EMAIL_REGEX }

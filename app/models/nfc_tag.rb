@@ -9,6 +9,7 @@
 #  lifetime_balance :integer          default(0), not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
+#  currency_id      :integer
 #
 
 # CHARTER
@@ -24,9 +25,11 @@
 #
 class NfcTag < ActiveRecord::Base
   attr_accessible :lifetime_balance, :name, :tag_id,
-                  :user_id
+                  :user_id, :currency_id
   
   belongs_to :user
+  # If a non-BTC tag
+  belongs_to :currency
   
   has_many :payloads, :dependent => :destroy
   
