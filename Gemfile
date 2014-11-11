@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '1.9.3'
 
-gem 'rails', '3.2.18'
+gem 'rails', '3.2.20'
 gem 'pg', '0.17.1'
 gem 'devise', '2.2.8'
 gem 'devise-async', '0.7.0'
