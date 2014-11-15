@@ -1,10 +1,11 @@
 source 'https://rubygems.org'
-ruby '1.9.3'
+ruby '2.1.4'
 
 gem 'rails', '3.2.20'
 gem 'pg', '0.17.1'
 gem 'devise', '2.2.8'
 gem 'devise-async', '0.7.0'
+gem 'nokogiri', '1.6.1'
 
 gem 'haml', '4.0.5'
 gem 'haml-rails', '0.4'
@@ -13,7 +14,7 @@ gem 'haml-rails', '0.4'
 gem 'rails_admin', '0.4.9'
 
 # gem for api
-gem "rocket_pants", "1.9.1"
+gem "rocket_pants", "1.10.0"
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -39,16 +40,16 @@ gem 'carrierwave', '0.10.0'
 gem 'fog', '1.22.0'
 #for heroku, have to use this to get to imagemagick
 gem 'rmagick', '2.13.1', :require => false
-gem 'mini_magick'
-gem 'carrierwave_backgrounder', '0.2.1'
-gem 'newrelic_rpm', '3.9.3.241'
+gem 'mini_magick', '4.0.0'
+gem 'carrierwave_backgrounder', '0.4.1'
+gem 'newrelic_rpm', '3.9.6.257'
 gem 'delayed_job_active_record', '0.3.3'
 gem 'coinbase', '1.3.0'
 gem 'friendly_id', '4.0.9'
 gem 'rqrcode-rails3', '0.1.7'
 
 group :development, :test do
-  gem 'rspec-rails', '2.13.1'
+  gem 'rspec-rails', '2.13.2'
   gem 'annotate', '2.6.1'
   gem 'better_errors', '1.1.0'
   gem 'binding_of_caller', '0.7.2'
@@ -62,5 +63,5 @@ group :test do
 end
 
 group :production do
-  gem 'rails_12factor', '0.0.2'
+  gem 'rails_12factor', '0.0.3'
 end
