@@ -44,7 +44,7 @@ gem 'mini_magick', '4.0.0'
 gem 'carrierwave_backgrounder', '0.4.1'
 gem 'newrelic_rpm', '3.9.6.257'
 gem 'delayed_job_active_record', '0.3.3'
-gem 'coinbase', '1.3.0'
+gem 'coinbase', '2.1.1'
 gem 'friendly_id', '4.0.9'
 gem 'rqrcode-rails3', '0.1.7'
 
