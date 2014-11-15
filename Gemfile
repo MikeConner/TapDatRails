@@ -19,10 +19,10 @@ gem "rocket_pants", "1.10.0"
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails'
+  gem 'sass-rails', '3.2.6'
   gem 'coffee-rails', '3.2.2'
   gem 'uglifier', '2.5.3'
-  gem 'foundation-rails'
+  gem 'foundation-rails', '5.4.5.0'
 end
 
 gem 'jquery-rails', '3.1.2'

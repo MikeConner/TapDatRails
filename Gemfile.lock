@@ -292,7 +292,7 @@ DEPENDENCIES
   factory_girl_rails (= 4.5.0)
   faker (= 1.4.2)
   fog (= 1.22.0)
-  foundation-rails
+  foundation-rails (= 5.4.5.0)
   friendly_id (= 4.0.9)
   haml (= 4.0.5)
   haml-rails (= 0.4)
@@ -309,6 +309,6 @@ DEPENDENCIES
   rqrcode-rails3 (= 0.1.7)
   rspec-rails (= 2.13.2)
   rspec-tag_matchers (= 0.1.2)
-  sass-rails
+  sass-rails (= 3.2.6)
   thin (= 1.6.2)
   uglifier (= 2.5.3)
