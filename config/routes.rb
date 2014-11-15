@@ -6,6 +6,10 @@ TapDatRails::Application.routes.draw do
 
   devise_for :users
 
+  resources :users, :only => [] do
+    get 'leader_board', :on => :member
+  end
+  
   match "/how_it_works" => "static_pages#how_it_works"
   match "/legal" => "static_pages#legal"
   match "/privacy" => "static_pages#privacy"
