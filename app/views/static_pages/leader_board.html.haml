@@ -14,25 +14,26 @@
             %th
         %tbody
           - n = [@tappers.length, @tapped.length].max
-          - for x in 0..(n - 1) do
-            %tr
-              - if x < @tappers.length
-                %td= image_tag @image_map[@tappers[x].user_id], :style => 'width:60px'
-                %td= User.find_by_id(@tappers[x].user_id).name
-                %td= number_to_currency(@tappers[x].dollar)
-                %td= number_with_delimiter(@tappers[x].taps)
-              - else
-                %td
-                %td
-                %td
-                %td
-              - if x < @tapped.length  
-                %td= image_tag @image_map[@tapped[x].dest_id], :style => 'width:60px'
-                %td= User.find_by_id(@tapped[x].dest_id).name
-                %td= number_to_currency(@tapped[x].dollar)
-                %td= number_with_delimiter(@tapped[x].taps)
-              - else
-                %td
-                %td
-                %td
-                %td
+          - if n >= 1
+            - for x in 0..(n - 1) do
+              %tr
+                - if x < @tappers.length
+                  %td= image_tag @image_map[@tappers[x].user_id], :style => 'width:60px'
+                  %td= User.find_by_id(@tappers[x].user_id).name
+                  %td= number_to_currency(@tappers[x].dollar)
+                  %td= number_with_delimiter(@tappers[x].taps)
+                - else
+                  %td
+                  %td
+                  %td
+                  %td
+                - if x < @tapped.length  
+                  %td= image_tag @image_map[@tapped[x].dest_id], :style => 'width:60px'
+                  %td= User.find_by_id(@tapped[x].dest_id).name
+                  %td= number_to_currency(@tapped[x].dollar)
+                  %td= number_with_delimiter(@tapped[x].taps)
+                - else
+                  %td
+                  %td
+                  %td
+                  %td
