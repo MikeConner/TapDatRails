@@ -1,16 +1,18 @@
-!!! 5
-%head
-  %meta{ :charset => "utf-8" }
-  %meta{ :name => "viewport", :content => "width=device-width, initial-scale=1.0" }
-  %meta{:name => 'description', :content => I18n.t('meta_description') }
-  %title TapDatRails
-  = favicon_link_tag 
-  = stylesheet_link_tag "application"
-  = csrf_meta_tag
-  = render 'layouts/application/shim'
-%body
-  = render 'layouts/application/header'
-  = yield
-  = render 'layouts/application/footer' 
-  = javascript_include_tag "application"
-  = content_for :head 
+!!!
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %title= content_for?(:title) ? yield(:title) : "foundation-rails"
+    = stylesheet_link_tag    "application"
+    = javascript_include_tag "vendor/modernizr"
+    = favicon_link_tag 
+    = stylesheet_link_tag "application"
+    = csrf_meta_tag
+    = render 'layouts/application/shim'
+  %body
+    = render 'layouts/application/header'
+    = yield
+    = render 'layouts/application/footer' 
+    = javascript_include_tag "application"
+    = content_for :head 

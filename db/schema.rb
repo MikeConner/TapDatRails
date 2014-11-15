@@ -64,22 +64,6 @@ ActiveRecord::Schema.define(:version => 20141110012923) do
   add_index "friendly_id_slugs", ["sluggable_id"], :name => "index_friendly_id_slugs_on_sluggable_id"
   add_index "friendly_id_slugs", ["sluggable_type"], :name => "index_friendly_id_slugs_on_sluggable_type"
 
-  create_table "merchants", :force => true do |t|
-    t.integer  "user_id"
-    t.decimal  "balance",                  :default => 0.0, :null => false
-    t.string   "name"
-    t.string   "phone",      :limit => 14
-    t.string   "address_1"
-    t.string   "address_2"
-    t.string   "city"
-    t.string   "state",      :limit => 2
-    t.string   "zip",        :limit => 10
-    t.string   "slug"
-    t.text     "notes"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
-  end
-
   create_table "nfc_tags", :force => true do |t|
     t.integer  "user_id"
     t.string   "name"
