@@ -1,12 +1,13 @@
-%nav.top-bar{class: 'white-header'}
+%nav.top-bar{"data-topbar" => "", :role => "navigation"}
   %ul.title-area
     %li.name
-      %h1= link_to(image_tag("TapDatLogo.png", :style => 'width:150px; padding-top:18px;'), root_path)
+      = link_to(image_tag("logo-white.png"), root_path)
+    / Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone
     %li.toggle-topbar.menu-icon
       %a{:href => "#"}
         %span Menu
   %section.top-bar-section
-    %ul.left
+    / Right Nav Section
     %ul.right
       %li= link_to 'How it works', how_it_works_path
       %li= link_to 'Contact Us', contact_path
