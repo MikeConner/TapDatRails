@@ -17,3 +17,4 @@ en:
   object_not_found: "%{obj} not found!"
   no_generator: 'Generator has no names'
   rate_not_found: 'Cannot access bitcoin conversion rate; please try again later!'
+  not_currency_owner: "You aren't the owner of this currency"

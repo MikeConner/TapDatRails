@@ -26,6 +26,8 @@
 #
 # NOTES AND WARNINGS
 #   Currency objects are only used for non-bitcoin currencies. Bitcoin itself uses the former mechanism (i.e., satoshi_balance in the user)
+#   Currency denominations are stored as serialized integer arrays. To show and edit, they have to be simple comma-delimited strings;
+# hence the encode and decode methods.
 #
 class Currency < ActiveRecord::Base
   ACTIVE = 0
@@ -46,4 +48,39 @@ class Currency < ActiveRecord::Base
                    :length => { :maximum => NAME_LEN },
                    :uniqueness => { :case_sensitive => false }
   validates_inclusion_of :status, :in => VALID_STATUSES
+  
+  def encode_denominations
+    unless self.denominations.blank?
+      begin
+        d = self.denominations.split(',')
+        numerics = []
+        d.each do |c|
+          numerics.push(c.to_i)
+        end
+        
+        self.denominations = YAML::dump(numerics)
+      rescue
+        self.errors.add :base, "Invalid denominations #{self.denominations}"  
+      end
+    end
+  end
+  
+  def decode_denominations(as_str = false)
+    if self.denominations.blank?
+      as_str ? "" : []
+    else
+      d = YAML.load(self.denominations)
+      if as_str
+        str = ""
+        d.each do |n|
+          str += ", " unless str.blank?
+          str += n.to_s
+        end
+        
+        str
+      else
+        d
+      end
+    end
+  end
 end

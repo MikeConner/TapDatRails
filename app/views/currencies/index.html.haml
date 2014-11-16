@@ -1,0 +1,10 @@
+.row
+  .large-12.columns
+    %h1== Currencies
+.row
+  .large-12.columns
+    - @currencies.each do |currency|
+      = render :partial => 'currency', :locals => { :currency => currency }
+      = link_to "Delete #{currency.name}", currency, :method => :delete, :data => { :confirm => 'Are you sure?' }
+.row
+  = link_to 'Add Currency', new_currency_path

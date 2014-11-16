@@ -1,0 +1,11 @@
+%h2
+  - unless currency.icon.nil?
+    = image_tag currency.icon.url
+  = currency.name
+%p 
+  Denominations
+  = currency.decode_denominations(true)
+- if currency.expiration_days.nil?
+  %p No expiration
+- else
+  %p== Expires in #{pluralize(currency.expiration_days, 'day')}

@@ -1,0 +1,11 @@
+#container.text-center
+  .row
+    .large-12.columns
+      %h1== Edit Currency
+  .row
+    .large-12.columns
+      = form_for @currency do |f|
+        = render :partial => 'shared/error_messages', :locals => { :errors => @currency.errors, :name => 'Currency' }
+        = render :partial => 'currency_fields', :locals => { :f => f }
+        .actions
+          = f.submit 'Update Currency'

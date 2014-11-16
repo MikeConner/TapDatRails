@@ -10,6 +10,8 @@ TapDatRails::Application.routes.draw do
     get 'leader_board', :on => :member
   end
   
+  resources :currencies
+  
   match "/how_it_works" => "static_pages#how_it_works"
   match "/legal" => "static_pages#legal"
   match "/privacy" => "static_pages#privacy"

@@ -1,0 +1,5 @@
+= render :partial => 'currency', :locals => { :currency => @currency }
+%br
+= link_to 'Edit', edit_currency_path(@currency)
+%br
+= link_to 'Back', currencies_path
