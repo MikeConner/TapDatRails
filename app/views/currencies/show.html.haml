@@ -1,4 +1,13 @@
-= render :partial => 'currency', :locals => { :currency => @currency }
+- unless @currency.icon.nil?
+  %p= image_tag @currency.icon.url
+%p= link_to @currency.name, currency_path(@currency)
+%p== Denominations: #{@currency.decode_denominations(true)}
+- if @currency.expiration_days.nil?
+  %p N/A
+- else
+  %p== Expires in #{pluralize(@currency.expiration_days, 'day')}
+%br
+= link_to 'Show Vouchers', vouchers_path(:currency_id => @currency.id)
 %br
 = link_to 'Edit', edit_currency_path(@currency)
 %br

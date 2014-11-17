@@ -11,6 +11,7 @@ TapDatRails::Application.routes.draw do
   end
   
   resources :currencies
+  resources :vouchers
   
   match "/how_it_works" => "static_pages#how_it_works"
   match "/legal" => "static_pages#legal"

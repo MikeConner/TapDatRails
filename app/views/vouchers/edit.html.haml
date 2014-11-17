@@ -1,0 +1,11 @@
+.text-center
+  .row
+    .large-12.columns
+      %h1== Edit Voucher
+  .row
+    .large-12.columns
+      = form_for @voucher do |f|
+        = render :partial => 'shared/error_messages', :locals => { :errors => @voucher.errors, :name => 'Voucher' }
+        = render :partial => 'voucher_fields', :locals => { :f => f }
+        .actions
+          = f.submit 'Update Voucher'

@@ -35,11 +35,10 @@ class CurrenciesController < ApplicationController
 
   # PUT /currencies/1
   def update
-    @currency.encode_denominations
-    
-    params[:currency][:denominations] = @currency.denominations
-
     if @currency.update_attributes(params[:currency])
+      @currency.encode_denominations
+      @currency.save!
+      
       redirect_to @currency, notice: 'Currency was successfully updated.'
     else
       render 'edit'

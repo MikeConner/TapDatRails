@@ -34,7 +34,7 @@ class Voucher < ActiveRecord::Base
   before_validation :ensure_uid
   before_validation :ensure_valid_denomination, :on => :create
   
-  attr_accessible :amount, :status, :uid
+  attr_accessible :amount, :status, :uid, :currency_id, :balance_id
 
   belongs_to :currency
   # Assigned to balance when bought by a user
@@ -48,7 +48,30 @@ class Voucher < ActiveRecord::Base
                      :numericality => { :only_integer => true, :greater_than => 0 }
   
   scope :active, where("status = ?", ACTIVE)
-                     
+  
+  # For display
+  def display_status
+    case self.status
+    when ACTIVE
+      "Active"
+    when REDEEMED
+      "Redeemed"
+    when EXPIRED
+      "Expired"
+    else
+      raise "Unknown status #{self.status}"
+    end
+  end   
+  
+  # For display
+  def assigned_user_display
+    if self.balance.nil?
+      "N/A"
+    else
+      self.balance.user.name
+    end
+  end   
+               
 private
   def ensure_uid
     self.uid = SecureRandom.hex(3) if self.uid.nil?
