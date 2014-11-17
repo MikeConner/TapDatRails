@@ -65,6 +65,22 @@ describe User do
       end
     end
   end
+
+  describe "balances" do
+    let(:user) { FactoryGirl.create(:user_with_balances) }
+    
+    it "should have balances" do
+      user.balances.count.should be == 3
+    end
+    
+    describe "delete" do
+      before { user.destroy }
+      
+      it "should be gone" do
+        Balance.count.should be == 0
+      end
+    end
+  end
   
   describe "Missing name" do
     before { user.name = ' ' }

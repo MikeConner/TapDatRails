@@ -97,6 +97,16 @@ FactoryGirl.define do
         FactoryGirl.create_list(:currency, evaluator.num_currencies, :user => user)
       end
     end
+
+    factory :user_with_balances do 
+      transient do
+        num_balances 3
+      end
+      
+      after(:create) do |user, evaluator|
+        FactoryGirl.create_list(:balance, evaluator.num_balances, :user => user)
+      end
+    end
     
     factory :user_with_tags do
       transient do
