@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.1.4'
+ruby '2.1.5'
 
 gem 'rails', '3.2.20'
 gem 'pg', '0.17.1'
@@ -39,7 +39,7 @@ gem 'faker', '1.4.2'
 gem 'carrierwave', '0.10.0'
 gem 'fog', '1.22.0'
 #for heroku, have to use this to get to imagemagick
-gem 'rmagick', '2.13.1', :require => false
+gem 'rmagick', '2.13.4', :require => false
 gem 'mini_magick', '4.0.0'
 gem 'carrierwave_backgrounder', '0.4.1'
 gem 'newrelic_rpm', '3.9.6.257'

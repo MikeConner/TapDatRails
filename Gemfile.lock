@@ -233,7 +233,7 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     remotipart (1.2.1)
-    rmagick (2.13.1)
+    rmagick (2.13.4)
     rocket_pants (1.10.0)
       actionpack (>= 3.0, < 5.0)
       api_smith
@@ -318,7 +318,7 @@ DEPENDENCIES
   rails (= 3.2.20)
   rails_12factor (= 0.0.3)
   rails_admin (= 0.4.9)
-  rmagick (= 2.13.1)
+  rmagick (= 2.13.4)
   rocket_pants (= 1.10.0)
   rqrcode-rails3 (= 0.1.7)
   rspec-rails (= 2.13.2)
