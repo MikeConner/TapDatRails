@@ -35,6 +35,7 @@ TapDatRails::Application.routes.draw do
       resources :sessions, :only => [:create, :destroy]      
       resources :registrations, :only => [:create]  
       resources :transactions, :only => [:create, :index] 
+      resources :currencies, :only => [:index]
       resources :users, :only => [:show, :update] do
         collection do
           put 'reset_nickname'
