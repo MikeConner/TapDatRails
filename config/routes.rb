@@ -6,6 +6,13 @@ TapDatRails::Application.routes.draw do
 
   devise_for :users
 
+  resources :users, :only => [] do
+    get 'leader_board', :on => :member
+  end
+  
+  resources :currencies
+  resources :vouchers
+  
   match "/how_it_works" => "static_pages#how_it_works"
   match "/legal" => "static_pages#legal"
   match "/privacy" => "static_pages#privacy"
@@ -28,6 +35,7 @@ TapDatRails::Application.routes.draw do
       resources :sessions, :only => [:create, :destroy]      
       resources :registrations, :only => [:create]  
       resources :transactions, :only => [:create, :index] 
+      resources :currencies, :only => [:index]
       resources :users, :only => [:show, :update] do
         collection do
           put 'reset_nickname'

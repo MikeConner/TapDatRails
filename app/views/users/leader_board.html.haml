@@ -4,29 +4,15 @@
       %table
         %thead
           %tr
-            %th The Tappers
-            %th
-            %th
-            %th
-            %th The Tapped
+            %th Taps
             %th
             %th
             %th
         %tbody
-          - n = [@tappers.length, @tapped.length].max
+          - n = @tapped.length
           - if n >= 1
             - for x in 0..(n - 1) do
               %tr
-                - if x < @tappers.length
-                  %td= image_tag @image_map[@tappers[x].user_id], :style => 'width:60px'
-                  %td= @names_map[@tappers[x].user_id]
-                  %td= number_to_currency(@tappers[x].dollar)
-                  %td= number_with_delimiter(@tappers[x].taps)
-                - else
-                  %td
-                  %td
-                  %td
-                  %td
                 - if x < @tapped.length  
                   %td= image_tag @image_map[@tapped[x].dest_id], :style => 'width:60px'
                   %td= @names_map[@tapped[x].dest_id]

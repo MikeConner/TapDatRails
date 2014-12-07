@@ -1,0 +1,7 @@
+= f.hidden_field :currency_id, :value => f.object.currency_id
+= f.hidden_field :balance_id, :value => f.object.balance_id
+%h2= f.object.uid
+.field
+  = f.label :amount
+  = f.select :amount, options_for_select(f.object.currency.decode_denominations, f.object.amount)
+  

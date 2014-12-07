@@ -1,0 +1,17 @@
+.row
+  .large-12.columns
+    %h1== Currencies
+.row
+  .large-12.columns
+    %table.table.zebra-striped
+      %thead
+        %th Icon
+        %th Name
+        %th Denominations
+        %th Expiration (days)
+        %th
+      %tbody
+        - @currencies.each do |currency|
+          = render :partial => 'currency', :locals => { :currency => currency }
+.row
+  = link_to 'Add Currency', new_currency_path

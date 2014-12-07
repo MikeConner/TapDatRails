@@ -29,11 +29,16 @@ class Mobile::V1::UsersController < ApiController
       if balance.nil?
         error! :not_found, :metadata => {:error_description => I18n.t('address_not_found')}
       else
-        price = [0, CoinbaseAPI.instance.sell_price(balance)].max
+        price = 0 == balance ? 0 : [0, CoinbaseAPI.instance.sell_price(balance)].max
 
         response = {:btc_balance => balance,
                     :dollar_balance => price,
                     :exchange_rate => (balance.nil? or (0 == balance)) ? nil : price / balance}
+                    
+        current_user.balances.each do |bal|
+          response[bal.currency_name] = bal.amount
+        end
+        
         expose response
       end
     end
