@@ -27,8 +27,8 @@ class Transaction < ActiveRecord::Base
   extend FriendlyId
   friendly_id :generate_id, use: [:slugged, :history]
   
-  attr_accessible :comment, :dest_id, :dollar_amount, :satoshi_amount, :source_id,
-                  :nfc_tag_id, :payload_id
+  #attr_accessible :comment, :dest_id, :dollar_amount, :satoshi_amount, :source_id,
+  #                :nfc_tag_id, :payload_id
   
   belongs_to :user
   belongs_to :nfc_tag

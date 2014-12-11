@@ -34,7 +34,7 @@ class Voucher < ActiveRecord::Base
   before_validation :ensure_uid
   before_validation :ensure_valid_denomination, :on => :create
   
-  attr_accessible :amount, :status, :uid, :currency_id, :balance_id
+  #attr_accessible :amount, :status, :uid, :currency_id, :balance_id
 
   belongs_to :currency
   # Assigned to balance when bought by a user
@@ -47,7 +47,7 @@ class Voucher < ActiveRecord::Base
   validates :amount, :presence => true,
                      :numericality => { :only_integer => true, :greater_than => 0 }
   
-  scope :active, where("status = ?", ACTIVE)
+  scope :active, -> { where("status = ?", ACTIVE) }
   
   # For display
   def display_status

@@ -20,9 +20,9 @@ describe NfcTag do
   subject { tag }
   
   it "should respond to everything" do
-    tag.should respond_to(:name)
-    tag.should respond_to(:tag_id)  
-    tag.should respond_to(:lifetime_balance)  
+    expect(tag).to respond_to(:name)
+    expect(tag).to respond_to(:tag_id)  
+    expect(tag).to respond_to(:lifetime_balance)  
   end
   
   its(:user) { should be == user }
@@ -47,14 +47,14 @@ describe NfcTag do
     let(:tag) { FactoryGirl.create(:nfc_tag_with_payloads) }
     
     it "should have payloads" do
-      tag.payloads.count.should be == 3
+      expect(tag.payloads.count).to eq(3)
     end
     
     describe "destroy" do
       before { tag.destroy }
       
       it "should be gone" do
-        Payload.count.should be == 0
+        expect(Payload.count).to eq(0)
       end
     end
   end  

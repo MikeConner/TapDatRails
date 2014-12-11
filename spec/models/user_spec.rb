@@ -34,18 +34,18 @@ describe User do
   subject { user }
   
   it "should respond to everything (instant)" do
-    user.should respond_to(:name)
-    user.should respond_to(:email)
-    user.should respond_to(:phone_secret_key)
-    user.should respond_to(:inbound_btc_address)
-    user.should respond_to(:outbound_btc_address)
-    user.should respond_to(:satoshi_balance)
-    user.should respond_to(:authentication_token)
-    user.should respond_to(:profile_image)
-    user.should respond_to(:profile_thumb)
-    user.should respond_to(:mobile_profile_image_url)
-    user.should respond_to(:mobile_profile_thumb_url)
-    user.should respond_to(:inbound_btc_qrcode)
+    expect(user).to respond_to(:name)
+    expect(user).to respond_to(:email)
+    expect(user).to respond_to(:phone_secret_key)
+    expect(user).to respond_to(:inbound_btc_address)
+    expect(user).to respond_to(:outbound_btc_address)
+    expect(user).to respond_to(:satoshi_balance)
+    expect(user).to respond_to(:authentication_token)
+    expect(user).to respond_to(:profile_image)
+    expect(user).to respond_to(:profile_thumb)
+    expect(user).to respond_to(:mobile_profile_image_url)
+    expect(user).to respond_to(:mobile_profile_thumb_url)
+    expect(user).to respond_to(:inbound_btc_qrcode)
   end
   
   it { should be_valid }
@@ -54,14 +54,14 @@ describe User do
     let(:user) { FactoryGirl.create(:user_with_currencies) }
     
     it "should have currencies" do
-      user.currencies.count.should be == 2
+      expect(user.currencies.count).to eq(2)
     end
     
     describe "delete" do
       before { user.destroy }
       
       it "should be gone" do
-        Currency.count.should be == 0
+        expect(Currency.count).to eq(0)
       end
     end
   end
@@ -70,14 +70,14 @@ describe User do
     let(:user) { FactoryGirl.create(:user_with_balances) }
     
     it "should have balances" do
-      user.balances.count.should be == 3
+      expect(user.balances.count).to eq(3)
     end
     
     describe "delete" do
       before { user.destroy }
       
       it "should be gone" do
-        Balance.count.should be == 0
+        expect(Balance.count).to eq(0)
       end
     end
   end
@@ -134,14 +134,14 @@ describe User do
     let(:user) { FactoryGirl.create(:user_with_tags) }
     
     it "should have tags" do
-      user.nfc_tags.count.should be == 5
+      expect(user.nfc_tags.count).to eq(5)
     end
     
     describe "delete" do
       before { user.destroy }
       
       it "should be gone" do
-        NfcTag.count.should be == 0
+        expect(NfcTag.count).to eq(0)
       end
     end
   end
@@ -150,14 +150,16 @@ describe User do
     let(:user) { FactoryGirl.create(:user_with_transactions) }
     
     it "should have transactions" do
-      user.transactions.count.should be == 2
+      expect(user.transactions.count).to eq(2)
     end
     
-    describe "delete" do      
-      it "should not be gone" do
-        expect { user.destroy }.to raise_exception(ActiveRecord::DeleteRestrictionError)
+    describe "delete" do    
+      before { user.destroy }
         
-        Transaction.count.should be == 2
+      it "should not be gone" do
+        expect(user.errors.count).to_not eq(0)
+        
+        expect(Transaction.count).to eq(2)
       end
     end
     
@@ -168,7 +170,7 @@ describe User do
       end
       
       it "should now be gone" do
-        Transaction.count.should be == 0
+        expect(Transaction.count).to eq(0)
       end
     end
   end
@@ -177,16 +179,18 @@ describe User do
     let(:user) { FactoryGirl.create(:user_with_details) }
     
     it "should have transactions" do
-      user.transactions.count.should be == 2
-      user.transaction_details.count.should be == 4
+      expect(user.transactions.count).to eq(2)
+      expect(user.transaction_details.count).to eq(4)
     end
     
-    describe "delete" do      
+    describe "delete" do 
+      before { user.destroy }
+           
       it "should not be gone" do
-        expect { user.destroy }.to raise_exception(ActiveRecord::DeleteRestrictionError)
+        expect(user.errors.count).to_not eq(0)
         
-        Transaction.count.should be == 2
-        TransactionDetail.count.should be == 4
+        expect(Transaction.count).to eq(2)
+        expect(TransactionDetail.count).to eq(4)
       end
     end
     
@@ -197,8 +201,8 @@ describe User do
       end
       
       it "should now be gone" do
-        Transaction.count.should be == 0
-        TransactionDetail.count.should be == 0
+        expect(Transaction.count).to eq(0)
+        expect(TransactionDetail.count).to eq(0)
       end
     end
   end

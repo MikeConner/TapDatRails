@@ -38,10 +38,10 @@ class Currency < ActiveRecord::Base
   
   mount_uploader :icon, ImageUploader
 
-  attr_accessible :denominations, :expiration_days, :icon, :remote_icon_url, :name, :status, :user_id
+  #attr_accessible :denominations, :expiration_days, :icon, :remote_icon_url, :name, :status, :user_id
   
   belongs_to :user
-  has_many :vouchers, :dependent => :restrict
+  has_many :vouchers, :dependent => :restrict_with_error
   
   validates :expiration_days, :numericality => { :only_integer => true, :greater_than => 0 }
   validates :name, :presence => true,

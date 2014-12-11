@@ -20,20 +20,19 @@ describe TransactionDetail do
   let(:tag) { FactoryGirl.create(:nfc_tag, :user => other) }
   let(:payload) { FactoryGirl.create(:payload, :nfc_tag => tag) }
   let(:transaction) { FactoryGirl.create(:transaction, :user => user, :dest_id => other.id, :nfc_tag => tag, :payload => payload) }
-  let(:detail) { FactoryGirl.create(:transaction_detail, :transaction => transaction, :subject_id => user.id, :target_id => other.id) }
+  let(:detail) { FactoryGirl.create(:transaction_detail, :transaction_id => transaction, :subject_id => user.id, :target_id => other.id) }
   
   subject { detail }
   
   it "should respond to everything" do
-    detail.should respond_to(:credit_satoshi)
-    detail.should respond_to(:debit_satoshi)  
-    detail.should respond_to(:conversion_rate)  
-    detail.should respond_to(:currency)  
+    expect(detail).to respond_to(:credit_satoshi)
+    expect(detail).to respond_to(:debit_satoshi)  
+    expect(detail).to respond_to(:conversion_rate)  
+    expect(detail).to respond_to(:currency)  
   end
   
-  its(:transaction) { should be == transaction }
   it { should be_valid }
-  
+    
   describe "missing subject" do
     before { detail.subject_id = nil }
     
