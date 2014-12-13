@@ -2,7 +2,7 @@ require 'nickname_generator'
 require 'coinbase_api'
 
 class Mobile::V1::UsersController < ApiController
-  before_filter :after_token_authentication
+  before_filter :authenticate_user_from_token!
 
   # GET /mobile/:version/users/:id
   def show
@@ -52,7 +52,7 @@ class Mobile::V1::UsersController < ApiController
     params[:user].delete(:inbound_btc_address)
     params[:user].delete(:satoshi_balance)
 
-    if current_user.update_attributes(params[:user])
+    if current_user.update_attributes(user_params)
       response = {:nickname => current_user.name,
                   :email => current_user.email,
                   :inbound_btc_address => current_user.inbound_btc_address,
@@ -63,7 +63,7 @@ class Mobile::V1::UsersController < ApiController
     end
     puts current_user.errors.full_messages
   rescue Exception => ex
-    puts.ex.message
+    puts ex.message
     error! :bad_request, :metadata => {:error_description => ex.message}
   end
 
@@ -105,5 +105,10 @@ class Mobile::V1::UsersController < ApiController
         expose response              
       end        
     end
+  end
+
+private
+  def user_params
+    params.require(:user).permit(:name, :email, :inbound_btc_address, :outbound_btc_address, :mobile_profile_image_url, :mobile_profile_thumb_url)
   end
 end

@@ -1,5 +1,5 @@
 class Mobile::V1::CurrenciesController < ApiController
-  before_filter :after_token_authentication
+  before_filter :authenticate_user_from_token!
   
   def index
     currencies = Hash.new

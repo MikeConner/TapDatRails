@@ -9,13 +9,14 @@ describe Mobile::V1::CurrenciesController, :type => :controller do
     it "should fail" do
       get :index, :version => 1
       
-      subject.current_user.should be_nil
+      expect(subject.current_user).to be_nil
       
-      response.status.should be == 404
+      expect(response.status).to eq(404)
       
       result = JSON.parse(response.body)
-      result.keys.include?('error').should be_true
-      result['error_description'].should be == I18n.t('auth_token_not_found')
+
+      expect(result.keys.include?('error')).to be true
+      expect(result['error_description']).to eq(I18n.t('auth_token_not_found'))
     end
   end
 
@@ -23,15 +24,16 @@ describe Mobile::V1::CurrenciesController, :type => :controller do
     it "should fail" do
       get :index, :version => 1, :auth_token => user.authentication_token
       
-      subject.current_user.should_not be_nil
-      subject.current_user.currencies.count.should be == 2
+      expect(subject.current_user).to_not be_nil
+      expect(subject.current_user.currencies.count).to eq(2)
       
-      response.status.should be == 200
+      expect(response.status).to eq(200)
       
       result = JSON.parse(response.body)
-      result.keys.include?('error').should be_false
-      result.keys.include?('response').should be_true
-      result['response'].keys.should be == subject.current_user.currencies.map { |c| c.name }
+      
+      expect(result.keys.include?('error')).to be false
+      expect(result.keys.include?('response')).to be true
+      expect(result['response'].keys).to eq(subject.current_user.currencies.map { |c| c.name })
     end
   end
 end

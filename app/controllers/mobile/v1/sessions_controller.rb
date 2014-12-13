@@ -1,5 +1,5 @@
 class Mobile::V1::SessionsController < ApiController
-  before_filter :after_token_authentication
+  before_filter :authenticate_user_from_token!
 
   # POST /mobile/:version/sessions
   def create
