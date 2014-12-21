@@ -1,6 +1,7 @@
 class CurrenciesController < ApplicationController
   before_filter :authenticate_user!
   before_filter :currency_owner, :except => [:index, :new, :create]
+  before_filter :ensure_admin_user, :except => [:index, :show]
   
   # GET /currencies
   def index
@@ -56,7 +57,7 @@ private
   def currency_owner
     @currency = Currency.find(params[:id])
     if @currency.user != current_user
-      redirect_to root_path, I18n.t('not_currency_owner')
+      redirect_to root_path, :alert => I18n.t('not_currency_owner')
     end
   end  
 end

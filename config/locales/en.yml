@@ -20,6 +20,7 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  admins_only: 'This function reserved for administrators.'
   already_logged_in: 'User already logged in'
   auth_token_not_found: 'Authentication token not recognized'
   empty_payload: 'Payload has no content'
