@@ -26,6 +26,7 @@
 #  mobile_profile_image_url :string(255)
 #  mobile_profile_thumb_url :string(255)
 #  inbound_btc_qrcode       :string(255)
+#  role                     :integer          default(0), not null
 #
 
 describe User do  
@@ -46,9 +47,18 @@ describe User do
     expect(user).to respond_to(:mobile_profile_image_url)
     expect(user).to respond_to(:mobile_profile_thumb_url)
     expect(user).to respond_to(:inbound_btc_qrcode)
+    expect(user).to respond_to(:admin?)
   end
   
   it { should be_valid }
+  
+  it { should_not be_admin }
+  
+  describe "Admin user" do
+    before { user.update_attribute(:role, User::ADMIN_ROLE) }
+    
+    it { should be_admin }
+  end
   
   describe "currencies" do
     let(:user) { FactoryGirl.create(:user_with_currencies) }

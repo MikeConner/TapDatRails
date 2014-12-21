@@ -26,6 +26,7 @@
 #  mobile_profile_image_url :string(255)
 #  mobile_profile_thumb_url :string(255)
 #  inbound_btc_qrcode       :string(255)
+#  role                     :integer          default(0), not null
 #
 
 # CHARTER
@@ -51,7 +52,10 @@ class User < ActiveRecord::Base
 
   UNKNOWN_EMAIL_DOMAIN = '@noreply.fish'
   SECRET_KEY_LEN = 16
-
+  # User Roles (bitmask, if we need more than one)
+  # Wimping out and not using Devise mechanisms
+  ADMIN_ROLE = 1
+  
   mount_uploader :profile_image, ImageUploader
   mount_uploader :profile_thumb, ImageUploader
   mount_uploader :inbound_btc_qrcode, ImageUploader
@@ -78,6 +82,10 @@ class User < ActiveRecord::Base
   def generated_email?
     self.email.ends_with?(UNKNOWN_EMAIL_DOMAIN)
   end  
+  
+  def admin?
+    1 == self.role & ADMIN_ROLE
+  end
   
 protected
   def ensure_authentication_token!
