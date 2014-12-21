@@ -4,7 +4,7 @@ ruby '2.1.5'
 gem 'rails', '4.1.8'
 gem 'pg', '0.17.1'
 gem 'devise', '3.4.1'
-gem 'devise-async'#, '0.7.0'
+gem 'devise-async', '0.9.0'
 gem 'nokogiri', '1.6.1'
 
 gem 'haml', '4.1.0.beta.1'
@@ -14,7 +14,7 @@ gem 'haml-rails', '0.6.0'
 gem 'rails_admin', '0.6.5'
 
 # gem for api
-gem "rocket_pants"#, "1.10.0"
+gem "rocket_pants", "1.10.0"
 
 # 4.1 compatibility
 gem 'sass', '~> 3.2.19'
