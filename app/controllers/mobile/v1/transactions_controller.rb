@@ -1,7 +1,7 @@
 require 'bitcoin_ticker'
 
 class Mobile::V1::TransactionsController < ApiController
-  before_filter :after_token_authentication
+  before_filter :authenticate_user_from_token!
   
   # GET /mobile/:version/transactions
   def index

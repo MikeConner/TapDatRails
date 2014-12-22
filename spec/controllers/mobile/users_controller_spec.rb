@@ -9,13 +9,14 @@ describe Mobile::V1::UsersController, :type => :controller do
     it "should fail for insufficient balance" do
       put :cashout, :version => 1, :auth_token => user.authentication_token
 
-      subject.current_user.satoshi_balance.should be == CoinbaseAPI::WITHDRAWAL_THRESHOLD / 2
-      response.status.should be == 400
+      expect(subject.current_user.satoshi_balance).to eq(CoinbaseAPI::WITHDRAWAL_THRESHOLD / 2)
+      expect(response.status).to eq(400)
       
       result = JSON.parse(response.body)
-      result.keys.include?('response').should be_false
-      result.keys.include?('error').should be_true
-      result["error_description"].should be == I18n.t('insufficient_balance')            
+      
+      expect(result.keys.include?('response')).to be false
+      expect(result.keys.include?('error')).to be true
+      expect(result["error_description"]).to eq(I18n.t('insufficient_balance'))         
     end
   end
 
@@ -25,15 +26,16 @@ describe Mobile::V1::UsersController, :type => :controller do
     it "should fail for no inbound address" do
       put :cashout, :version => 1, :auth_token => user.authentication_token
 
-      subject.current_user.satoshi_balance.should be == CoinbaseAPI::WITHDRAWAL_THRESHOLD * 2
-      subject.current_user.inbound_btc_address.should be_nil
+      expect(subject.current_user.satoshi_balance).to eq(CoinbaseAPI::WITHDRAWAL_THRESHOLD * 2)
+      expect(subject.current_user.inbound_btc_address).to be_nil
       
-      response.status.should be == 400
+      expect(response.status).to eq(400)
       
       result = JSON.parse(response.body)
-      result.keys.include?('response').should be_false
-      result.keys.include?('error').should be_true
-      result["error_description"].should be == I18n.t('invalid_btc_addresses')            
+      
+      expect(result.keys.include?('response')).to be false
+      expect(result.keys.include?('error')).to be true
+      expect(result["error_description"]).to eq(I18n.t('invalid_btc_addresses'))            
     end
   end
   
@@ -43,15 +45,16 @@ describe Mobile::V1::UsersController, :type => :controller do
     it "should fail for no outbound address" do
       put :cashout, :version => 1, :auth_token => user.authentication_token
 
-      subject.current_user.satoshi_balance.should be == CoinbaseAPI::WITHDRAWAL_THRESHOLD * 10
-      subject.current_user.outbound_btc_address.should be_nil
+      expect(subject.current_user.satoshi_balance).to eq(CoinbaseAPI::WITHDRAWAL_THRESHOLD * 10)
+      expect(subject.current_user.outbound_btc_address).to be_nil
       
-      response.status.should be == 400
+      expect(response.status).to eq(400)
       
       result = JSON.parse(response.body)
-      result.keys.include?('response').should be_false
-      result.keys.include?('error').should be_true
-      result["error_description"].should be == I18n.t('invalid_btc_addresses')            
+      
+      expect(result.keys.include?('response')).to be false
+      expect(result.keys.include?('error')).to be true
+      expect(result["error_description"]).to eq(I18n.t('invalid_btc_addresses'))            
     end
   end
 
@@ -61,19 +64,20 @@ describe Mobile::V1::UsersController, :type => :controller do
     it "should succeed" do
       put :cashout, :version => 1, :auth_token => user.authentication_token
 
-      subject.current_user.satoshi_balance.should be == 0
-      Transaction.count.should be == 1
-      TransactionDetail.count.should be == 1
-      subject.current_user.transactions.first.satoshi_amount.should be == CoinbaseAPI::WITHDRAWAL_THRESHOLD * 2
+      expect(subject.current_user.satoshi_balance).to eq(0)
+      expect(Transaction.count).to eq(1)
+      expect(TransactionDetail.count).to eq(1)
+      expect(subject.current_user.transactions.first.satoshi_amount).to eq(CoinbaseAPI::WITHDRAWAL_THRESHOLD * 2)
       
-      response.status.should be == 200
+      expect(response.status).to eq(200)
       
       result = JSON.parse(response.body)
-      result.keys.include?('response').should be_true
-      result['response']['success'].should be_true
-      result['response']['id'].should_not be_blank
-      result['response'].keys.include?('data').should be_true
-      result.keys.include?('error').should be_false
+      
+      expect(result.keys.include?('response')).to be true
+      expect(result['response']['success']).to be true
+      expect(result['response']['id']).to_not be_blank
+      expect(result['response'].keys.include?('data')).to be true
+      expect(result.keys.include?('error')).to be false
     end
   end
   
@@ -83,13 +87,14 @@ describe Mobile::V1::UsersController, :type => :controller do
     it "should fail" do
       get :balance_inquiry, :version => 1, :auth_token => user.authentication_token
             
-      subject.current_user.inbound_btc_address.should be_nil
-      response.status.should be == 404
+      expect(subject.current_user.inbound_btc_address).to be_nil
+      expect(response.status).to eq(404)
       
       result = JSON.parse(response.body)
-      result.keys.include?('response').should be_false
-      result.keys.include?('error').should be_true
-      result["error_description"].should be == I18n.t('no_btc_address')      
+      
+      expect(result.keys.include?('response')).to be false
+      expect(result.keys.include?('error')).to be true
+      expect(result["error_description"]).to eq(I18n.t('no_btc_address'))      
     end
   end
 
@@ -97,22 +102,23 @@ describe Mobile::V1::UsersController, :type => :controller do
     let(:user) { FactoryGirl.create(:user) }
     
     before do
-      CoinbaseAPI.any_instance.stub(:balance_inquiry).and_return(1.5)      
-      CoinbaseAPI.any_instance.stub(:sell_price).and_return(450)      
+      allow_any_instance_of(CoinbaseAPI).to receive(:balance_inquiry).and_return(1.5)      
+      allow_any_instance_of(CoinbaseAPI).to receive(:sell_price).and_return(450)      
     end
     
     it "should work" do
       get :balance_inquiry, :version => 1, :auth_token => user.authentication_token
             
-      subject.current_user.inbound_btc_address.should be == user.inbound_btc_address
-      response.status.should be == 200
+      expect(subject.current_user.inbound_btc_address).to eq(user.inbound_btc_address)
+      expect(response.status).to eq(200)
       
       result = JSON.parse(response.body)
-      result.keys.include?('response').should be_true
-      result.keys.include?('error').should be_false
-      result["response"]["btc_balance"].should be == 1.5      
-      result["response"]["dollar_balance"].should be == 450      
-      result["response"]["exchange_rate"].should be == 300      
+      
+      expect(result.keys.include?('response')).to be true
+      expect(result.keys.include?('error')).to be false
+      expect(result["response"]["btc_balance"]).to eq(1.5)      
+      expect(result["response"]["dollar_balance"]).to eq(450)      
+      expect(result["response"]["exchange_rate"]).to eq(300)      
     end
   end
 
@@ -120,19 +126,20 @@ describe Mobile::V1::UsersController, :type => :controller do
     let(:user) { FactoryGirl.create(:user) }
     
     before do
-      CoinbaseAPI.any_instance.stub(:balance_inquiry).and_return(nil)      
-      CoinbaseAPI.any_instance.stub(:sell_price).and_return(300)      
+      allow_any_instance_of(CoinbaseAPI).to receive(:balance_inquiry).and_return(nil)      
+      allow_any_instance_of(CoinbaseAPI).to receive(:sell_price).and_return(300)      
     end
     
     it "should work" do
       get :balance_inquiry, :version => 1, :auth_token => user.authentication_token
             
-      response.status.should be == 404
+      expect(response.status).to eq(404)
       
       result = JSON.parse(response.body)
-      result.keys.include?('response').should be_false
-      result.keys.include?('error').should be_true
-      result["error_description"].should be == I18n.t('address_not_found')      
+      
+      expect(result.keys.include?('response')).to be false
+      expect(result.keys.include?('error')).to be true
+      expect(result["error_description"]).to eq(I18n.t('address_not_found'))      
     end
   end
 
@@ -140,22 +147,23 @@ describe Mobile::V1::UsersController, :type => :controller do
     let(:user) { FactoryGirl.create(:user) }
     
     before do
-      CoinbaseAPI.any_instance.stub(:balance_inquiry).and_return(0)      
-      CoinbaseAPI.any_instance.stub(:sell_price).and_return(0)      
+      allow_any_instance_of(CoinbaseAPI).to receive(:balance_inquiry).and_return(0)      
+      allow_any_instance_of(CoinbaseAPI).to receive(:sell_price).and_return(0)      
     end
     
     it "should work" do
       get :balance_inquiry, :version => 1, :auth_token => user.authentication_token
             
-      subject.current_user.inbound_btc_address.should be == user.inbound_btc_address
-      response.status.should be == 200
+      expect(subject.current_user.inbound_btc_address).to eq(user.inbound_btc_address)
+      expect(response.status).to eq(200)
       
       result = JSON.parse(response.body)
-      result.keys.include?('response').should be_true
-      result.keys.include?('error').should be_false
-      result["response"]["btc_balance"].should be == 0      
-      result["response"]["dollar_balance"].should be == 0      
-      result["response"]["exchange_rate"].should be_nil      
+      
+      expect(result.keys.include?('response')).to be true
+      expect(result.keys.include?('error')).to be false
+      expect(result["response"]["btc_balance"]).to eq(0)      
+      expect(result["response"]["dollar_balance"]).to eq(0)      
+      expect(result["response"]["exchange_rate"]).to be_nil      
     end
   end
   
@@ -163,14 +171,15 @@ describe Mobile::V1::UsersController, :type => :controller do
     it "should fail" do
       get :show, :version => 1, :id => 0, :auth_token => SecureRandom.hex(16)
 
-      subject.current_user.should be_nil
+      expect(subject.current_user).to be_nil
 
-      response.status.should be == 404
+      expect(response.status).to eq(404)
       
       result = JSON.parse(response.body)
-      result.keys.include?("response").should be_false
-      result.keys.include?("error").should be_true
-      result["error_description"].should be == I18n.t('auth_token_not_found')
+      
+      expect(result.keys.include?("response")).to be false
+      expect(result.keys.include?("error")).to be true
+      expect(result["error_description"]).to eq(I18n.t('auth_token_not_found'))
     end
   end
   
@@ -180,30 +189,31 @@ describe Mobile::V1::UsersController, :type => :controller do
     it "creates session successfully" do
       get :show, :version => 1, :id => 0, :auth_token => user.authentication_token
       
-      subject.current_user.should_not be_nil
-      subject.current_user.email.should be == user.email
-      subject.current_user.name.should be == user.name
-      subject.current_user.inbound_btc_address.should be == user.inbound_btc_address
-      subject.current_user.outbound_btc_address.should be == user.outbound_btc_address
-      subject.current_user.satoshi_balance.should be == user.satoshi_balance
-      subject.current_user.phone_secret_key.should be == user.phone_secret_key
+      expect(subject.current_user).to_not be_nil
+      expect(subject.current_user.email).to eq(user.email)
+      expect(subject.current_user.name).to eq(user.name)
+      expect(subject.current_user.inbound_btc_address).to eq(user.inbound_btc_address)
+      expect(subject.current_user.outbound_btc_address).to eq(user.outbound_btc_address)
+      expect(subject.current_user.satoshi_balance).to eq(user.satoshi_balance)
+      expect(subject.current_user.phone_secret_key).to eq(user.phone_secret_key)
       
-      response.status.should be == 200
+      expect(response.status).to eq(200)
       
       result = JSON.parse(response.body)
-      result['response'].keys.include?('nickname').should be_true
-      result['response'].keys.include?('email').should be_true
-      result['response'].keys.include?('inbound_btc_address').should be_true
-      result['response'].keys.include?('outbound_btc_address').should be_true
-      result['response'].keys.include?('satoshi_balance').should be_true
-      result['response'].keys.include?('profile_image').should be_true
-      result['response'].keys.include?('profile_thumb').should be_true
-      result['response']['nickname'].should be == user.name
-      result['response']['email'].should be == user.email
-      result['response']['inbound_btc_address'].should be == user.inbound_btc_address
-      result['response']['outbound_btc_address'].should be == user.outbound_btc_address
-      result['response']['satoshi_balance'].should be == user.satoshi_balance
-      result.keys.include?('error').should be_false
+      
+      expect(result['response'].keys.include?('nickname')).to be true
+      expect(result['response'].keys.include?('email')).to be true
+      expect(result['response'].keys.include?('inbound_btc_address')).to be true
+      expect(result['response'].keys.include?('outbound_btc_address')).to be true
+      expect(result['response'].keys.include?('satoshi_balance')).to be true
+      expect(result['response'].keys.include?('profile_image')).to be true
+      expect(result['response'].keys.include?('profile_thumb')).to be true
+      expect(result['response']['nickname']).to eq(user.name)
+      expect(result['response']['email']).to eq(user.email)
+      expect(result['response']['inbound_btc_address']).to eq(user.inbound_btc_address)
+      expect(result['response']['outbound_btc_address']).to eq(user.outbound_btc_address)
+      expect(result['response']['satoshi_balance']).to eq(user.satoshi_balance)
+      expect(result.keys.include?('error')).to be false
     end
   end  
 
@@ -215,15 +225,16 @@ describe Mobile::V1::UsersController, :type => :controller do
     it "creates session successfully" do
       put :reset_nickname, :version => 1, :auth_token => user.authentication_token
       
-      subject.current_user.should_not be_nil
-      subject.current_user.name.should_not be_blank
+      expect(subject.current_user).to_not be_nil
+      expect(subject.current_user.name).to_not be_blank
             
-      response.status.should be == 400
+      expect(response.status).to eq(400)
       
       result = JSON.parse(response.body)
-      result.keys.include?("response").should be_false
-      result.keys.include?("error").should be_true
-      result["error_description"].should be == I18n.t('no_generator')
+      
+      expect(result.keys.include?("response")).to be false
+      expect(result.keys.include?("error")).to be true
+      expect(result["error_description"]).to eq(I18n.t('no_generator'))
     end
   end  
 
@@ -253,30 +264,31 @@ describe Mobile::V1::UsersController, :type => :controller do
                               :authentication_token => authentication_token,
                               :phone_secret_key => phone_secret_key}
       
-      subject.current_user.should_not be_nil
-      subject.current_user.name.should be == nickname
-      subject.current_user.inbound_btc_address.should be == user.inbound_btc_address
-      subject.current_user.inbound_btc_address.should_not be == inbound_btc_address
-      subject.current_user.outbound_btc_address.should_not be == user.outbound_btc_address
-      subject.current_user.outbound_btc_address.should be == outbound_btc_address
-      subject.current_user.authentication_token.should be == user.authentication_token
-      subject.current_user.authentication_token.should_not be == authentication_token
-      subject.current_user.satoshi_balance.should be == user.satoshi_balance
-      subject.current_user.satoshi_balance.should_not be == satoshi_balance
-      subject.current_user.phone_secret_key.should be == user.phone_secret_key
-      subject.current_user.phone_secret_key.should_not be == phone_secret_key
-      subject.current_user.email.should_not be == user.email
-      subject.current_user.email.should be == email
+      expect(subject.current_user).to_not be_nil
+      expect(subject.current_user.name).to eq(nickname)
+      expect(subject.current_user.inbound_btc_address).to eq(user.inbound_btc_address)
+      expect(subject.current_user.inbound_btc_address).to_not eq(inbound_btc_address)
+      expect(subject.current_user.outbound_btc_address).to_not eq(user.outbound_btc_address)
+      expect(subject.current_user.outbound_btc_address).to eq(outbound_btc_address)
+      expect(subject.current_user.authentication_token).to eq(user.authentication_token)
+      expect(subject.current_user.authentication_token).to_not eq(authentication_token)
+      expect(subject.current_user.satoshi_balance).to eq(user.satoshi_balance)
+      expect(subject.current_user.satoshi_balance).to_not eq(satoshi_balance)
+      expect(subject.current_user.phone_secret_key).to eq(user.phone_secret_key)
+      expect(subject.current_user.phone_secret_key).to_not eq(phone_secret_key)
+      expect(subject.current_user.email).to_not eq(user.email)
+      expect(subject.current_user.email).to eq(email)
             
-      response.status.should be == 200
+      expect(response.status).to eq(200)
       
       result = JSON.parse(response.body)
-      result['response'].keys.include?('nickname').should be_true
-      result['response']['nickname'].should_not be == @old_name
-      result['response']['inbound_btc_address'].should be == user.inbound_btc_address
-      result['response']['outbound_btc_address'].should be == outbound_btc_address
-      result['response']['email'].should be == email
-      result.keys.include?('error').should be_false
+      
+      expect(result['response'].keys.include?('nickname')).to be true
+      expect(result['response']['nickname']).to_not eq(@old_name)
+      expect(result['response']['inbound_btc_address']).to eq(user.inbound_btc_address)
+      expect(result['response']['outbound_btc_address']).to eq(outbound_btc_address)
+      expect(result['response']['email']).to eq(email)
+      expect(result.keys.include?('error')).to be false
     end
   end  
 
@@ -292,15 +304,16 @@ describe Mobile::V1::UsersController, :type => :controller do
     it "creates session successfully" do
       put :reset_nickname, :version => 1, :auth_token => user.authentication_token
       
-      subject.current_user.should_not be_nil
-      subject.current_user.name.should_not be_blank
+      expect(subject.current_user).to_not be_nil
+      expect(subject.current_user.name).to_not be_blank
             
-      response.status.should be == 200
+      expect(response.status).to eq(200)
       
       result = JSON.parse(response.body)
-      result['response'].keys.include?('nickname').should be_true
-      result['response']['nickname'].should_not be == @old_name
-      result.keys.include?('error').should be_false
+      
+      expect(result['response'].keys.include?('nickname')).to be true
+      expect(result['response']['nickname']).to_not eq(@old_name)
+      expect(result.keys.include?('error')).to be false
     end
   end    
 end

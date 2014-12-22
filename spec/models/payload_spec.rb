@@ -23,14 +23,14 @@ describe Payload do
   subject { payload }
   
   it "should respond to everything" do
-    payload.should respond_to(:uri)
-    payload.should respond_to(:payload_image)
-    payload.should respond_to(:payload_thumb)
-    payload.should respond_to(:content)  
-    payload.should respond_to(:threshold)  
-    payload.should respond_to(:slug)  
-    payload.should respond_to(:mobile_payload_image_url)
-    payload.should respond_to(:mobile_payload_thumb_url)
+    expect(payload).to respond_to(:uri)
+    expect(payload).to respond_to(:payload_image)
+    expect(payload).to respond_to(:payload_thumb)
+    expect(payload).to respond_to(:content)  
+    expect(payload).to respond_to(:threshold)  
+    expect(payload).to respond_to(:slug)  
+    expect(payload).to respond_to(:mobile_payload_image_url)
+    expect(payload).to respond_to(:mobile_payload_thumb_url)
   end
   
   its(:nfc_tag) { should be == tag }
@@ -45,7 +45,7 @@ describe Payload do
   end
   
   it "should have a slug" do
-    payload.slug.should_not be_nil
+    expect(payload.slug).to_not be_nil
   end  
   
   describe "no content" do

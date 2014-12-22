@@ -25,10 +25,10 @@ describe Transaction do
   subject { transaction }
   
   it "should respond to everything" do
-    transaction.should respond_to(:satoshi_amount)
-    transaction.should respond_to(:dollar_amount)  
-    transaction.should respond_to(:comment)  
-    transaction.should respond_to(:slug)  
+    expect(transaction).to respond_to(:satoshi_amount)
+    expect(transaction).to respond_to(:dollar_amount)  
+    expect(transaction).to respond_to(:comment)  
+    expect(transaction).to respond_to(:slug)  
   end
   
   its(:user) { should be == user }
@@ -37,7 +37,7 @@ describe Transaction do
   it { should be_valid }
 
   it "should have a slug" do
-    transaction.slug.should_not be_nil
+    expect(transaction.slug).not_to be_nil
   end  
     
   describe "missing user" do
@@ -68,27 +68,27 @@ describe Transaction do
     end
   end
   
-  describe "No amount at all" do
+  describe "Default amount" do
     before do
-      transaction.dollar_amount = nil
-      transaction.satoshi_amount = nil
+      expect(transaction.dollar_amount).to eq(1)
+      expect(transaction.satoshi_amount).to eq(10000)
     end
     
-    it { should_not be_valid }
+    it { should be_valid }
   end
   
   describe "Details" do
     let(:transaction) { FactoryGirl.create(:transaction_with_details) }
     
     it "should have details" do
-      transaction.transaction_details.count.should be == 2
+      expect(transaction.transaction_details.count).to eq(2)
     end
     
     describe "destroy" do
       before { transaction.destroy }
       
       it "should be gone" do
-        TransactionDetail.count.should be == 0
+        expect(TransactionDetail.count).to eq(0)
       end
     end
   end

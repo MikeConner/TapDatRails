@@ -15,8 +15,8 @@ describe Nickname do
   subject { nickname }
   
   it "should respond to everything" do
-    nickname.should respond_to(:column)
-    nickname.should respond_to(:word)  
+    expect(nickname).to respond_to(:column)
+    expect(nickname).to respond_to(:word)  
   end
   
   it { should be_valid }

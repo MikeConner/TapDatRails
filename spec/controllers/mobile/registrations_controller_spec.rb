@@ -18,13 +18,14 @@ describe Mobile::V1::RegistrationsController, :type => :controller do
     it "should fail" do
       post :create, :version => 1, :user => {:phone_secret_key => user.phone_secret_key}
       
-      subject.current_user.should be_nil
-      response.status.should be == 400
+      expect(subject.current_user).to be_nil
+      expect(response.status).to eq(400)
       
       result = JSON.parse(response.body)
-      result.keys.include?("response").should be_false
-      result.keys.include?("error").should be_true
-      result["error_description"].should match('duplicate key value violates unique constraint')
+      
+      expect(result.keys.include?("response")).to be false
+      expect(result.keys.include?("error")).to be true
+      expect(result["error_description"]).to match('duplicate key value violates unique constraint')
     end
   end
   
@@ -37,17 +38,18 @@ describe Mobile::V1::RegistrationsController, :type => :controller do
     it "creates user successfully" do
       post :create, :version => 1, :user => {:email => email, :password => password, :nickname => nickname, :phone_secret_key => secret_key}
       
-      subject.current_user.should_not be_nil
-      subject.current_user.email.should be == email
-      subject.current_user.name.should be == nickname
-      subject.current_user.phone_secret_key.should be == secret_key
-      subject.current_user.inbound_btc_address.should_not be_nil
+      expect(subject.current_user).to_not be_nil
+      expect(subject.current_user.email).to eq(email)
+      expect(subject.current_user.name).to eq(nickname)
+      expect(subject.current_user.phone_secret_key).to eq(secret_key)
+      expect(subject.current_user.inbound_btc_address).to_not be_nil
       
       result = JSON.parse(response.body)
-      result['response'].keys.include?('nickname').should be_true
-      result['response']['nickname'].should be == nickname
-      result['response']['auth_token'].should_not be_blank
-      result.keys.include?('error').should be_false
+      
+      expect(result['response'].keys.include?('nickname')).to be true
+      expect(result['response']['nickname']).to eq(nickname)
+      expect(result['response']['auth_token']).to_not be_blank
+      expect(result.keys.include?('error')).to be false
     end
  
     describe "creates user successfully (minimal)" do
@@ -61,16 +63,17 @@ describe Mobile::V1::RegistrationsController, :type => :controller do
       it "should succeed with nickname" do
         post :create, :version => 1, :user => {:phone_secret_key => secret_key}
         
-        subject.current_user.should_not be_nil
-        subject.current_user.email.should_not be_blank
-        subject.current_user.name.should_not be_blank
-        subject.current_user.phone_secret_key.should be == secret_key
+        expect(subject.current_user).to_not be_nil
+        expect(subject.current_user.email).to_not be_blank
+        expect(subject.current_user.name).to_not be_blank
+        expect(subject.current_user.phone_secret_key).to eq(secret_key)
         
         result = JSON.parse(response.body)
-        result['response'].keys.include?('nickname').should be_true
-        result['response']['nickname'].should be == "Ham Fist"
-        result['response']['auth_token'].should_not be_blank
-        result.keys.include?('error').should be_false
+        
+        expect(result['response'].keys.include?('nickname')).to be true
+        expect(result['response']['nickname']).to eq("Ham Fist")
+        expect(result['response']['auth_token']).to_not be_blank
+        expect(result.keys.include?('error')).to be false
       end
     end
 
@@ -80,38 +83,41 @@ describe Mobile::V1::RegistrationsController, :type => :controller do
       it "has no nicknames" do
         post :create, :version => 1, :user => {:phone_secret_key => secret_key}
         
-        subject.current_user.should be_nil
-        response.status.should be == 400
+        expect(subject.current_user).to be_nil
+        expect(response.status).to eq(400)
         
         result = JSON.parse(response.body)
-        result.keys.include?("response").should be_false
-        result.keys.include?("error").should be_true
-        result["error_description"].should be == I18n.t('no_generator')
+        
+        expect(result.keys.include?("response")).to be false
+        expect(result.keys.include?("error")).to be true
+        expect(result["error_description"]).to eq(I18n.t('no_generator'))
       end
     end
     
     it "fails with no user" do
       post :create, :version => 1
       
-      subject.current_user.should be_nil
-      response.status.should be == 400
+      expect(subject.current_user).to be_nil
+      expect(response.status).to eq(400)
       
       result = JSON.parse(response.body)
-      result.keys.include?("response").should be_false
-      result.keys.include?("error").should be_true
-      result["error_description"].should be == I18n.t('missing_argument', :arg => 'user')
+      
+      expect(result.keys.include?("response")).to be false
+      expect(result.keys.include?("error")).to be true
+      expect(result["error_description"]).to eq(I18n.t('missing_argument', :arg => 'user'))
     end
 
     it "fails with no key" do
       post :create, :version => 1, :user => { :email => email, :password => password, :nickname => nickname }
       
-      subject.current_user.should be_nil
-      response.status.should be == 400
+      expect(subject.current_user).to be_nil
+      expect(response.status).to eq(400)
       
       result = JSON.parse(response.body)
-      result.keys.include?("response").should be_false
-      result.keys.include?("error").should be_true
-      result["error_description"].should be == I18n.t('missing_argument', :arg => 'phone secret key')
+      
+      expect(result.keys.include?("response")).to be false
+      expect(result.keys.include?("error")).to be true
+      expect(result["error_description"]).to eq(I18n.t('missing_argument', :arg => 'phone secret key'))
     end
   end
 end

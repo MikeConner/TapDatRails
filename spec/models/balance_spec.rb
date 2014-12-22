@@ -18,9 +18,9 @@ describe Balance do
   subject { balance }
   
   it "should respond to anything" do
-    balance.should respond_to(:currency_name)
-    balance.should respond_to(:amount)
-    balance.should respond_to(:expiration_date)
+    expect(balance).to respond_to(:currency_name)
+    expect(balance).to respond_to(:amount)
+    expect(balance).to respond_to(:expiration_date)
   end
   
   its(:user) { should be == user }
@@ -34,25 +34,25 @@ describe Balance do
   end
   
   it "should have zero amount initially" do
-    balance.amount.should be == 0
+    expect(balance.amount).to eq(0)
   end
   
   describe "vouchers" do
     let(:balance) { FactoryGirl.create(:balance_with_vouchers, :user => user) }
     
     it "should have vouchers" do
-      balance.vouchers.count.should be == 3
+      expect(balance.vouchers.count).to be == 3
     end
     
     it "should get the right amount" do
-      balance.amount.should be == Voucher.sum(:amount)
+      expect(balance.amount).to eq(Voucher.sum(:amount))
     end
     
     describe "delete" do
       before { balance.destroy }
       
       it "should be gone" do
-        Voucher.count.should be == 0
+        expect(Voucher.count).to be == 0
       end
     end
   end

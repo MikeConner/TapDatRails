@@ -20,9 +20,9 @@ describe Voucher do
  subject { voucher }
  
  it "should respond to everything" do
-   voucher.should respond_to(:uid)
-   voucher.should respond_to(:amount)
-   voucher.should respond_to(:status)
+   expect(voucher).to respond_to(:uid)
+   expect(voucher).to respond_to(:amount)
+   expect(voucher).to respond_to(:status)
  end
  
  its(:currency) { should be == currency }
@@ -67,8 +67,8 @@ describe Voucher do
    end
    
    it "should respond to the scope" do
-     Voucher.count.should be == 2
-     Voucher.active.count.should be == 1
+     expect(Voucher.count).to eq(2)
+     expect(Voucher.active.count).to eq(1)
    end
- end
+  end
 end

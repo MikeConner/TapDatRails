@@ -25,8 +25,8 @@
 # NOTES AND WARNINGS
 #
 class Balance < ActiveRecord::Base
-  attr_accessible :currency_name, :expiration_date, 
-                  :user_id
+  #attr_accessible :currency_name, :expiration_date, 
+  #                :user_id
   
   belongs_to :user
   has_many :vouchers, :dependent => :destroy

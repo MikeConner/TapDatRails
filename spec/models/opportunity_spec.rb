@@ -16,9 +16,9 @@ describe Opportunity do
   subject { opportunity }
   
   it "should respond to everything (instant)" do
-    opportunity.should respond_to(:name)
-    opportunity.should respond_to(:email)
-    opportunity.should respond_to(:location)
+    expect(opportunity).to respond_to(:name)
+    expect(opportunity).to respond_to(:email)
+    expect(opportunity).to respond_to(:location)
   end
   
   it { should be_valid }

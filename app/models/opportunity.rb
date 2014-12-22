@@ -21,7 +21,7 @@
 class Opportunity < ActiveRecord::Base
   include ApplicationHelper
   
-  attr_accessible :email, :location, :name
+  #attr_accessible :email, :location, :name
   
   validates :email, :uniqueness => { case_sensitive: false },
                     :format => { with: EMAIL_REGEX }

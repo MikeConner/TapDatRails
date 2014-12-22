@@ -20,12 +20,12 @@ describe Currency do
   subject { currency }
   
   it "should respond to everything" do
-    currency.should respond_to(:name)
-    currency.should respond_to(:icon)
-    currency.should respond_to(:remote_icon_url)
-    currency.should respond_to(:denominations)
-    currency.should respond_to(:expiration_days)
-    currency.should respond_to(:status)
+    expect(currency).to respond_to(:name)
+    expect(currency).to respond_to(:icon)
+    expect(currency).to respond_to(:remote_icon_url)
+    expect(currency).to respond_to(:denominations)
+    expect(currency).to respond_to(:expiration_days)
+    expect(currency).to respond_to(:status)
   end
   
   its(:user) { should be == user }
@@ -76,11 +76,15 @@ describe Currency do
     let(:currency) { FactoryGirl.create(:currency_with_vouchers) }
     
     it "should have vouchers" do
-      currency.vouchers.count.should be == 2
+      expect(currency.vouchers.count).to eq(2)
     end
     
-    it "should not delete" do
-      expect { currency.destroy }.to raise_exception(ActiveRecord::DeleteRestrictionError)
+    describe "should not delete" do
+      before { currency.destroy }
+      
+      it "should have errors" do
+        expect(currency.errors.count).not_to eq(0)
+      end
     end
     
     describe "Delete vouchers" do
@@ -90,7 +94,7 @@ describe Currency do
         before { currency.destroy }
         
         it "should work" do
-          Currency.count.should be == 0
+          expect(Currency.count).to eq(0)
         end
       end
     end

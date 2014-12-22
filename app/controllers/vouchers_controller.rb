@@ -2,6 +2,7 @@ class VouchersController < ApplicationController
   before_filter :authenticate_user!
   # Currently the only use for this is to get vouchers associated with a given currency_id, which must be supplied
   before_filter :get_parent_currency, :only => [:index, :new]
+  before_filter :ensure_admin_user, :except => [:index, :show]
   
   # GET /vouchers?currency_id=
   def index
@@ -60,5 +61,5 @@ private
     @currency = Currency.find_by_id(params[:currency_id])
     
     redirect_to root_path, :alert => 'Unknown parent currency' if @currency.nil?
-  end 
+  end   
 end

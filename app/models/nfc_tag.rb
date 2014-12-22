@@ -24,8 +24,8 @@
 #   legible_id makes it easier for users to type in
 #
 class NfcTag < ActiveRecord::Base
-  attr_accessible :lifetime_balance, :name, :tag_id,
-                  :user_id, :currency_id
+  #attr_accessible :lifetime_balance, :name, :tag_id,
+  #                :user_id, :currency_id
   
   belongs_to :user
   # If a non-BTC tag

@@ -19,7 +19,7 @@
 # NOTES AND WARNINGS
 #
 class Nickname < ActiveRecord::Base
-  attr_accessible :column, :word
+  #attr_accessible :column, :word
   
   validates :column, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
   validates_presence_of :word

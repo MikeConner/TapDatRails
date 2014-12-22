@@ -3,16 +3,17 @@
   %head
     %meta{:charset => "utf-8"}/
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
-    %title= content_for?(:title) ? yield(:title) : "foundation-rails"
+    %title= content_for?(:title) ? yield(:title) : "Tap Dat App"
     = stylesheet_link_tag    "application"
     = javascript_include_tag "vendor/modernizr"
-    = favicon_link_tag 
+    = favicon_link_tag
     = stylesheet_link_tag "application"
     = csrf_meta_tag
     = render 'layouts/application/shim'
   %body
     = render 'layouts/application/header'
-    = yield
-    -# = render 'layouts/application/footer' 
+    .row.large-12.columns
+      = yield
+    = render 'layouts/application/footer'
     = javascript_include_tag "application"
     = content_for :head

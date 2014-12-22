@@ -16,6 +16,7 @@ class Mobile::V1::RegistrationsController < ApiController
           else
             btc_address = Faker::Bitcoin.address
           end
+
           user = User.create!(:email => email,
                               :password => password,
                               :password_confirmation => password,

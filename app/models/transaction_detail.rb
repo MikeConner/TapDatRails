@@ -25,12 +25,12 @@
 #   If we ever use more than dollars, we would also need a currency field
 #
 class TransactionDetail < ActiveRecord::Base
-  attr_accessible :conversion_rate, :currency, :credit_satoshi, :debit_satoshi, :subject_id, :target_id
+  #attr_accessible :conversion_rate, :currency, :credit_satoshi, :debit_satoshi, :subject_id, :target_id
   
   MAX_CURRENCY_LEN = 16
   CURRENCY_USD = 'USD'
   
-  belongs_to :transaction
+  belongs_to :tap_transaction, :foreign_key => :transaction_id
   
   validates_presence_of :subject_id
   validates_presence_of :target_id

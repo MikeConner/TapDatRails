@@ -1,5 +1,5 @@
 class Mobile::V1::PayloadsController < ApiController
-  before_filter :after_token_authentication
+  before_filter :authenticate_user_from_token!
   before_filter :ensure_own_tag, :except => [:show]
   
   # GET /mobile/:version/payloads
@@ -13,7 +13,7 @@ class Mobile::V1::PayloadsController < ApiController
   
   # POST /mobile/:version/payloads
   def create
-    payload = @tag.payloads.build(params[:payload])
+    payload = @tag.payloads.build(payload_params)
     
     if payload.valid?
       begin
@@ -52,7 +52,7 @@ class Mobile::V1::PayloadsController < ApiController
       error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'Payload')}
     else
       begin
-        payload.update_attributes!(params[:payload])
+        payload.update_attributes!(payload_params)
         head :ok
       rescue Exception => ex
         error! :bad_request, :metadata => {:error_description => ex.message} 
@@ -78,6 +78,10 @@ class Mobile::V1::PayloadsController < ApiController
   end
   
 private
+  def payload_params
+    params.require(:payload).permit(:content, :threshold, :uri, :payload_image, :remote_payload_image_url, :payload_thumb, :remote_payload_thumb_url, :mobile_payload_image_url, :mobile_payload_thumb_url)
+  end
+  
   def set_tag
     @tag = NfcTag.find_by_tag_id(params[:tag_id].gsub('-', ''))
         
