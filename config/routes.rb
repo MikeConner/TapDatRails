@@ -6,8 +6,12 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  resources :users, :only => [] do
-    get 'leader_board', :on => :member
+  resources :users, :only => [:update] do
+    member do
+      get 'leader_board'
+      get 'dashboard'
+      get 'qrcode'
+    end
   end
   
   resources :currencies
@@ -18,7 +22,7 @@ Rails.application.routes.draw do
   get "/privacy" => "static_pages#privacy"
   get "/contact" => "static_pages#contact"
   get "/leader_board" => "static_pages#leader_board"
-
+  
   namespace :api do
     namespace :v1 do
       devise_scope :user do
@@ -26,6 +30,7 @@ Rails.application.routes.draw do
         post 'sessions' => 'sessions#create', :as => 'login'
         delete 'sessions' => 'sessions#destroy', :as => 'logout'
       end
+      
       get 'tasks' => 'tasks#index', :as => 'tasks'
     end
   end

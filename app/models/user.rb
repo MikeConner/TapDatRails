@@ -72,6 +72,7 @@ class User < ActiveRecord::Base
   has_many :transaction_details, :through => :transactions   
   has_many :currencies, :dependent => :destroy
   has_many :balances, :dependent => :destroy
+  has_many :payloads, -> { uniq }, :through => :transactions
   
   validates :email, :uniqueness => { case_sensitive: false },
                     :format => { with: EMAIL_REGEX }

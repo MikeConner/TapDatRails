@@ -23,7 +23,7 @@ class CurrenciesController < ApplicationController
 
   # POST /currencies
   def create
-    @currency = current_user.currencies.new(params[:currency])
+    @currency = current_user.currencies.new(currency_params)
 
     @currency.encode_denominations
         
@@ -36,7 +36,7 @@ class CurrenciesController < ApplicationController
 
   # PUT /currencies/1
   def update
-    if @currency.update_attributes(params[:currency])
+    if @currency.update_attributes(currency_params)
       @currency.encode_denominations
       @currency.save!
       
@@ -60,4 +60,8 @@ private
       redirect_to root_path, :alert => I18n.t('not_currency_owner')
     end
   end  
+  
+  def currency_params
+    params.require(:currency).permit(:denominations, :expiration_days, :icon, :remote_icon_url, :name, :status, :user_id)
+  end
 end

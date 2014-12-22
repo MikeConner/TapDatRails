@@ -1,0 +1,12 @@
+%h1 Account
+= label_tag :nickname
+= text_field_tag :nickname, current_user.name
+= submit_tag 'Update Nickname', :class => 'btn', :onclick => "update_nickname('nickname', '#{user_path(current_user)}');"
+%br
+= current_user.email
+%br
+- unless current_user.inbound_btc_address.nil?
+  = image_tag "#{qrcode_user_path(current_user)}.svg"
+  %br
+  = current_user.inbound_btc_address
+  
