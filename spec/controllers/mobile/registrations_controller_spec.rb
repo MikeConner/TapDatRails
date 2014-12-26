@@ -43,6 +43,7 @@ describe Mobile::V1::RegistrationsController, :type => :controller do
       expect(subject.current_user.name).to eq(nickname)
       expect(subject.current_user.phone_secret_key).to eq(secret_key)
       expect(subject.current_user.inbound_btc_address).to_not be_nil
+      expect(subject.current_user.inbound_btc_qrcode).to_not be_nil
       
       result = JSON.parse(response.body)
       
