@@ -58,3 +58,7 @@ group :test do
   gem 'rspec-tag_matchers', '0.1.2'
   gem 'rspec-its', '1.1.0'
 end
+
+group :production do
+  gem 'rails_12factor'
+end
