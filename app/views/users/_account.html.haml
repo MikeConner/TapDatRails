@@ -9,4 +9,5 @@
   = image_tag "#{qrcode_user_path(current_user)}.svg"
   %br
   = current_user.inbound_btc_address
-  
+%br
+%h3 Satoshi Balance: #{current_user.satoshi_balance}
