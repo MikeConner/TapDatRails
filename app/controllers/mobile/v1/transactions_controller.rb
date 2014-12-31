@@ -98,7 +98,7 @@ class Mobile::V1::TransactionsController < ApiController
   end
 private
   def transaction_params
-    params.require(:tag_id, :amount)
+    params.permit(:tag_id, :amount, :auth_token)
   end
 
 end
