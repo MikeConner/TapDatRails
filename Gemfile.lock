@@ -332,6 +332,7 @@ DEPENDENCIES
   factory_girl_rails (= 4.5.0)
   faker (= 1.4.3)
   fog (= 1.22.1)
+  font-awesome-rails
   foundation-rails (= 5.4.5.0)
   friendly_id (= 5.0.4)
   haml (= 4.1.0.beta.1)

@@ -1,5 +1,21 @@
-%h1 Yapa
-- current_user.payloads.each do |yapa|
-  = image_tag yapa.payload_thumb
-  %br
-  = yapa.content
+.row
+  %h4 My Yapa
+%ul.small-block-grid-6
+  - current_user.payloads.each do |yapa|
+    %li{:style=> "background-image: url(#{yapa.mobile_payload_thumb_url}); width: 200px; height: 200px; border: 1px solid black; margin:10px; padding: 10px"}
+      .panel.radius.round
+        = truncate( yapa.content, :length => 20)
+
+-#          = image_tag yapa.mobile_payload_thumb_url, size: "200x200"
+      %br
+
+.row
+  .panel.large-12.columns
+    Similar to app.  Tiles (square-ish) of pictures - 3x3 or 4x4 (or just responsive  blocks that fill a grid - same shape (locked shape)
+    Each yapa history click opens up to a single yapa view (div on top of the yapa history page -> animate in and out)
+
+    Single Yapa:
+    Picture
+    Note
+    Currency + amount given (+ maybe icon?)
+    link to full res image (for download)

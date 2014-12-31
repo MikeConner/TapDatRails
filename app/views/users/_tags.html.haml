@@ -1,1 +1,9 @@
 %h1 Tags
+
+%ul.small-block-grid-3
+  - current_user.nfc_tags.each do |tag|
+    %li.foundation-plus{:style=> "background-image: url(#{tag.payloads.order(:threshold).first.mobile_payload_image_url}); width: 200px; height: 200px; margin:10px; border: 1px solid grey; padding: 10px"}
+      =tag.name
+  %li{:style=> "width: 200px; height: 200px; margin:10px; border: 1px solid grey; padding: 10px"}
+    %i.fa.fa-plus-circle.fa-5x
+      add

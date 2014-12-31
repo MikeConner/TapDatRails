@@ -1,7 +1,9 @@
 %h1 Account
+
+= image_tag current_user.mobile_profile_thumb_url
 = label_tag :nickname
 = text_field_tag :nickname, current_user.name
-= submit_tag 'Update Nickname', :class => 'btn', :onclick => "update_nickname('nickname', '#{user_path(current_user)}');"
+= submit_tag 'Update Nickname', :class => 'button', :onclick => "update_nickname('nickname', '#{user_path(current_user)}');"
 %br
 = current_user.email
 %br
@@ -11,3 +13,16 @@
   = current_user.inbound_btc_address
 %br
 %h3 Satoshi Balance: #{current_user.satoshi_balance}
+
+%h3 Other balances
+=current_user.balances.each do |balance|
+  = balance.currency_name
+  = balance.amount
+
+%h2 Deposit
+= current_user.inbound_btc_qrcode
+= current_user.inbound_btc_address
+
+%h3 Withdraw
+= text_field :outbound_addy, current_user.outbound_btc_address, :placeholder => "Outbound Addy"
+= submit_tag 'Withdraw', :class => "button"

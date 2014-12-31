@@ -6,6 +6,7 @@ gem 'pg', '0.17.1'
 gem 'devise', '3.4.1'
 gem 'devise-async', '0.9.0'
 gem 'nokogiri', '1.6.1'
+gem "font-awesome-rails"
 
 gem 'haml', '4.1.0.beta.1'
 gem 'haml-rails', '0.6.0'
