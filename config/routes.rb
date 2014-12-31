@@ -13,33 +13,23 @@ Rails.application.routes.draw do
       get 'qrcode'
     end
   end
-  
+
   resources :currencies
   resources :vouchers
-  
+
   get "/how_it_works" => "static_pages#how_it_works"
   get "/legal" => "static_pages#legal"
   get "/privacy" => "static_pages#privacy"
   get "/contact" => "static_pages#contact"
   get "/leader_board" => "static_pages#leader_board"
-  
-  namespace :api do
-    namespace :v1 do
-      devise_scope :user do
-        post 'registrations' => 'registrations#create', :as => 'register'
-        post 'sessions' => 'sessions#create', :as => 'login'
-        delete 'sessions' => 'sessions#destroy', :as => 'logout'
-      end
-      
-      get 'tasks' => 'tasks#index', :as => 'tasks'
-    end
-  end
-  
+
+
+
   namespace :mobile do
     api :version => 1, :module => "v1" do
-      resources :sessions, :only => [:create, :destroy]      
-      resources :registrations, :only => [:create]  
-      resources :transactions, :only => [:create, :index] 
+      resources :sessions, :only => [:create, :destroy]
+      resources :registrations, :only => [:create]
+      resources :transactions, :only => [:create, :index]
       resources :currencies, :only => [:index]
       resources :users, :only => [:show, :update] do
         collection do
@@ -47,12 +37,12 @@ Rails.application.routes.draw do
           get 'balance_inquiry'
           put 'cashout'
         end
-      end   
+      end
       resources :nfc_tags, :only => [:create, :update, :index, :destroy]
       resources :payloads, :except => [:new, :edit]
-    end    
+    end
   end
-  
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
