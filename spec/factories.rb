@@ -14,6 +14,10 @@ FactoryGirl.define do
   sequence(:sequential_tag) { |n| "Tag #{n}"}
   sequence(:random_currency) { |n| "#{Faker::Commerce.product_name.split(' ')[0..1].join(' ')} Pts" }
   
+  factory :bitcoin_rate do
+    rate { (Random.rand * 1000 + 1).round(2) }
+  end
+  
   factory :opportunity do
     email { generate(:random_email) }
     name { generate(:random_name) }

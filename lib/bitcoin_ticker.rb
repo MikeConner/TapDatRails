@@ -3,17 +3,28 @@ require 'singleton'
 class BitcoinTicker
   include Singleton
   
-  def current_rate
-    uri = URI.parse("http://blockchain.info/ticker")
-    http = Net::HTTP.new(uri.host, uri.port)
-    request = Net::HTTP::Get.new(uri.request_uri)
-          
-    response = http.request(request)                 
-    if response.code == '200'
-      data = JSON.parse(response.body)
-      rate = data['USD']['last'].to_f rescue nil
+  FALLBACK_RATE = 320.00
+    
+  def initialize
+    @agent = Mechanize.new
+  end
+  
+  def current_rate   
+    rate = nil
+    page = @agent.get('http://blockchain.info/ticker') rescue nil
+    
+    unless page.nil?
+      rate = JSON.parse(page.content)["USD"]["last"] rescue nil
+    end
+       
+    if rate.nil?
+      rate = BitcoinRate.first.rate rescue nil
     end
     
-    rate
-  end  
+    unless rate.nil?
+      BitcoinRate.create(:rate => rate)
+    end    
+    
+    rate || ENV['DEFAULT_BTC_RATE'] || FALLBACK_RATE
+  end
 end

@@ -48,7 +48,7 @@ class Mobile::V1::TransactionsController < ApiController
       else
         tag = NfcTag.find_by_tag_id(params[:tag_id])
         if tag.nil?
-          error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'NFC Tag')}
+           error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'NFC Tag')}
         else
           payload = tag.find_payload(amount)
           if payload.nil?
@@ -63,15 +63,15 @@ class Mobile::V1::TransactionsController < ApiController
                 if current_user.satoshi_balance < satoshi
                   error! :forbidden, :metadata => {:error_description => I18n.t('insufficient_funds'), :balance => current_user.satoshi_balance }
                 else
-                  tx = current_user.transactions.create!(:nfc_tag_id => tag.id,
+                  tx = current_user.transactions.create!(transaction_params({:nfc_tag_id => tag.id,
                                                          :payload_id => payload.id,
                                                          :dest_id => tag.user.id,
                                                          :comment => payload.content,
                                                          # Store dollar amount as an integer # of cents
                                                          :dollar_amount => (amount * 100.0).round,
-                                                         :satoshi_amount => satoshi)
-                  tx.transaction_details.create!(:subject_id => current_user.id, :target_id => tag.user.id, :debit_satoshi => satoshi, :conversion_rate => multiplier)
-                  tx.transaction_details.create!(:subject_id => tag.user.id, :target_id => current_user.id, :credit_satoshi => satoshi, :conversion_rate => multiplier)
+                                                         :satoshi_amount => satoshi}))
+                  tx.transaction_details.create!(details_params({:subject_id => current_user.id, :target_id => tag.user.id, :debit_satoshi => satoshi, :conversion_rate => multiplier}))
+                  tx.transaction_details.create!(details_params({:subject_id => tag.user.id, :target_id => current_user.id, :credit_satoshi => satoshi, :conversion_rate => multiplier}))
 
                   current_user.update_attribute(:satoshi_balance, current_user.satoshi_balance - satoshi)
                   tag.user.update_attribute(:satoshi_balance, tag.user.satoshi_balance + satoshi)
@@ -96,9 +96,13 @@ class Mobile::V1::TransactionsController < ApiController
       end
     end
   end
+  
 private
-  def transaction_params
-    params.permit(:tag_id, :amount, :auth_token)
+  def transaction_params(params)
+    ActionController::Parameters.new(params).permit(:nfc_tag_id, :payload_id, :dest_id, :comment, :dollar_amount, :satoshi_amount)
   end
-
+  
+  def details_params(params)
+    ActionController::Parameters.new(params).permit(:subject_id, :target_id, :debit_satoshi, :credit_satoshi, :conversion_rate)
+  end
 end

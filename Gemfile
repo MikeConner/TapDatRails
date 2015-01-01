@@ -45,6 +45,8 @@ gem 'friendly_id', '5.0.4'
 gem 'rqrcode-rails3', '0.1.7'
 gem 'bcrypt-ruby', '3.0.1'
 
+gem 'mechanize', '2.7.3'
+
 group :development, :test do
   gem 'rspec-rails', '3.1.0'
   gem 'annotate', '2.6.5'
