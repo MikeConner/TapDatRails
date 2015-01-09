@@ -4,7 +4,7 @@
 #
 #  id          :integer          not null, primary key
 #  currency_id :integer
-#  balance_id  :integer
+#  user_id     :integer
 #  uid         :string(16)       not null
 #  amount      :integer          not null
 #  status      :integer          default(0), not null
@@ -17,10 +17,14 @@
 #
 # USAGE
 #   Vouchers are issued in one of the valid denominations.
+#   The expiration date gets bumped up to the expiration date of the voucher (as determined by the expiration_days field in the associated currency)
+# If there are any active vouchers in this balance at the time a new one is added or a tap is attempted, and the date is passed, all the existing vouchers
+# are marked expired. Also, the currency owner can set a currency to inactive (e.g., when the event is over), which automatically expires all associated
+# active vouchers.
 #
 # NOTES AND WARNINGS
 #   When they are purchased by customers (venues handle all the actual money), they're scanned/typed into the customer's phone, which assigns the
-# voucher to that customer's balance in that currency. If there are existing vouchers that expire before the current date, they are expired, and
+# voucher to that customer. If there are existing vouchers that expire before the current date, they are expired, and
 # the expiration date of the balance is now set a number of days in the future corresponding to the currency's expiration policy.
 #
 class Voucher < ActiveRecord::Base
@@ -34,11 +38,8 @@ class Voucher < ActiveRecord::Base
   before_validation :ensure_uid
   before_validation :ensure_valid_denomination, :on => :create
   
-  #attr_accessible :amount, :status, :uid, :currency_id, :balance_id
-
   belongs_to :currency
-  # Assigned to balance when bought by a user
-  belongs_to :balance
+  belongs_to :user
   
   validates_presence_of :amount, :uid
   validates_inclusion_of :status, :in => STATUSES
@@ -65,10 +66,10 @@ class Voucher < ActiveRecord::Base
   
   # For display
   def assigned_user_display
-    if self.balance.nil?
+    if self.user.nil?
       "N/A"
     else
-      self.balance.user.name
+      self.user.name
     end
   end   
                

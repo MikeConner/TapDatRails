@@ -11,6 +11,7 @@
 #  status          :integer          default(0), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  reserve_balance :integer          default(0), not null
 #
 
 describe Currency do
@@ -26,11 +27,26 @@ describe Currency do
     expect(currency).to respond_to(:denominations)
     expect(currency).to respond_to(:expiration_days)
     expect(currency).to respond_to(:status)
+    expect(currency).to respond_to(:reserve_balance)
   end
   
   its(:user) { should be == user }
   
   it { should be_valid }
+  
+  describe "Missing reserve balance" do
+    before { currency.reserve_balance = ' ' }
+    
+    it { should_not be_valid }
+  end
+  
+  describe "Invalid reserve balance" do
+    [-2, 0.5, 'abc'].each do |balance|
+      before { currency.reserve_balance = balance }
+      
+      it { should_not be_valid }
+    end
+  end
   
   describe "invalid expiration days" do
     [-1, 0.25, 'abc'].each do |exp|

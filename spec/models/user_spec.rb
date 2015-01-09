@@ -216,4 +216,33 @@ describe User do
       end
     end
   end
+  
+  describe "vouchers" do
+    let(:user) { FactoryGirl.create(:user_with_vouchers) }
+    
+    it "should have vouchers" do
+      expect(user.vouchers.count).to be == 3
+    end
+    
+    describe "delete" do    
+      before { user.destroy }
+        
+      it "should not be gone" do
+        expect(user.errors.count).to_not eq(0)
+        
+        expect(Voucher.count).to eq(3)
+      end
+    end
+    
+    describe "Delete dependents first" do
+      before do
+        user.vouchers.destroy_all
+        user.destroy
+      end
+      
+      it "should now be gone" do
+        expect(Voucher.count).to eq(0)
+      end
+    end
+  end  
 end

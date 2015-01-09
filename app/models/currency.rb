@@ -11,6 +11,7 @@
 #  status          :integer          default(0), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  reserve_balance :integer          default(0), not null
 #
 
 # CHARTER
@@ -18,6 +19,10 @@
 # one-off "event" currencies. 
 #
 # USAGE
+#   Only admins can create currencies (for regular users). They can also edit the reserve amount (which generates a transaction).
+#   The currency issuing users can then generate vouchers in any amount consistent with the denominations, which decrements their
+# reserve balance.
+#
 #   Each currency has an expiration_days policy (e.g., 30 means they expire 30 days after assignment to a "customer" user)
 # The issuer can expire all outstanding vouchers at once by setting the entire currency status to INACTIVE.
 # 
@@ -48,6 +53,7 @@ class Currency < ActiveRecord::Base
                    :length => { :maximum => NAME_LEN },
                    :uniqueness => { :case_sensitive => false }
   validates_inclusion_of :status, :in => VALID_STATUSES
+  validates :reserve_balance, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
   
   def encode_denominations
     unless self.denominations.blank?

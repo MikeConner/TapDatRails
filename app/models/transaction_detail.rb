@@ -22,7 +22,6 @@
 # exchange rate used if the original currency was dollars.
 #
 # NOTES AND WARNINGS
-#   If we ever use more than dollars, we would also need a currency field
 #
 class TransactionDetail < ActiveRecord::Base
   #attr_accessible :conversion_rate, :currency, :credit_satoshi, :debit_satoshi, :subject_id, :target_id

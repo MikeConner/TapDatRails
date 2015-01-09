@@ -35,25 +35,5 @@ describe Balance do
   
   it "should have zero amount initially" do
     expect(balance.amount).to eq(0)
-  end
-  
-  describe "vouchers" do
-    let(:balance) { FactoryGirl.create(:balance_with_vouchers, :user => user) }
-    
-    it "should have vouchers" do
-      expect(balance.vouchers.count).to be == 3
-    end
-    
-    it "should get the right amount" do
-      expect(balance.amount).to eq(Voucher.sum(:amount))
-    end
-    
-    describe "delete" do
-      before { balance.destroy }
-      
-      it "should be gone" do
-        expect(Voucher.count).to be == 0
-      end
-    end
-  end
+  end  
 end

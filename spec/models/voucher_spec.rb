@@ -4,7 +4,7 @@
 #
 #  id          :integer          not null, primary key
 #  currency_id :integer
-#  balance_id  :integer
+#  user_id     :integer
 #  uid         :string(16)       not null
 #  amount      :integer          not null
 #  status      :integer          default(0), not null
@@ -14,8 +14,8 @@
 
 describe Voucher do
  let(:currency) { FactoryGirl.create(:currency) }
- let(:balance) { FactoryGirl.create(:balance) }
- let(:voucher) { FactoryGirl.create(:voucher, :currency => currency, :balance => balance) }
+ let(:user) { FactoryGirl.create(:user) }
+ let(:voucher) { FactoryGirl.create(:assigned_voucher, :currency => currency, :user => user) }
  
  subject { voucher }
  
@@ -26,7 +26,7 @@ describe Voucher do
  end
  
  its(:currency) { should be == currency }
- its(:balance) { should be == balance }
+ its(:user) { should be == user }
  
  it { should be_valid }
  
@@ -58,6 +58,13 @@ describe Voucher do
    before { voucher.uid = '*'*(Voucher::UID_LEN + 1) }
    
    it { should_not be_valid }
+ end
+ 
+ describe "un assigned" do
+   let(:voucher) { FactoryGirl.create(:voucher, :currency => currency) }
+   
+   its(:currency) { should be == currency }
+   its(:user) { should be_nil }
  end
  
  describe "statuses" do

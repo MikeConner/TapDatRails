@@ -33,6 +33,10 @@ FactoryGirl.define do
     currency
     
     amount { YAML::load(currency.denominations).sample }
+    
+    factory :assigned_voucher do
+      user
+    end
   end
   
   factory :currency do 
@@ -66,22 +70,7 @@ FactoryGirl.define do
     
     currency_name { bal_currency.name }
     expiration_date 1.week.from_now
-    
-    factory :balance_with_vouchers do
-      transient do
-        num_vouchers 3
-      end
-      
-      after(:create) do |balance, evaluator|
-        evaluator.num_vouchers.times do
-          bal_currency = FactoryGirl.create(:currency)
-          
-          FactoryGirl.create(:voucher, :currency => bal_currency, :balance => balance, 
-                             :amount => YAML.load(bal_currency.denominations).sample)
-        end
-      end
-    end
-  end
+   end
   
   factory :user do
     name { generate(:random_phrase) }
@@ -109,6 +98,16 @@ FactoryGirl.define do
       
       after(:create) do |user, evaluator|
         FactoryGirl.create_list(:balance, evaluator.num_balances, :user => user)
+      end
+    end
+
+    factory :user_with_vouchers do 
+      transient do
+        num_vouchers 3
+      end
+      
+      after(:create) do |user, evaluator|
+        FactoryGirl.create_list(:assigned_voucher, evaluator.num_vouchers, :user => user)
       end
     end
     

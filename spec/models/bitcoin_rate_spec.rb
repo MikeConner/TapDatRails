@@ -17,6 +17,8 @@ RSpec.describe BitcoinRate, :type => :model do
     expect(rate). to respond_to(:rate)
   end
   
+  it { should be_valid }
+  
   describe "Missing rate" do
     before { rate.rate = ' ' }
     

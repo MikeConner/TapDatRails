@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150101000235) do
+ActiveRecord::Schema.define(version: 20150109211930) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 20150101000235) do
     t.integer  "status",                     default: 0, null: false
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
+    t.integer  "reserve_balance",            default: 0, null: false
   end
 
   add_index "currencies", ["name"], name: "index_currencies_on_name", unique: true, using: :btree
@@ -215,7 +216,7 @@ ActiveRecord::Schema.define(version: 20150101000235) do
 
   create_table "vouchers", force: true do |t|
     t.integer  "currency_id"
-    t.integer  "balance_id"
+    t.integer  "user_id"
     t.string   "uid",         limit: 16,             null: false
     t.integer  "amount",                             null: false
     t.integer  "status",                 default: 0, null: false
