@@ -1,7 +1,9 @@
 = f.hidden_field :currency_id, :value => f.object.currency_id
-= f.hidden_field :balance_id, :value => f.object.balance_id
-%h2= f.object.uid
+= f.hidden_field :user_id, :value => f.object.user_id
+= f.hidden_field :uid, :value => f.object.uid
+= f.hidden_field :status, :value => f.object.status
 .field
-  = f.label :amount
-  = f.select :amount, options_for_select(f.object.currency.decode_denominations, f.object.amount)
+  %em== Denominations #{f.object.currency.decode_denominations} 
+  = f.label :amount, "Amount: Max #{number_with_delimiter(@currency.reserve_balance)}"
+  = f.number_field :amount, :min => 1, :max => @currency.reserve_balance
   

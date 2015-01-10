@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   end
 
   resources :currencies
-  resources :vouchers
+  resources :vouchers, :except => [:edit, :update]
 
   get "/how_it_works" => "static_pages#how_it_works"
   get "/legal" => "static_pages#legal"
@@ -37,6 +37,8 @@ Rails.application.routes.draw do
           get 'balance_inquiry'
           put 'cashout'
         end
+        
+        put 'redeem_voucher', :on => :member
       end
       resources :nfc_tags, :only => [:create, :update, :index, :destroy]
       resources :payloads, :except => [:new, :edit]

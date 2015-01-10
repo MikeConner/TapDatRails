@@ -2,17 +2,17 @@
 #
 # Table name: transactions
 #
-#  id             :integer          not null, primary key
-#  user_id        :integer
-#  nfc_tag_id     :integer
-#  payload_id     :integer
-#  dest_id        :integer
-#  satoshi_amount :integer
-#  dollar_amount  :integer
-#  comment        :string(255)
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#  slug           :string(255)
+#  id            :integer          not null, primary key
+#  user_id       :integer
+#  nfc_tag_id    :integer
+#  payload_id    :integer
+#  dest_id       :integer
+#  amount        :integer
+#  dollar_amount :integer
+#  comment       :string(255)
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  slug          :string(255)
 #
 
 describe Transaction do
@@ -25,7 +25,7 @@ describe Transaction do
   subject { transaction }
   
   it "should respond to everything" do
-    expect(transaction).to respond_to(:satoshi_amount)
+    expect(transaction).to respond_to(:amount)
     expect(transaction).to respond_to(:dollar_amount)  
     expect(transaction).to respond_to(:comment)  
     expect(transaction).to respond_to(:slug)  
@@ -52,9 +52,9 @@ describe Transaction do
     it { should_not be_valid }
   end
   
-  describe "Invalid satoshi amount" do
+  describe "Invalid amount" do
     [-1, 0.25, 'abc'].each do |amount|
-      before { transaction.satoshi_amount = amount }
+      before { transaction.amount = amount }
       
       it { should_not be_valid }
     end
@@ -71,7 +71,7 @@ describe Transaction do
   describe "Default amount" do
     before do
       expect(transaction.dollar_amount).to eq(1)
-      expect(transaction.satoshi_amount).to eq(10000)
+      expect(transaction.amount).to eq(10000)
     end
     
     it { should be_valid }

@@ -2,16 +2,18 @@
   .large-12.columns
     %h1== Vouchers in #{@currency.name}
 .row
-  .large-12.columns
-    %table.table.zebra-striped
-      %thead
-        %th ID
-        %th Amount
-        %th Status
-        %th Assigned
-        %th
-      %tbody
-        - @vouchers.each do |voucher|
-          = render :partial => 'voucher', :locals => { :voucher => voucher }
-.row
-  = link_to 'Add Voucher', new_voucher_path(:currency_id => @currency.id)
+  - unless @vouchers.empty?
+    .large-12.columns
+      %table.table.zebra-striped
+        %thead
+          %th ID
+          %th Amount
+          %th Status
+          %th Assigned
+          %th
+        %tbody
+          - @vouchers.each do |voucher|
+            = render :partial => 'voucher', :locals => { :voucher => voucher }
+- if @currency.reserve_balance > 0
+  .row
+    = link_to 'Add Voucher', new_voucher_path(:currency_id => @currency.id)

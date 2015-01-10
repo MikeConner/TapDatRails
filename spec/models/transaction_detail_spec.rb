@@ -6,8 +6,8 @@
 #  transaction_id  :integer
 #  subject_id      :integer          not null
 #  target_id       :integer          not null
-#  credit_satoshi  :integer
-#  debit_satoshi   :integer
+#  credit          :integer
+#  debit           :integer
 #  conversion_rate :decimal(, )      not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
@@ -25,8 +25,8 @@ describe TransactionDetail do
   subject { detail }
   
   it "should respond to everything" do
-    expect(detail).to respond_to(:credit_satoshi)
-    expect(detail).to respond_to(:debit_satoshi)  
+    expect(detail).to respond_to(:credit)
+    expect(detail).to respond_to(:debit)  
     expect(detail).to respond_to(:conversion_rate)  
     expect(detail).to respond_to(:currency)  
   end
@@ -67,8 +67,8 @@ describe TransactionDetail do
 
   describe "No amount at all" do
     before do
-      detail.credit_satoshi = nil
-      detail.debit_satoshi = nil
+      detail.credit = nil
+      detail.debit = nil
     end
     
     it { should_not be_valid }

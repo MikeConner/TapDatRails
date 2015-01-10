@@ -2,14 +2,15 @@
 #
 # Table name: vouchers
 #
-#  id          :integer          not null, primary key
-#  currency_id :integer
-#  user_id     :integer
-#  uid         :string(16)       not null
-#  amount      :integer          not null
-#  status      :integer          default(0), not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  id              :integer          not null, primary key
+#  currency_id     :integer
+#  user_id         :integer
+#  uid             :string(16)       not null
+#  amount          :integer          not null
+#  status          :integer          default(0), not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  expiration_date :date
 #
 
 # CHARTER
@@ -34,9 +35,8 @@ class Voucher < ActiveRecord::Base
   UID_LEN = 16
   
   STATUSES = [ACTIVE, REDEEMED, EXPIRED]
-  
-  before_validation :ensure_uid
   before_validation :ensure_valid_denomination, :on => :create
+  before_validation :ensure_uid, :on => :create
   
   belongs_to :currency
   belongs_to :user
@@ -49,6 +49,7 @@ class Voucher < ActiveRecord::Base
                      :numericality => { :only_integer => true, :greater_than => 0 }
   
   scope :active, -> { where("status = ?", ACTIVE) }
+  scope :redeemed, -> { where("status = ?", REDEEMED) }
   
   # For display
   def display_status
@@ -72,17 +73,28 @@ class Voucher < ActiveRecord::Base
       self.user.name
     end
   end   
-               
+
+  def active?
+    ACTIVE == self.status
+  end         
 private
   def ensure_uid
-    self.uid = SecureRandom.hex(3) if self.uid.nil?
+    self.uid = SecureRandom.hex(4) if self.uid.nil?
   end
   
   def ensure_valid_denomination
     unless self.currency.denominations.nil?
       valid_denominations = YAML.load(self.currency.denominations)
       
-      unless valid_denominations.include?(self.amount)
+      divisible = false
+      valid_denominations.each do |denom|
+        if 0 == self.amount % denom
+          divisible = true
+          break
+        end
+      end
+      
+      unless divisible
         self.errors.add :base, "Invalid denomination #{self.amount}"
       end
     end

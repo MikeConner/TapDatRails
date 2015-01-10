@@ -2,14 +2,15 @@
 #
 # Table name: vouchers
 #
-#  id          :integer          not null, primary key
-#  currency_id :integer
-#  user_id     :integer
-#  uid         :string(16)       not null
-#  amount      :integer          not null
-#  status      :integer          default(0), not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  id              :integer          not null, primary key
+#  currency_id     :integer
+#  user_id         :integer
+#  uid             :string(16)       not null
+#  amount          :integer          not null
+#  status          :integer          default(0), not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  expiration_date :date
 #
 
 describe Voucher do
@@ -23,6 +24,7 @@ describe Voucher do
    expect(voucher).to respond_to(:uid)
    expect(voucher).to respond_to(:amount)
    expect(voucher).to respond_to(:status)
+   expect(voucher).to respond_to(:expiration_date)
  end
  
  its(:currency) { should be == currency }

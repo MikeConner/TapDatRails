@@ -14,11 +14,13 @@
 %br
 %h3 Satoshi Balance: #{current_user.satoshi_balance}
 
-%h3 Other balances
-=current_user.balances.each do |balance|
-  = balance.currency_name
-  = balance.amount
-
+- unless current_user.balances.empty?
+  %h3 Other balances
+  - current_user.balances.each do |balance|
+    = balance.currency_name
+    = balance.amount
+    %br
+  
 %h2 Deposit
 = current_user.inbound_btc_qrcode
 = current_user.inbound_btc_address

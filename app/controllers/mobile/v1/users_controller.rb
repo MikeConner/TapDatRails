@@ -25,11 +25,12 @@ class Mobile::V1::UsersController < ApiController
     if current_user.inbound_btc_address.nil?
       error! :not_found, :metadata => {:error_description => I18n.t('no_btc_address')}
     else
+      # Result will be in Satoshi
       balance = CoinbaseAPI.instance.balance_inquiry(current_user.inbound_btc_address)
       if balance.nil?
         error! :not_found, :metadata => {:error_description => I18n.t('address_not_found')}
       else
-        price = 0 == balance ? 0 : [0, CoinbaseAPI.instance.sell_price(balance)].max
+        price = 0 == balance ? 0 : [0, CoinbaseAPI.instance.sell_price(balance.to_f / CoinbaseAPI::SATOSHI_PER_BTC.to_f)].max
 
         response = {:btc_balance => balance,
                     :dollar_balance => price,
@@ -89,11 +90,11 @@ class Mobile::V1::UsersController < ApiController
         # Create details
         satoshi = current_user.satoshi_balance
         
-        tx = current_user.transactions.create!(:dest_id => current_user.id, # destination is self
+        tx = current_user.transactions.create!(:dest_id => current_user.id,
                                                :comment => "Cashout of #{satoshi} (#{current_user.inbound_btc_address} to #{current_user.outbound_btc_address})",
                                                # Store dollar amount as an integer # of cents
-                                               :satoshi_amount => satoshi)  
-        tx.transaction_details.create!(:subject_id => current_user.id, :target_id => current_user.id, :debit_satoshi => satoshi, :conversion_rate => 1.0)      
+                                               :amount => satoshi)  
+        tx.transaction_details.create!(:subject_id => current_user.id, :target_id => current_user.id, :debit => satoshi, :conversion_rate => 1.0)      
 
         current_user.update_attribute(:satoshi_balance, 0)
                   
@@ -107,6 +108,32 @@ class Mobile::V1::UsersController < ApiController
     end
   end
 
+  def redeem_voucher
+    # Lookup voucher; ensure it's active. Assign voucher's user, update user's balance
+    voucher = Voucher.find_by_uid(params[:id])
+    if voucher.nil?
+      error! :not_found, :metadata => {:error_description => I18n.t('voucher_not_found', :uid => params[:id])}  
+    elsif !voucher.active?
+      error! :bad_request, :metadata => {:error_description => I18n.t('inactive_voucher', :uid => params[:id])}  
+    elsif current_user.id != voucher.user_id
+      error! :bad_request, :metadata => {:error_description => I18n.t('invalid_voucher', :uid => params[:id])}  
+    else
+      # Predefine response; this should never happen
+      response = {:error => true, :metadata => {:error_description => 'Transaction DB error'}}
+      
+      ActiveRecord::Base.transaction do
+        voucher.update_attribute(:status, Voucher::REDEEMED)
+        # Update balance
+        balance = current_user.balances.find_or_create_by(:currency_name => voucher.currency.name)
+        total = voucher.currency.vouchers.redeemed.where(:user_id => current_user.id).sum(:amount)
+        balance.update_attribute(:amount, total)
+      
+        response = {:currency_name => voucher.currency.name, :balance => total}       
+      end
+      
+      expose response
+    end
+  end
 private
   def user_params
     params.require(:user).permit(:name, :email, :inbound_btc_address, :outbound_btc_address, :mobile_profile_image_url, :mobile_profile_thumb_url)

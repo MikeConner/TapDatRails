@@ -6,8 +6,8 @@
 #  transaction_id  :integer
 #  subject_id      :integer          not null
 #  target_id       :integer          not null
-#  credit_satoshi  :integer
-#  debit_satoshi   :integer
+#  credit          :integer
+#  debit           :integer
 #  conversion_rate :decimal(, )      not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
@@ -24,8 +24,6 @@
 # NOTES AND WARNINGS
 #
 class TransactionDetail < ActiveRecord::Base
-  #attr_accessible :conversion_rate, :currency, :credit_satoshi, :debit_satoshi, :subject_id, :target_id
-  
   MAX_CURRENCY_LEN = 16
   CURRENCY_USD = 'USD'
   
@@ -40,7 +38,7 @@ class TransactionDetail < ActiveRecord::Base
   
 private
   def has_amount
-    if self.credit_satoshi.nil? and self.debit_satoshi.nil?
+    if self.credit.nil? and self.debit.nil?
       self.errors.add :base, I18n.t('invalid_transaction_amt')
     end
   end

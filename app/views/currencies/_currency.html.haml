@@ -1,11 +1,16 @@
-- if currency.icon.nil?
-  %td
-- else
-  %td= image_tag currency.icon.url, :width => 100
-%td= link_to currency.name, currency_path(currency)
-%td= currency.decode_denominations(true)
-- if currency.expiration_days.nil?
-  %td N/A
-- else
-  %td= pluralize(currency.expiration_days, 'day')
-%td= link_to "Delete", currency, :method => :delete, :data => { :confirm => 'Are you sure?' }
+%tr
+  %td= currency.user.name
+  - if currency.icon_processing?
+    %td Pending Upload
+  - elsif !currency.icon.nil? and currency.icon.file.exists?
+    %td= image_tag currency.icon.url, :width => 100
+  - else
+    %td
+  %td= link_to currency.name, currency_path(currency)
+  %td= currency.decode_denominations(true)
+  - if currency.expiration_days.nil?
+    %td N/A
+  - else
+    %td= pluralize(currency.expiration_days, 'day')
+  %td= number_with_delimiter(currency.reserve_balance)
+  %td= link_to "Delete", currency, :method => :delete, :data => { :confirm => 'Are you sure?' }

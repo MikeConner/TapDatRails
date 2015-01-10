@@ -7,6 +7,7 @@ class CoinbaseAPI
   WITHDRAWAL_THRESHOLD = 50000
   TEST_BUY = 350.0
   TEST_SELL = 345.0
+  SATOSHI_PER_BTC = 100000000
   
   attr_accessor :api
   
@@ -16,19 +17,19 @@ class CoinbaseAPI
       Rails.logger.info "Cannot initialize Coinbase"
     else
       self.api = Rails.env.test? ? nil : Coinbase::Client.new(COINBASE_API_KEY, COINBASE_SECRET_KEY)
+      @agent = Mechanize.new
     end
   end
   
   # This is not our entire account balance (which the Coinbase API would provide)
   # We want the balance of *one* of the addresses, which we can get from Blockchain
-  def balance_inquiry(address)    
-    uri = URI.parse("https://blockchain.info/q/addressbalance/#{address}")
-    http = Net::HTTP.new(uri.host)
-    request = Net::HTTP::Get.new(uri.request_uri)
-    response = http.request(request) 
+  def balance_inquiry(address)  
+    page = @agent.get("https://blockchain.info/q/addressbalance/#{address}") rescue nil
     
-    if response.code == '200'
-      return response.body.to_i
+    unless page.nil?
+      if page.code == '200'
+        return page.content.to_i
+      end
     end
     
     nil
@@ -48,7 +49,7 @@ class CoinbaseAPI
     if Rails.env.test?
       {:success => true, :id => SecureRandom.hex(12), :data => {:fish => 234}}
     else
-      response = self.api.send_money(to_address, satoshi.to_f / 100000000.0, "Cashout #{from_address} -> #{to_address}")
+      response = self.api.send_money(to_address, satoshi.to_f / SATOSHI_PER_BTC.to_f, "Cashout #{from_address} -> #{to_address}")
       
       {:success => response.success?, :id => response.transaction.id, :data => response.to_hash}
     end

@@ -29,11 +29,10 @@ class Payload < ActiveRecord::Base
   extend FriendlyId
   friendly_id :generate_id, use: [:slugged, :history]
   
-  #attr_accessible :content, :threshold, :uri, :payload_image, :remote_payload_image_url, :payload_thumb, :remote_payload_thumb_url,
-  #                :mobile_payload_image_url, :mobile_payload_thumb_url
-
   mount_uploader :payload_image, ImageUploader
   mount_uploader :payload_thumb, ImageUploader
+  process_in_background :payload_image
+  process_in_background :payload_thumb
 
   belongs_to :nfc_tag
   

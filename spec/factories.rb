@@ -147,15 +147,15 @@ FactoryGirl.define do
     nfc_tag
     payload
     
-    satoshi_amount 10000
+    amount 10000
     dollar_amount 1
     comment { generate(:random_phrase) }
     dest_id 14
     
     factory :transaction_with_details do      
       after(:create) do |transaction|
-        FactoryGirl.create(:transaction_detail, :transaction_id => transaction.id, :subject_id => transaction.user.id, :target_id => transaction.dest_id, :credit_satoshi => 10000)
-        FactoryGirl.create(:transaction_detail, :transaction_id => transaction.id, :subject_id => transaction.dest_id, :target_id => transaction.user.id, :debit_satoshi => 10000)
+        FactoryGirl.create(:transaction_detail, :transaction_id => transaction.id, :subject_id => transaction.user.id, :target_id => transaction.dest_id, :credit => 10000)
+        FactoryGirl.create(:transaction_detail, :transaction_id => transaction.id, :subject_id => transaction.dest_id, :target_id => transaction.user.id, :debit => 10000)
       end
     end
   end
@@ -165,7 +165,7 @@ FactoryGirl.define do
     
     subject_id 3
     target_id 7
-    credit_satoshi { Random.rand(1000000) }
+    credit { Random.rand(1000000) }
     conversion_rate { Random.rand * 3 }
   end
   

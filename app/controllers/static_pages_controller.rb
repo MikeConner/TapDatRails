@@ -17,8 +17,8 @@ class StaticPagesController < ApplicationController
   end
   
   def leader_board
-    @tappers = Transaction.select("user_id, sum(satoshi_amount) as satoshi, sum(dollar_amount) as dollar, count(dollar_amount) as taps").group('user_id').order('dollar DESC')
-    @tapped = Transaction.select("dest_id, sum(satoshi_amount) as satoshi, sum(dollar_amount) as dollar, count(dollar_amount) as taps").group('dest_id').order('dollar DESC')
+    @tappers = Transaction.select("user_id, sum(amount) as satoshi, sum(dollar_amount) as dollar, count(dollar_amount) as taps").group('user_id').order('dollar DESC')
+    @tapped = Transaction.select("dest_id, sum(amount) as satoshi, sum(dollar_amount) as dollar, count(dollar_amount) as taps").group('dest_id').order('dollar DESC')
     @image_map = Hash.new
     @names_map = Hash.new
     

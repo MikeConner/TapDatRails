@@ -35,5 +35,13 @@ describe Balance do
   
   it "should have zero amount initially" do
     expect(balance.amount).to eq(0)
-  end  
+  end 
+  
+  describe "Invalid amount" do
+    [-1, 0.5, 'abc'].each do |amount|
+      before { balance.amount = amount }
+      
+      it { should_not be_valid }
+    end
+  end 
 end

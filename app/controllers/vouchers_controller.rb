@@ -2,7 +2,8 @@ class VouchersController < ApplicationController
   before_filter :authenticate_user!
   # Currently the only use for this is to get vouchers associated with a given currency_id, which must be supplied
   before_filter :get_parent_currency, :only => [:index, :new]
-  before_filter :ensure_admin_user, :except => [:index, :show]
+  # get_parent_currency has to come before ensure_admin_or_owner
+  before_filter :ensure_admin_or_owner
   
   # GET /vouchers?currency_id=
   def index
@@ -16,34 +17,26 @@ class VouchersController < ApplicationController
 
   # GET /vouchers/new?currency_id=
   def new
-    @voucher = @currency.vouchers.build    
-  end
-
-  # GET /vouchers/1/edit
-  def edit
-    @voucher = Voucher.find(params[:id])
+    @voucher = @currency.vouchers.build(:uid => SecureRandom.hex(4))  
   end
 
   # POST /vouchers?currency_id=
   def create
-    #@currency = Currency.find_by_id(params[:voucher][:currency_id])
-    @voucher = Voucher.new(params[:voucher])
-        
+    @voucher = Voucher.new(voucher_params)
+    @currency = @voucher.currency
+    
+    if params[:voucher][:amount].to_i > @currency.reserve_balance
+      # Should not happen, because UI has the max set
+      redirect_to vouchers_path(:currency_id => @currency.id), :alert => 'Insufficient balance' and return
+    end 
+    
     if @voucher.save
+      # Deduct from currency's reserve balance
+      @currency.update_attribute(:reserve_balance, @currency.reserve_balance - @voucher.amount)
+       
       redirect_to @voucher, notice: 'Voucher was successfully created.'
     else
       render 'new'
-    end
-  end
-
-  # PUT /vouchers/1
-  def update
-    @voucher = Voucher.find(params[:id])
-
-    if @voucher.update_attributes(params[:voucher])
-      redirect_to @voucher, notice: 'Voucher was successfully updated.'
-    else
-      render 'edit'
     end
   end
 
@@ -57,9 +50,19 @@ class VouchersController < ApplicationController
   end 
   
 private
+  def voucher_params
+    params.require(:voucher).permit(:amount, :currency_id, :user_id, :uid, :status)    
+  end
+  
   def get_parent_currency
     @currency = Currency.find_by_id(params[:currency_id])
     
     redirect_to root_path, :alert => 'Unknown parent currency' if @currency.nil?
-  end   
+  end  
+  
+  def ensure_admin_or_owner
+    unless current_user.admin? or (@currency.user.id == current_user.id)
+      redirect_to root_path, :alert => 'Must be an admin or currency owner'
+    end
+  end 
 end

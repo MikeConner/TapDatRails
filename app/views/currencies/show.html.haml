@@ -6,6 +6,7 @@
   %p N/A
 - else
   %p== Expires in #{pluralize(@currency.expiration_days, 'day')}
+%p== Reserve balance: #{@currency.reserve_balance}
 %br
 = link_to 'Show Vouchers', vouchers_path(:currency_id => @currency.id)
 %br

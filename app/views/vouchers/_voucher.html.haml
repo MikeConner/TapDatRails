@@ -1,6 +1,6 @@
 %tr
   %td= voucher.uid
-  %td== Amount: #{number_with_delimiter(voucher.amount)}
-  %td== Status: #{voucher.display_status}
-  %td== Assigned to: #{voucher.assigned_user_display}
+  %td= number_with_delimiter(voucher.amount)
+  %td= voucher.display_status
+  %td= voucher.assigned_user_display
   %td= link_to "Delete", voucher, :method => :delete, :data => { :confirm => 'Are you sure?' }

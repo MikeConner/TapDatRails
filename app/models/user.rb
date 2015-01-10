@@ -59,6 +59,9 @@ class User < ActiveRecord::Base
   mount_uploader :profile_image, ImageUploader
   mount_uploader :profile_thumb, ImageUploader
   mount_uploader :inbound_btc_qrcode, ImageUploader
+  process_in_background :profile_image
+  process_in_background :profile_thumb
+  process_in_background :inbound_btc_qrcode
                     
   has_many :nfc_tags, :dependent => :destroy
   has_many :transactions, :dependent => :restrict_with_error 
@@ -82,6 +85,11 @@ class User < ActiveRecord::Base
     1 == (self.role & ADMIN_ROLE)
   end
   
+  def currency_balance(currency_name)
+    balance = balances.where(:currency_name => currency_name).first
+    
+    balance.nil? ? 0 : balance.amount
+  end
 protected
   def ensure_authentication_token!
     if self.authentication_token.blank?

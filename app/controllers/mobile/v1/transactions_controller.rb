@@ -1,4 +1,5 @@
 require 'bitcoin_ticker'
+require 'coinbase_api'
 
 class Mobile::V1::TransactionsController < ApiController
   before_filter :authenticate_user_from_token!
@@ -14,7 +15,7 @@ class Mobile::V1::TransactionsController < ApiController
       other_thumb = other_user.profile_thumb.url || other_user.mobile_profile_thumb_url
 
       response.push({:id => tx.slug, :date => tx.created_at, :payload_image => payload_image, :payload_thumb => payload_thumb,
-                     :satoshi_amount => tx.satoshi_amount, :dollar_amount => tx.dollar_amount,
+                     :amount => tx.amount, :dollar_amount => tx.dollar_amount,
                      :comment => tx.comment, :other_user_thumb => other_thumb, :other_user_nickname => other_user.name})
     end
 
@@ -32,14 +33,7 @@ class Mobile::V1::TransactionsController < ApiController
       rate = nil
 
       amount = params[:amount].to_f
-      3.times do
-        rate = BitcoinTicker.instance.current_rate
-        if rate.nil?
-          sleep 5
-        else
-          break
-        end
-      end
+      rate = BitcoinTicker.instance.current_rate
 
       if amount <= 0
         error! :bad_request, :metadata => {:error_description => I18n.t('invalid_amount')}
@@ -58,7 +52,7 @@ class Mobile::V1::TransactionsController < ApiController
               begin
                 # Assuming amount and rate are in dollars
                 multiplier = 1.0 / rate
-                satoshi = (amount / rate * 100000000.0).round
+                satoshi = (amount / rate * CoinbaseAPI::SATOSHI_PER_BTC.to_f).round
 
                 if current_user.satoshi_balance < satoshi
                   error! :forbidden, :metadata => {:error_description => I18n.t('insufficient_funds'), :balance => current_user.satoshi_balance }
@@ -69,14 +63,14 @@ class Mobile::V1::TransactionsController < ApiController
                                                          :comment => payload.content,
                                                          # Store dollar amount as an integer # of cents
                                                          :dollar_amount => (amount * 100.0).round,
-                                                         :satoshi_amount => satoshi}))
-                  tx.transaction_details.create!(details_params({:subject_id => current_user.id, :target_id => tag.user.id, :debit_satoshi => satoshi, :conversion_rate => multiplier}))
-                  tx.transaction_details.create!(details_params({:subject_id => tag.user.id, :target_id => current_user.id, :credit_satoshi => satoshi, :conversion_rate => multiplier}))
+                                                         :amount => satoshi}))
+                  tx.transaction_details.create!(details_params({:subject_id => current_user.id, :target_id => tag.user.id, :debit => satoshi, :conversion_rate => multiplier}))
+                  tx.transaction_details.create!(details_params({:subject_id => tag.user.id, :target_id => current_user.id, :credit => satoshi, :conversion_rate => multiplier}))
 
                   current_user.update_attribute(:satoshi_balance, current_user.satoshi_balance - satoshi)
                   tag.user.update_attribute(:satoshi_balance, tag.user.satoshi_balance + satoshi)
 
-                  response = {:satoshi_amount => satoshi,
+                  response = {:amount => satoshi,
                               :dollar_amount => (amount * 100.0).round,
                               :final_balance => current_user.satoshi_balance,
                               :tapped_user_thumb => tag.user.profile_thumb || tag.user.remote_profile_thumb_url,
@@ -99,10 +93,10 @@ class Mobile::V1::TransactionsController < ApiController
   
 private
   def transaction_params(params)
-    ActionController::Parameters.new(params).permit(:nfc_tag_id, :payload_id, :dest_id, :comment, :dollar_amount, :satoshi_amount)
+    ActionController::Parameters.new(params).permit(:nfc_tag_id, :payload_id, :dest_id, :comment, :dollar_amount, :amount)
   end
   
   def details_params(params)
-    ActionController::Parameters.new(params).permit(:subject_id, :target_id, :debit_satoshi, :credit_satoshi, :conversion_rate)
+    ActionController::Parameters.new(params).permit(:subject_id, :target_id, :debit, :credit, :conversion_rate)
   end
 end

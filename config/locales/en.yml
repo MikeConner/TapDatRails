@@ -33,7 +33,12 @@ en:
   missing_phone_secret: 'Phone secret key missing'
   missing_argument: "Missing argument: %{arg}"
   no_btc_address: 'No bitcoin address'
+  address_not_found: 'BTC address not found'
   object_not_found: "%{obj} not found!"
   no_generator: 'Generator has no names'
   rate_not_found: 'Cannot access bitcoin conversion rate; please try again later!'
   not_currency_owner: "You aren't the owner of this currency"
+  voucher_not_found: "Voucher %{uid} not found"
+  inactive_voucher: "Voucher %{uid} is not active, and cannot be redeemed"
+  unavailable_voucher: "Voucher %{uid} has already been assigned"
+  invalid_voucher: "Voucher %{uid} is not yours"

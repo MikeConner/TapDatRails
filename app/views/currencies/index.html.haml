@@ -5,10 +5,12 @@
   .large-12.columns
     %table.table.zebra-striped
       %thead
+        %th Issuer
         %th Icon
         %th Name
         %th Denominations
         %th Expiration (days)
+        %th Reserve
         %th
       %tbody
         - @currencies.each do |currency|

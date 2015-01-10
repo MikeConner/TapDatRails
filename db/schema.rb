@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150109211930) do
+ActiveRecord::Schema.define(version: 20150110053312) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,14 +35,16 @@ ActiveRecord::Schema.define(version: 20150109211930) do
 
   create_table "currencies", force: true do |t|
     t.integer  "user_id"
-    t.string   "name",            limit: 24,             null: false
+    t.string   "name",              limit: 24,               null: false
     t.string   "icon"
     t.string   "denominations"
     t.integer  "expiration_days"
-    t.integer  "status",                     default: 0, null: false
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
-    t.integer  "reserve_balance",            default: 0, null: false
+    t.integer  "status",                       default: 0,   null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.integer  "reserve_balance",              default: 0,   null: false
+    t.boolean  "icon_processing"
+    t.integer  "amount_per_dollar",            default: 100, null: false
   end
 
   add_index "currencies", ["name"], name: "index_currencies_on_name", unique: true, using: :btree
@@ -153,8 +155,8 @@ ActiveRecord::Schema.define(version: 20150109211930) do
     t.integer  "transaction_id"
     t.integer  "subject_id",                                 null: false
     t.integer  "target_id",                                  null: false
-    t.integer  "credit_satoshi"
-    t.integer  "debit_satoshi"
+    t.integer  "credit"
+    t.integer  "debit"
     t.decimal  "conversion_rate",                            null: false
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
@@ -169,11 +171,11 @@ ActiveRecord::Schema.define(version: 20150109211930) do
     t.integer  "nfc_tag_id"
     t.integer  "payload_id"
     t.integer  "dest_id"
-    t.integer  "satoshi_amount"
+    t.integer  "amount"
     t.integer  "dollar_amount"
     t.string   "comment"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.string   "slug"
   end
 
@@ -217,11 +219,12 @@ ActiveRecord::Schema.define(version: 20150109211930) do
   create_table "vouchers", force: true do |t|
     t.integer  "currency_id"
     t.integer  "user_id"
-    t.string   "uid",         limit: 16,             null: false
-    t.integer  "amount",                             null: false
-    t.integer  "status",                 default: 0, null: false
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.string   "uid",             limit: 16,             null: false
+    t.integer  "amount",                                 null: false
+    t.integer  "status",                     default: 0, null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.date     "expiration_date"
   end
 
   add_index "vouchers", ["uid"], name: "index_vouchers_on_uid", unique: true, using: :btree

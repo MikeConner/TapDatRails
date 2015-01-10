@@ -2,16 +2,18 @@
 #
 # Table name: currencies
 #
-#  id              :integer          not null, primary key
-#  user_id         :integer
-#  name            :string(24)       not null
-#  icon            :string(255)
-#  denominations   :string(255)
-#  expiration_days :integer
-#  status          :integer          default(0), not null
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  reserve_balance :integer          default(0), not null
+#  id                :integer          not null, primary key
+#  user_id           :integer
+#  name              :string(24)       not null
+#  icon              :string(255)
+#  denominations     :string(255)
+#  expiration_days   :integer
+#  status            :integer          default(0), not null
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  reserve_balance   :integer          default(0), not null
+#  icon_processing   :boolean
+#  amount_per_dollar :integer          default(100), not null
 #
 
 # CHARTER
@@ -42,9 +44,8 @@ class Currency < ActiveRecord::Base
   VALID_STATUSES = [ACTIVE, INACTIVE]
   
   mount_uploader :icon, ImageUploader
+  process_in_background :icon
 
-  #attr_accessible :denominations, :expiration_days, :icon, :remote_icon_url, :name, :status, :user_id
-  
   belongs_to :user
   has_many :vouchers, :dependent => :restrict_with_error
   
@@ -53,7 +54,13 @@ class Currency < ActiveRecord::Base
                    :length => { :maximum => NAME_LEN },
                    :uniqueness => { :case_sensitive => false }
   validates_inclusion_of :status, :in => VALID_STATUSES
+  # Balance available to create vouchers (from external funding)
   validates :reserve_balance, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
+  validates :amount_per_dollar, :numericality => { :only_integer => true, :greater_than => 0 }
+  
+  def conversion_rate
+    1.0 / self.amount_per_dollar.to_f
+  end
   
   def encode_denominations
     unless self.denominations.blank?

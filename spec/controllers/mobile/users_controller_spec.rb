@@ -3,6 +3,65 @@ describe Mobile::V1::UsersController, :type => :controller do
     request.env["devise.mapping"] = Devise.mappings[:user]
   end
   
+  describe "Redeem voucher" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:voucher) { FactoryGirl.create(:voucher) }
+    let(:my_voucher) { FactoryGirl.create(:voucher, :user => user) }
+    let(:redeemed_voucher) { FactoryGirl.create(:voucher, :status => Voucher::REDEEMED) }
+        
+    it "should not find invalid voucher" do
+      put :redeem_voucher, :version => 1, :auth_token => user.authentication_token, :id => 83242
+      
+      expect(response.status).to eq(404)
+      
+      result = JSON.parse(response.body)
+      
+      expect(result.keys.include?('response')).to be false
+      expect(result.keys.include?('error')).to be true
+      expect(result["error_description"]).to eq(I18n.t('voucher_not_found', :uid => 83242))         
+    end
+
+    it "should find redeemed voucher" do
+      put :redeem_voucher, :version => 1, :auth_token => user.authentication_token, :id => redeemed_voucher.uid
+      
+      expect(response.status).to eq(400)
+      
+      result = JSON.parse(response.body)
+      
+      expect(result.keys.include?('response')).to be false
+      expect(result.keys.include?('error')).to be true
+      expect(result["error_description"]).to eq(I18n.t('inactive_voucher', :uid => redeemed_voucher.uid))         
+    end
+
+    it "should find other user's voucher" do
+      put :redeem_voucher, :version => 1, :auth_token => user.authentication_token, :id => voucher.uid
+      
+      expect(response.status).to eq(400)
+      
+      result = JSON.parse(response.body)
+      
+      expect(result.keys.include?('response')).to be false
+      expect(result.keys.include?('error')).to be true
+      expect(result["error_description"]).to eq(I18n.t('invalid_voucher', :uid => voucher.uid))         
+    end
+
+    it "should redeem voucher" do
+      put :redeem_voucher, :version => 1, :auth_token => user.authentication_token, :id => my_voucher.uid
+      
+      expect(response.status).to eq(200)
+      
+      result = JSON.parse(response.body)
+      
+      expect(result.keys.include?('response')).to be true
+      expect(result.keys.include?('error')).to be false
+      expect(result['response']['currency_name']).to eq(my_voucher.currency.name)
+      expect(result['response']['balance']).to eq(my_voucher.amount)
+      expect(Balance.count).to eq(1)
+      
+      expect(user.currency_balance(my_voucher.currency.name)).to eq(my_voucher.amount)
+    end
+  end
+  
   describe "Cashout (insufficient)" do
     let(:user) { FactoryGirl.create(:user, :satoshi_balance => CoinbaseAPI::WITHDRAWAL_THRESHOLD / 2) }
     
@@ -67,7 +126,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(subject.current_user.satoshi_balance).to eq(0)
       expect(Transaction.count).to eq(1)
       expect(TransactionDetail.count).to eq(1)
-      expect(subject.current_user.transactions.first.satoshi_amount).to eq(CoinbaseAPI::WITHDRAWAL_THRESHOLD * 2)
+      expect(subject.current_user.transactions.first.amount).to eq(CoinbaseAPI::WITHDRAWAL_THRESHOLD * 2)
       
       expect(response.status).to eq(200)
       

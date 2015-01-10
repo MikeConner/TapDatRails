@@ -3,6 +3,4 @@
 %p== Status: #{@voucher.display_status}
 %p== Assigned to: #{@voucher.assigned_user_display}
 %br
-= link_to 'Edit', edit_voucher_path(@voucher)
-%br
 = link_to 'Back', vouchers_path(:currency_id => @voucher.currency_id)

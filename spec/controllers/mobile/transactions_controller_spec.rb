@@ -22,16 +22,16 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       expect(tx.nfc_tag_id).to eq(tag.id)
       expect(tx.payload_id).to_not be_nil
       expect(tx.dollar_amount).to eq(2000)
-      expect(tx.satoshi_amount).to eq((tx.transaction_details.first.conversion_rate * tx.dollar_amount * 1000000.0).round)
+      expect(tx.amount).to eq((tx.transaction_details.first.conversion_rate * tx.dollar_amount * 1000000.0).round)
       expect(tx.comment).to eq(tx.payload.content)
-      expect(subject.current_user.reload.satoshi_balance).to eq(INITIAL_AMOUNT - tx.satoshi_amount)
-      expect(tag.user.reload.satoshi_balance).to eq(INITIAL_AMOUNT + tx.satoshi_amount)
+      expect(subject.current_user.reload.satoshi_balance).to eq(INITIAL_AMOUNT - tx.amount)
+      expect(tag.user.reload.satoshi_balance).to eq(INITIAL_AMOUNT + tx.amount)
       expect(response.status).to eq(200)
       
       result = JSON.parse(response.body)
 
       expect(result['response'].keys.include?('payload')).to be true
-      expect(result['response']['satoshi_amount']).to eq(INITIAL_AMOUNT - subject.current_user.reload.satoshi_balance)
+      expect(result['response']['amount']).to eq(INITIAL_AMOUNT - subject.current_user.reload.satoshi_balance)
       expect(result['response']['dollar_amount']).to eq(tx.dollar_amount)
       expect(result['response']['final_balance']).to eq(subject.current_user.reload.satoshi_balance)
       expect(result['response']['tapped_user_thumb']).to_not be_nil

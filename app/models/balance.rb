@@ -24,4 +24,5 @@ class Balance < ActiveRecord::Base
   belongs_to :user
   
   validates_presence_of :currency_name  
+  validates :amount, :numericality => { :only_integer => true, :greater_than_or_equal => 0 }
 end

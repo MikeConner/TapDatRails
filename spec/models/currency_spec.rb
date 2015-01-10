@@ -2,16 +2,18 @@
 #
 # Table name: currencies
 #
-#  id              :integer          not null, primary key
-#  user_id         :integer
-#  name            :string(24)       not null
-#  icon            :string(255)
-#  denominations   :string(255)
-#  expiration_days :integer
-#  status          :integer          default(0), not null
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  reserve_balance :integer          default(0), not null
+#  id                :integer          not null, primary key
+#  user_id           :integer
+#  name              :string(24)       not null
+#  icon              :string(255)
+#  denominations     :string(255)
+#  expiration_days   :integer
+#  status            :integer          default(0), not null
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  reserve_balance   :integer          default(0), not null
+#  icon_processing   :boolean
+#  amount_per_dollar :integer          default(100), not null
 #
 
 describe Currency do
@@ -23,11 +25,13 @@ describe Currency do
   it "should respond to everything" do
     expect(currency).to respond_to(:name)
     expect(currency).to respond_to(:icon)
+    expect(currency).to respond_to(:icon_processing)
     expect(currency).to respond_to(:remote_icon_url)
     expect(currency).to respond_to(:denominations)
     expect(currency).to respond_to(:expiration_days)
     expect(currency).to respond_to(:status)
     expect(currency).to respond_to(:reserve_balance)
+    expect(currency).to respond_to(:amount_per_dollar)
   end
   
   its(:user) { should be == user }

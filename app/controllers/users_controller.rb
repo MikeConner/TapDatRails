@@ -26,7 +26,7 @@ class UsersController < ApplicationController
   
   def leader_board
     @tappers = []
-    @tapped = Transaction.where(:dest_id => 4).select("dest_id, sum(satoshi_amount) as satoshi, sum(dollar_amount) as dollar, count(dollar_amount) as taps").group('dest_id').order('dollar DESC')
+    @tapped = Transaction.where(:dest_id => 4).select("dest_id, sum(amount) as satoshi, sum(dollar_amount) as dollar, count(dollar_amount) as taps").group('dest_id').order('dollar DESC')
     @image_map = Hash.new
     @names_map = Hash.new
     

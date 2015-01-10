@@ -1,4 +1,6 @@
-= f.hidden_field :user_id, :value => f.object.user_id
+.field
+  = f.label :user_id, 'Issuer'
+  = f.select :user_id, options_for_select(@issuers, f.object.user_id)
 .field
   = f.label :name
   = f.text_field :name, :size => Currency::NAME_LEN
@@ -14,4 +16,7 @@
 .field
   = f.label :remote_icon_url, "or image URL"
   = f.text_field :remote_icon_url
+.field
+  = f.label :reserve_balance
+  = f.number_field :reserve_balance, :min => 0
   
