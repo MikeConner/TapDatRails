@@ -24,7 +24,12 @@ class CoinbaseAPI
   # This is not our entire account balance (which the Coinbase API would provide)
   # We want the balance of *one* of the addresses, which we can get from Blockchain
   def balance_inquiry(address)  
-    page = @agent.get("https://blockchain.info/q/addressbalance/#{address}") rescue nil
+    begin
+      page = @agent.get("https://blockchain.info/q/addressbalance/#{address}")
+    rescue Exception => ex
+      Rails.logger.error "Could not get balance on #{address} - #{ex.inspect}"
+      page = nil
+    end
     
     unless page.nil?
       if page.code == '200'
