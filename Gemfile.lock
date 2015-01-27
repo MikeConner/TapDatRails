@@ -364,7 +364,7 @@ DEPENDENCIES
   nokogiri (= 1.6.1)
   pg (= 0.17.1)
   rails (= 4.1.8)
-  rails_12factor
+  rails_12factor (= 0.0.3)
   rails_admin (= 0.6.5)
   rmagick (= 2.13.4)
   rocket_pants (= 1.10.0)

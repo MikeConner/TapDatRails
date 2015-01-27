@@ -6,7 +6,8 @@ describe Mobile::V1::UsersController, :type => :controller do
   describe "Redeem voucher" do
     let(:user) { FactoryGirl.create(:user) }
     let(:voucher) { FactoryGirl.create(:voucher) }
-    let(:my_voucher) { FactoryGirl.create(:voucher, :user => user) }
+    # Will have issuer's user id
+    let(:my_voucher) { FactoryGirl.create(:voucher) }
     let(:redeemed_voucher) { FactoryGirl.create(:voucher, :status => Voucher::REDEEMED) }
         
     it "should not find invalid voucher" do
@@ -33,16 +34,20 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result["error_description"]).to eq(I18n.t('inactive_voucher', :uid => redeemed_voucher.uid))         
     end
 
-    it "should find other user's voucher" do
+    it "should find other user's voucher -- doesn't matter; they aren't owned until redeemed" do
       put :redeem_voucher, :version => 1, :auth_token => user.authentication_token, :id => voucher.uid
       
-      expect(response.status).to eq(400)
+      expect(response.status).to eq(200)
       
       result = JSON.parse(response.body)
       
-      expect(result.keys.include?('response')).to be false
-      expect(result.keys.include?('error')).to be true
-      expect(result["error_description"]).to eq(I18n.t('invalid_voucher', :uid => voucher.uid))         
+      expect(result.keys.include?('response')).to be true
+      expect(result.keys.include?('error')).to be false
+      expect(result['response']['currency_name']).to eq(voucher.currency.name)
+      expect(result['response']['balance']).to eq(voucher.amount)
+      expect(Balance.count).to eq(1)
+      
+      expect(user.currency_balance(voucher.currency.name)).to eq(voucher.amount)
     end
 
     it "should redeem voucher" do
@@ -198,7 +203,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
-      expect(result["error_description"]).to eq(I18n.t('address_not_found'))      
+      expect(result["error_description"]).to match(I18n.t('address_not_found'))      
     end
   end
 

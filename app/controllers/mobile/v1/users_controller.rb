@@ -28,7 +28,7 @@ class Mobile::V1::UsersController < ApiController
       # Result will be in Satoshi
       balance = CoinbaseAPI.instance.balance_inquiry(current_user.inbound_btc_address)
       if balance.nil?
-        error! :not_found, :metadata => {:error_description => I18n.t('address_not_found: User:' + current_user.id.to_s)}
+        error! :not_found, :metadata => {:error_description => I18n.t('address_not_found') + ': User:' + current_user.id.to_s }
       else
         price = 0 == balance ? 0 : [0, CoinbaseAPI.instance.sell_price(balance.to_f / CoinbaseAPI::SATOSHI_PER_BTC.to_f)].max
 
@@ -115,14 +115,14 @@ class Mobile::V1::UsersController < ApiController
       error! :not_found, :metadata => {:error_description => I18n.t('voucher_not_found', :uid => params[:id])}
     elsif !voucher.active?
       error! :bad_request, :metadata => {:error_description => I18n.t('inactive_voucher', :uid => params[:id])}
-    elsif current_user.id != voucher.user_id
-      error! :bad_request, :metadata => {:error_description => I18n.t('invalid_voucher', :uid => params[:id])}
     else
       # Predefine response; this should never happen
       response = {:error => true, :metadata => {:error_description => 'Transaction DB error'}}
 
       ActiveRecord::Base.transaction do
         voucher.update_attribute(:status, Voucher::REDEEMED)
+        voucher.update_attribute(:user_id, current_user.id)
+        
         # Update balance
         balance = current_user.balances.find_or_create_by(:currency_name => voucher.currency.name)
         total = voucher.currency.vouchers.redeemed.where(:user_id => current_user.id).sum(:amount)
