@@ -3,6 +3,38 @@ describe Mobile::V1::TransactionsController, :type => :controller do
     request.env["devise.mapping"] = Devise.mappings[:user]
   end
   
+  describe "Get a list" do
+    let(:user) { FactoryGirl.create(:user, :satoshi_balance => INITIAL_AMOUNT) }
+
+    before { 
+      for m in 01..12 do
+        FactoryGirl.create(:transaction, :user => user, :created_at => DateTime.parse("2014-#{m}-01"))
+      end
+    }
+    
+    it "should get them all" do
+      get :index, :version => 1, :auth_token => user.authentication_token
+      
+      expect(subject.current_user).to eq(user)
+      expect(response.status).to eq(200)
+      
+      result = JSON.parse(response.body)
+
+      expect(result['response'].count).to eq(12)
+    end
+    
+    it "should get half" do
+      get :index, :version => 1, :auth_token => user.authentication_token, :after => '2014-06-01'
+
+      expect(subject.current_user).to eq(user)
+      expect(response.status).to eq(200)
+      
+      result = JSON.parse(response.body)
+
+      expect(result['response'].count).to eq(7)
+    end
+  end
+  
   describe "Do a tap" do
     INITIAL_AMOUNT = 10000000
     
