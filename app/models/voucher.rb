@@ -83,8 +83,8 @@ private
   end
   
   def ensure_valid_denomination
-    unless self.currency.denominations.nil?
-      valid_denominations = YAML.load(self.currency.denominations)
+    unless self.currency.denominations.empty?
+      valid_denominations = self.currency.denomination_values
       
       divisible = false
       valid_denominations.each do |denom|

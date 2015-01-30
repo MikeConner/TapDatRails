@@ -32,21 +32,35 @@ FactoryGirl.define do
   factory :voucher do
     currency
     
-    amount { YAML::load(currency.denominations).sample }
+    amount { currency.denomination_values.sample }
     
     factory :assigned_voucher do
       user
     end
   end
   
+  factory :denomination do
+    currency
+    
+    value { [1, 5, 10, 20].sample }
+    remote_image_url 'http://upload.wikimedia.org/wikipedia/commons/2/24/Onedolar2009series.jpg'
+  end
+  
   factory :currency do 
     user
     
     name { generate(:random_currency) }
-    denominations { YAML.dump([1, 2, 5, 10, 20]) }
     remote_icon_url 'http://favicon-generator.org/favicons/2014-11-09/63f9acfc66d75ec8207fe51c83556d8b.ico'
     status Currency::ACTIVE
     expiration_days 30
+    symbol '$'
+    
+    after(:create) do |currency|
+      FactoryGirl.create(:denomination, :currency => currency, :value => 1, :remote_image_url => 'http://upload.wikimedia.org/wikipedia/commons/2/24/Onedolar2009series.jpg')
+      FactoryGirl.create(:denomination, :currency => currency, :value => 5, :remote_image_url => 'http://currencyguide.eu/usd-en/New_five_dollar_bill.jpg')
+      FactoryGirl.create(:denomination, :currency => currency, :value => 10, :remote_image_url => 'http://upload.wikimedia.org/wikipedia/commons/4/49/US10dollarbill-Series_2004A.jpg')
+      FactoryGirl.create(:denomination, :currency => currency, :value => 20, :remote_image_url => 'https://abagond.files.wordpress.com/2014/01/20-dollar-bill-1981.jpg')
+    end
     
     factory :currency_with_vouchers do
       transient do
@@ -55,7 +69,7 @@ FactoryGirl.define do
       
       after(:create) do |currency, evaluator|
         evaluator.num_vouchers.times do
-          FactoryGirl.create(:voucher, :currency => currency, :amount => YAML.load(currency.denominations).sample)
+          FactoryGirl.create(:voucher, :currency => currency, :amount => currency.denomination_values.sample)
         end
       end
     end

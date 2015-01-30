@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150130045550) do
+ActiveRecord::Schema.define(version: 20150130051933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,6 @@ ActiveRecord::Schema.define(version: 20150130045550) do
     t.integer  "user_id"
     t.string   "name",              limit: 24,               null: false
     t.string   "icon"
-    t.string   "denominations"
     t.integer  "expiration_days"
     t.integer  "status",                       default: 0,   null: false
     t.datetime "created_at",                                 null: false
@@ -65,6 +64,14 @@ ActiveRecord::Schema.define(version: 20150130045550) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+
+  create_table "denominations", force: true do |t|
+    t.integer  "currency_id"
+    t.integer  "value"
+    t.string   "image"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "friendly_id_slugs", force: true do |t|
     t.string   "slug",                      null: false

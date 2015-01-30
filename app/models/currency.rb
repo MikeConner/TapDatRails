@@ -6,7 +6,6 @@
 #  user_id           :integer
 #  name              :string(24)       not null
 #  icon              :string(255)
-#  denominations     :string(255)
 #  expiration_days   :integer
 #  status            :integer          default(0), not null
 #  created_at        :datetime         not null
@@ -14,6 +13,7 @@
 #  reserve_balance   :integer          default(0), not null
 #  icon_processing   :boolean
 #  amount_per_dollar :integer          default(100), not null
+#  symbol            :string(1)
 #
 
 # CHARTER
@@ -28,13 +28,12 @@
 #   Each currency has an expiration_days policy (e.g., 30 means they expire 30 days after assignment to a "customer" user)
 # The issuer can expire all outstanding vouchers at once by setting the entire currency status to INACTIVE.
 # 
-# Currencies have icon images, and also a defined set of denominations. Vouchers issued in the currency have to be denominated
-# to a valid value (this is also what the GUI uses to set tap amounts)
+# Currencies have icon images, single-character symbols, and also a defined set of denominations (with associated images). 
+#   Vouchers issued in the currency have to be denominated to a valid value (this is also what the GUI uses to set tap amounts)
 #
 # NOTES AND WARNINGS
 #   Currency objects are only used for non-bitcoin currencies. Bitcoin itself uses the former mechanism (i.e., satoshi_balance in the user)
-#   Currency denominations are stored as serialized integer arrays. To show and edit, they have to be simple comma-delimited strings;
-# hence the encode and decode methods.
+#   Currency denominations are stored as dependent models
 #
 class Currency < ActiveRecord::Base
   ACTIVE = 0
@@ -48,6 +47,7 @@ class Currency < ActiveRecord::Base
 
   belongs_to :user
   has_many :vouchers, :dependent => :restrict_with_error
+  has_many :denominations, :dependent => :destroy
   
   validates :expiration_days, :numericality => { :only_integer => true, :greater_than => 0 }
   validates :name, :presence => true,
@@ -61,40 +61,9 @@ class Currency < ActiveRecord::Base
   
   def conversion_rate
     1.0 / self.amount_per_dollar.to_f
-  end
+  end  
   
-  def encode_denominations
-    unless self.denominations.blank?
-      begin
-        d = self.denominations.split(',')
-        numerics = []
-        d.each do |c|
-          numerics.push(c.to_i)
-        end
-        
-        self.denominations = YAML::dump(numerics)
-      rescue
-        self.errors.add :base, "Invalid denominations #{self.denominations}"  
-      end
-    end
-  end
-  
-  def decode_denominations(as_str = false)
-    if self.denominations.blank?
-      as_str ? "" : []
-    else
-      d = YAML.load(self.denominations)
-      if as_str
-        str = ""
-        d.each do |n|
-          str += ", " unless str.blank?
-          str += n.to_s
-        end
-        
-        str
-      else
-        d
-      end
-    end
+  def denomination_values
+    denominations.map { |d| d.value }
   end
 end
