@@ -1,5 +1,7 @@
 - unless @currency.icon.nil?
   %p= image_tag @currency.icon.url
+- unless @currency.symbol.nil?
+  %p= @currency.symbol
 %p= link_to @currency.name, currency_path(@currency)
 %p== Denominations: #{@currency.decode_denominations(true)}
 - if @currency.expiration_days.nil?

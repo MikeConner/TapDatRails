@@ -32,11 +32,28 @@ describe Currency do
     expect(currency).to respond_to(:status)
     expect(currency).to respond_to(:reserve_balance)
     expect(currency).to respond_to(:amount_per_dollar)
+    expect(currency).to respond_to(:symbol)
   end
   
   its(:user) { should be == user }
   
   it { should be_valid }
+  
+  describe "Invalid currency" do
+    before { currency.symbol = "Fish" }
+    
+    it { should_not be_valid }
+  end
+   
+  describe "Unicode currency" do
+    before { currency.symbol = "漢" }
+    
+    it { should be_valid }
+    
+    it "should match" do
+      expect(currency.symbol).to eq("漢")
+    end
+  end
   
   describe "Missing reserve balance" do
     before { currency.reserve_balance = ' ' }

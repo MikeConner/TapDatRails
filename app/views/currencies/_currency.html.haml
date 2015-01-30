@@ -6,7 +6,10 @@
     %td= image_tag currency.icon.url, :width => 100
   - else
     %td
-  %td= link_to currency.name, currency_path(currency)
+  %td
+    - unless currency.symbol.nil?
+      = currency.symbol
+    = link_to currency.name, currency_path(currency)
   %td= currency.decode_denominations(true)
   - if currency.expiration_days.nil?
     %td N/A

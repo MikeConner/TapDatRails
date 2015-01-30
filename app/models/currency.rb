@@ -57,6 +57,7 @@ class Currency < ActiveRecord::Base
   # Balance available to create vouchers (from external funding)
   validates :reserve_balance, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
   validates :amount_per_dollar, :numericality => { :only_integer => true, :greater_than => 0 }
+  validates :symbol, :length => { :is => 1 }, :allow_nil => true
   
   def conversion_rate
     1.0 / self.amount_per_dollar.to_f

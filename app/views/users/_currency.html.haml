@@ -1,6 +1,11 @@
 .currency_section{:id => currency.name.gsub(' ', '_')}
   %h1 Currency
-  %h3= currency.name
+  - unless currency.icon.nil? or !currency.icon.file.exists?
+    = image_tag currency.icon.url
+  %h3
+    - unless currency.symbol.nil?
+      = currency.symbol
+    = currency.name
 
   Show balance of currency
   here we need to have a form that will generate vouchers - enter amount (multiple of base amount in denomination - just check don't do dropdown)
