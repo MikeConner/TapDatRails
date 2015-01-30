@@ -39,8 +39,7 @@ describe Currency do
   its(:user) { should be == user }
   
   it { should be_valid }
-
-=begin  
+ 
   it "Should have denominations" do
     expect(currency.denominations.count).to eq(4)
     expect(currency.denomination_values).to match_array([1,5,10,20])
@@ -115,7 +114,7 @@ describe Currency do
       it { should_not be_valid }
     end
   end
-=end  
+ 
   describe "vouchers" do
     let(:currency) { FactoryGirl.create(:currency_with_vouchers) }
     

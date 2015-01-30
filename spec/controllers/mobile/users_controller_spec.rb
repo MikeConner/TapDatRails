@@ -43,8 +43,9 @@ describe Mobile::V1::UsersController, :type => :controller do
       
       expect(result.keys.include?('response')).to be true
       expect(result.keys.include?('error')).to be false
-      expect(result['response']['currency_name']).to eq(voucher.currency.name)
+      expect(result['response']['amount_redeemed']).to eq(voucher.amount)
       expect(result['response']['balance']).to eq(voucher.amount)
+      expect(result['response'].keys.include?('currency')).to be true
       expect(Balance.count).to eq(1)
       
       expect(user.currency_balance(voucher.currency.name)).to eq(voucher.amount)
@@ -59,8 +60,13 @@ describe Mobile::V1::UsersController, :type => :controller do
       
       expect(result.keys.include?('response')).to be true
       expect(result.keys.include?('error')).to be false
-      expect(result['response']['currency_name']).to eq(my_voucher.currency.name)
+      expect(result['response'].keys.include?('currency')).to be true
+      expect(result['response']['currency']['id']).to eq(my_voucher.currency.id)
+      expect(result['response']['currency']['name']).to eq(my_voucher.currency.name)
+      expect(result['response']['currency']['symbol']).to eq(my_voucher.currency.symbol)
+      expect(result['response']['currency']['icon']).to eq(my_voucher.currency.icon.url)
       expect(result['response']['balance']).to eq(my_voucher.amount)
+      expect(result['response']['amount_redeemed']).to eq(my_voucher.amount)
       expect(Balance.count).to eq(1)
       
       expect(user.currency_balance(my_voucher.currency.name)).to eq(my_voucher.amount)

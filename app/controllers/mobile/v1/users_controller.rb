@@ -127,8 +127,14 @@ class Mobile::V1::UsersController < ApiController
         balance = current_user.balances.find_or_create_by(:currency_name => voucher.currency.name)
         total = voucher.currency.vouchers.redeemed.where(:user_id => current_user.id).sum(:amount)
         balance.update_attribute(:amount, total)
-
-        response = {:currency_name => voucher.currency.name, :balance => total}
+        currency = voucher.currency
+        
+        response = {:balance => total, 
+                    :amount_redeemed => voucher.amount, 
+                    :currency => {:icon => currency.icon.nil? ? nil : currency.icon.url, 
+                                  :symbol => currency.symbol,
+                                  :name => currency.name,
+                                  :id => currency.id}}
       end
 
       expose response
