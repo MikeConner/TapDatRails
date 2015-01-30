@@ -5,21 +5,24 @@
   = f.label :name
   = f.text_field :name, :size => Currency::NAME_LEN
 .field
-  = f.label :denominations, 'Please enter a comma-delimited list of allowed currency denominations'
-  = f.text_field :denominations, :value => f.object.decode_denominations(true)
-.field
   = f.label :expiration_days, "Please enter the number of days until currency voucher expiration (leave blank if they don't expire)"
   = f.number_field :expiration_days, :min => 1
 .field
-  = f.label :icon
-  = f.file_field :icon
-.field
   = f.label :symbol
   = f.text_field :symbol, :maxlength => 1
+.field
+  = f.label :icon
+  = f.file_field :icon
 .field
   = f.label :remote_icon_url, "or image URL"
   = f.text_field :remote_icon_url
 .field
   = f.label :reserve_balance
   = f.number_field :reserve_balance, :min => 0
+%h4 Denominations
+#denomination
+  = f.fields_for :denominations do |denomination_form|
+    = render :partial => 'denomination', :locals => { :f => denomination_form }
+  = add_denomination(@currency, f)
+%br
   

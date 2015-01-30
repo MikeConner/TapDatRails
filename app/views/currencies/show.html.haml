@@ -3,7 +3,7 @@
 - unless @currency.symbol.nil?
   %p= @currency.symbol
 %p= link_to @currency.name, currency_path(@currency)
-%p== Denominations: #{@currency.decode_denominations(true)}
+%p== Denominations: #{@currency.denomination_values.to_s}
 - if @currency.expiration_days.nil?
   %p N/A
 - else

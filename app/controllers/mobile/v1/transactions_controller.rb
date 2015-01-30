@@ -9,7 +9,7 @@ class Mobile::V1::TransactionsController < ApiController
     response = []
 
     after = params[:after].blank? ? nil : DateTime.parse(params[:after]) rescue nil
-    tx_list = after.nil? ? current_user.transactions.order('created_at DESC') : current_user.transactions.where('created_at >= ?', after).order('created_at DESC')
+    tx_list = after.nil? ? current_user.transactions.order('created_at') : current_user.transactions.where('created_at > ?', after).order('created_at')
 
     tx_list.each do |tx|
       payload_image = tx.payload.payload_image.url || tx.payload.mobile_payload_image_url

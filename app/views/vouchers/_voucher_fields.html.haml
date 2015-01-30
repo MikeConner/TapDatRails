@@ -3,7 +3,7 @@
 = f.hidden_field :uid, :value => f.object.uid
 = f.hidden_field :status, :value => f.object.status
 .field
-  %em== Denominations #{f.object.currency.decode_denominations} 
+  %em== Denominations #{f.object.currency.denomination_values.to_s} 
   = f.label :amount, "Amount: Max #{number_with_delimiter(@currency.reserve_balance)}"
   = f.number_field :amount, :min => 1, :max => @currency.reserve_balance
   

@@ -34,8 +34,6 @@ class CurrenciesController < ApplicationController
   def create
     user = User.find(params[:currency][:user_id])
     @currency = user.currencies.new(currency_params)
-
-    @currency.encode_denominations
         
     if @currency.save
       unless 0 == @currency.reserve_balance
@@ -74,8 +72,6 @@ class CurrenciesController < ApplicationController
       Rails.logger.info funding_transaction[:comment]
     end
       
-    @currency.encode_denominations
-
     if @currency.save
       unless funding_transaction.empty?
         ActiveRecord::Base.transaction do
@@ -113,6 +109,7 @@ class CurrenciesController < ApplicationController
 
 private
   def currency_params
-    params.require(:currency).permit(:denominations, :expiration_days, :icon, :remote_icon_url, :name, :status, :reserve_balance, :user_id)
+    params.require(:currency).permit(:expiration_days, :icon, :symbol, :remote_icon_url, :name, :status, :reserve_balance, :user_id, 
+                                     :denominations_attributes => [:id, :value, :image, :remote_image_url, :caption, :_destroy])
   end
 end

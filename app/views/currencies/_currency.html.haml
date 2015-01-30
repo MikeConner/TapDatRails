@@ -10,7 +10,7 @@
     - unless currency.symbol.nil?
       = currency.symbol
     = link_to currency.name, currency_path(currency)
-  %td= currency.decode_denominations(true)
+  %td= currency.denomination_values.to_s
   - if currency.expiration_days.nil?
     %td N/A
   - else

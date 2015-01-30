@@ -48,6 +48,9 @@ class Currency < ActiveRecord::Base
   belongs_to :user
   has_many :vouchers, :dependent => :restrict_with_error
   has_many :denominations, :dependent => :destroy
+
+  accepts_nested_attributes_for :denominations, :allow_destroy => true, 
+                                :reject_if => :reject_denominations
   
   validates :expiration_days, :numericality => { :only_integer => true, :greater_than => 0 }
   validates :name, :presence => true,
@@ -57,7 +60,7 @@ class Currency < ActiveRecord::Base
   # Balance available to create vouchers (from external funding)
   validates :reserve_balance, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
   validates :amount_per_dollar, :numericality => { :only_integer => true, :greater_than => 0 }
-  validates :symbol, :length => { :is => 1 }, :allow_nil => true
+  validates :symbol, :length => { :is => 1 }, :allow_blank => true
   
   def conversion_rate
     1.0 / self.amount_per_dollar.to_f
@@ -66,4 +69,34 @@ class Currency < ActiveRecord::Base
   def denomination_values
     denominations.map { |d| d.value }
   end
+  
+private
+  def reject_denominations(attributes)
+    # Reject if no changes, so that we're not uploading every single piece of content every time, even if nothing changed. That would get expensive.
+    # Note this will not stop it from uploading unchanged images if they change the caption, but it's at least an improvement until we find something better
+    # Strategy is to look up find the original record, then compare each attribute to the current value, setting a flag if anything changed
+    current = self.denominations.where(:id => attributes['id']).first
+    if current.nil?
+      changed = true
+    else
+      changed = false
+      
+      attributes.each do |k, v|
+        next if k == '_destroy'
+        
+        unless current[k].to_s == v
+          changed = true
+          break
+        end
+      end
+    end
+    
+    # Return true (reject record) if all_blank or unchanged
+    if changed
+      # All blank logic (same as reject_if :all_blank)
+      attributes.all? { |key, value| key == '_destroy' || value.blank? }
+    else
+      true
+    end
+  end  
 end

@@ -69,6 +69,8 @@ ActiveRecord::Schema.define(version: 20150130051933) do
     t.integer  "currency_id"
     t.integer  "value"
     t.string   "image"
+    t.boolean  "image_processing"
+    t.string   "caption"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

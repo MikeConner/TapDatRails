@@ -4,7 +4,9 @@ class CreateDenominations < ActiveRecord::Migration
       t.references :currency
       t.integer :value
       t.string :image
-
+      t.boolean :image_processing
+      t.string :caption
+      
       t.timestamps
     end
     

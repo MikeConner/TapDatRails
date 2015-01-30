@@ -18,6 +18,7 @@ describe Denomination do
   
   it "should respond to everything" do
     expect(denomination).to respond_to(:value)
+    expect(denomination).to respond_to(:caption)
     expect(denomination).to respond_to(:image)
     expect(denomination).to respond_to(:remote_image_url)
   end
