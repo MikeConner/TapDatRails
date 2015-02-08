@@ -16,10 +16,10 @@
 #
 
 # CHARTER
-#   Summary record of a bitcoin transaction.
+#   Summary record of a transaction, bitcoin or currency
 #
 # USAGE
-#   Details are recorded in a separate dependent model (credits and debits)
+#   Details are recorded in a separate dependent model (credits and debits). If the currency id is blank, it's bitcoin. Otherwise it's a currency
 #   
 # NOTES AND WARNINGS
 #   Owner of the transaction is the destination

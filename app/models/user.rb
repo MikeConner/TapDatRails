@@ -85,8 +85,8 @@ class User < ActiveRecord::Base
     1 == (self.role & ADMIN_ROLE)
   end
   
-  def currency_balance(currency_name)
-    balance = balances.where(:currency_name => currency_name).first
+  def currency_balance(currency)
+    balance = balances.where(:currency_id => currency.id).first rescue nil
     
     balance.nil? ? 0 : balance.amount
   end

@@ -4,37 +4,32 @@
 #
 #  id              :integer          not null, primary key
 #  user_id         :integer
-#  currency_name   :string(255)      not null
 #  amount          :integer          default(0), not null
 #  expiration_date :datetime
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  currency_id     :integer
 #
 
 describe Balance do
   let(:user) { FactoryGirl.create(:user) }
-  let(:balance) { FactoryGirl.create(:balance, :user => user) }
+  let(:currency) { FactoryGirl.create(:currency) }
+  let(:balance) { FactoryGirl.create(:balance, :user => user, :currency => currency) }
   
   subject { balance }
   
   it "should respond to anything" do
-    expect(balance).to respond_to(:currency_name)
     expect(balance).to respond_to(:amount)
     expect(balance).to respond_to(:expiration_date)
   end
   
   its(:user) { should be == user }
+  its(:currency) { should be == currency }
   
   it { should be_valid }
   
-  describe "missing name" do
-    before { balance.currency_name = ' ' }
-    
-    it { should_not be_valid }
-  end
-  
-  it "should have zero amount initially" do
-    expect(balance.amount).to eq(0)
+  it "should have default amount initially" do
+    expect(balance.amount).to eq(1000)
   end 
   
   describe "Invalid amount" do

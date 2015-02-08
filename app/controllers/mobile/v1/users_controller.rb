@@ -36,8 +36,9 @@ class Mobile::V1::UsersController < ApiController
                     :dollar_balance => price,
                     :exchange_rate => (balance.nil? or (0 == balance)) ? nil : price / balance}
 
+        response[:balances] = []
         current_user.balances.each do |bal|
-          response[bal.currency_name] = bal.amount
+          response[:balances].push({:id => bal.currency.id, :amount => bal.amount})
         end
 
         expose response
@@ -124,7 +125,7 @@ class Mobile::V1::UsersController < ApiController
         voucher.update_attribute(:user_id, current_user.id)
         
         # Update balance
-        balance = current_user.balances.find_or_create_by(:currency_name => voucher.currency.name)
+        balance = current_user.balances.find_or_create_by(:currency_id => voucher.currency.id)
         total = voucher.currency.vouchers.redeemed.where(:user_id => current_user.id).sum(:amount)
         balance.update_attribute(:amount, total)
         currency = voucher.currency

@@ -12,7 +12,7 @@ FactoryGirl.define do
   sequence(:random_sentences) { |n| Faker::Lorem.sentences.join(' ') }
   sequence(:random_bitcoin_address) { |n| Faker::Bitcoin.address }
   sequence(:sequential_tag) { |n| "Tag #{n}"}
-  sequence(:random_currency) { |n| "#{Faker::Commerce.product_name.split(' ')[0..1].join(' ')} Pts" }
+  sequence(:random_currency) { |n| "#{Faker::Commerce.product_name.split(' ')[0..1].join(' ')} #{Random.rand(100)}" }
   
   factory :bitcoin_rate do
     rate { (Random.rand * 1000 + 1).round(2) }
@@ -50,7 +50,7 @@ FactoryGirl.define do
     user
     
     name { generate(:random_currency) }
-    remote_icon_url 'http://favicon-generator.org/favicons/2014-11-09/63f9acfc66d75ec8207fe51c83556d8b.ico'
+    remote_icon_url 'http://www.rw-designer.com/icon-detail/11995'
     status Currency::ACTIVE
     expiration_days 30
     symbol '$'
@@ -58,8 +58,9 @@ FactoryGirl.define do
     after(:create) do |currency|
       FactoryGirl.create(:denomination, :currency => currency, :value => 1, :remote_image_url => 'http://upload.wikimedia.org/wikipedia/commons/2/24/Onedolar2009series.jpg')
       FactoryGirl.create(:denomination, :currency => currency, :value => 5, :remote_image_url => 'http://currencyguide.eu/usd-en/New_five_dollar_bill.jpg')
-      FactoryGirl.create(:denomination, :currency => currency, :value => 10, :remote_image_url => 'http://upload.wikimedia.org/wikipedia/commons/4/49/US10dollarbill-Series_2004A.jpg')
-      FactoryGirl.create(:denomination, :currency => currency, :value => 20, :remote_image_url => 'https://abagond.files.wordpress.com/2014/01/20-dollar-bill-1981.jpg')
+      # Takes too long to load these!
+      #FactoryGirl.create(:denomination, :currency => currency, :value => 10, :remote_image_url => 'http://upload.wikimedia.org/wikipedia/commons/4/49/US10dollarbill-Series_2004A.jpg')
+      #FactoryGirl.create(:denomination, :currency => currency, :value => 20, :remote_image_url => 'https://abagond.files.wordpress.com/2014/01/20-dollar-bill-1981.jpg')
     end
     
     factory :currency_with_vouchers do
@@ -77,12 +78,15 @@ FactoryGirl.define do
     
   factory :balance do
     user
+    currency
     
-    transient do
-      bal_currency { create(:currency) }
-    end    
+    # This is how to create a valid name dynamically; useful code sample
+    #transient do
+    #  bal_currency { create(:currency) }
+    #end    
+    amount 1000
     
-    currency_name { bal_currency.name }
+    #currency_name { bal_currency.name }
     expiration_date 1.week.from_now
    end
   
@@ -107,7 +111,7 @@ FactoryGirl.define do
 
     factory :user_with_balances do 
       transient do
-        num_balances 3
+        num_balances 2
       end
       
       after(:create) do |user, evaluator|
@@ -193,6 +197,7 @@ FactoryGirl.define do
   
   factory :nfc_tag do
     user
+    currency
     
     tag_id { SecureRandom.hex(5) }
     name "Tag name"

@@ -23,6 +23,7 @@ en:
   admins_only: 'This function reserved for administrators.'
   already_logged_in: 'User already logged in'
   auth_token_not_found: 'Authentication token not recognized'
+  currency_mismatch: 'Tap currency does not match tag currency!'
   empty_payload: 'Payload has no content'
   insufficient_funds: 'Insufficient funds for this transaction'
   invalid_amount: 'Amount invalid'

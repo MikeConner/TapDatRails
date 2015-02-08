@@ -80,7 +80,7 @@ describe User do
     let(:user) { FactoryGirl.create(:user_with_balances) }
     
     it "should have balances" do
-      expect(user.balances.count).to eq(3)
+      expect(user.balances.count).to eq(2)
     end
     
     describe "delete" do

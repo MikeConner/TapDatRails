@@ -2,12 +2,14 @@
 #
 # Table name: denominations
 #
-#  id          :integer          not null, primary key
-#  currency_id :integer
-#  value       :integer
-#  image       :string(255)
-#  created_at  :datetime
-#  updated_at  :datetime
+#  id               :integer          not null, primary key
+#  currency_id      :integer
+#  value            :integer
+#  image            :string(255)
+#  image_processing :boolean
+#  caption          :string(255)
+#  created_at       :datetime
+#  updated_at       :datetime
 #
 
 describe Denomination do

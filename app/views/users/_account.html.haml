@@ -17,7 +17,7 @@
 - unless current_user.balances.empty?
   %h3 Other balances
   - current_user.balances.each do |balance|
-    = balance.currency_name
+    = balance.currency.name
     = balance.amount
     %br
   

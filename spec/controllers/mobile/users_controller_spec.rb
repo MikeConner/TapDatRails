@@ -48,7 +48,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result['response'].keys.include?('currency')).to be true
       expect(Balance.count).to eq(1)
       
-      expect(user.currency_balance(voucher.currency.name)).to eq(voucher.amount)
+      expect(user.currency_balance(voucher.currency)).to eq(voucher.amount)
     end
 
     it "should redeem voucher" do
@@ -69,7 +69,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result['response']['amount_redeemed']).to eq(my_voucher.amount)
       expect(Balance.count).to eq(1)
       
-      expect(user.currency_balance(my_voucher.currency.name)).to eq(my_voucher.amount)
+      expect(user.currency_balance(my_voucher.currency)).to eq(my_voucher.amount)
     end
   end
   
@@ -148,6 +148,31 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result['response']['id']).to_not be_blank
       expect(result['response'].keys.include?('data')).to be true
       expect(result.keys.include?('error')).to be false
+    end
+  end
+  
+  describe "Balance inquiry (currencies)" do
+    let(:user) { FactoryGirl.create(:user_with_balances) }
+    
+    before do
+      allow_any_instance_of(CoinbaseAPI).to receive(:balance_inquiry).and_return(1.5)      
+      allow_any_instance_of(CoinbaseAPI).to receive(:sell_price).and_return(450)      
+    end
+
+    it "should return them" do
+      get :balance_inquiry, :version => 1, :auth_token => user.authentication_token
+            
+      expect(subject.current_user.inbound_btc_address).to eq(user.inbound_btc_address)
+      expect(response.status).to eq(200)
+      
+      result = JSON.parse(response.body)
+      
+      expect(result.keys.include?('response')).to be true
+      expect(result.keys.include?('error')).to be false
+      expect(result["response"]["btc_balance"]).to eq(1.5)      
+      expect(result["response"]["dollar_balance"]).to eq(450)      
+      expect(result["response"]["exchange_rate"]).to eq(300)    
+      expect(result["response"]["balances"].count).to eq(2) 
     end
   end
   

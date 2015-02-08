@@ -41,8 +41,8 @@ describe Currency do
   it { should be_valid }
  
   it "Should have denominations" do
-    expect(currency.denominations.count).to eq(4)
-    expect(currency.denomination_values).to match_array([1,5,10,20])
+    expect(currency.denominations.count).to eq(2)
+    expect(currency.denomination_values).to match_array([1,5])
   end
   
   describe "Invalid currency" do

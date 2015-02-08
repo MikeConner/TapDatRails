@@ -11,21 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150130051933) do
+ActiveRecord::Schema.define(version: 20150206033507) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "balances", force: true do |t|
     t.integer  "user_id"
-    t.string   "currency_name",               null: false
     t.integer  "amount",          default: 0, null: false
     t.datetime "expiration_date"
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
+    t.integer  "currency_id"
   end
-
-  add_index "balances", ["user_id", "currency_name"], name: "index_balances_on_user_id_and_currency_name", unique: true, using: :btree
 
   create_table "bitcoin_rates", force: true do |t|
     t.float    "rate"
