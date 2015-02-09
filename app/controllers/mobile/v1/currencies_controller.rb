@@ -19,6 +19,7 @@ private
     {:name => currency.name,
      :icon => currency.icon.url,
      :amount_per_dollar => currency.amount_per_dollar,
+     :max_amount => currency.max_amount,
      :symbol => currency.symbol}
   end
 end

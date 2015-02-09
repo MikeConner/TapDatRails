@@ -109,7 +109,7 @@ class CurrenciesController < ApplicationController
 
 private
   def currency_params
-    params.require(:currency).permit(:expiration_days, :icon, :symbol, :remote_icon_url, :name, :status, :reserve_balance, :user_id, 
+    params.require(:currency).permit(:expiration_days, :icon, :symbol, :remote_icon_url, :name, :status, :max_amount, :reserve_balance, :user_id, 
                                      :denominations_attributes => [:id, :value, :image, :remote_image_url, :caption, :_destroy])
   end
 end

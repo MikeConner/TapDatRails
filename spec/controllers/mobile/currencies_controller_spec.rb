@@ -19,6 +19,7 @@ describe Mobile::V1::CurrenciesController, :type => :controller do
       expect(result['response']['icon']).to_not be_empty
       expect(result['response']['amount_per_dollar']).to eq(currency.amount_per_dollar)
       expect(result['response']['symbol']).to eq(currency.symbol)
+      expect(result['response']['max_amount']).to eq(currency.max_amount)
       expect(result['response']['denominations'].count).to eq(2)
     end
   end

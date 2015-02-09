@@ -34,11 +34,14 @@
 # NOTES AND WARNINGS
 #   Currency objects are only used for non-bitcoin currencies. Bitcoin itself uses the former mechanism (i.e., satoshi_balance in the user)
 #   Currency denominations are stored as dependent models
+#   Allow 0 in max amount (perhaps indicating no limit?)
 #
 class Currency < ActiveRecord::Base
   ACTIVE = 0
   INACTIVE = 1
   NAME_LEN = 24
+  # Max "Tip" per transaction for this currency
+  MAX_AMOUNT = 500 
   
   VALID_STATUSES = [ACTIVE, INACTIVE]
   
@@ -61,6 +64,7 @@ class Currency < ActiveRecord::Base
   validates :reserve_balance, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
   validates :amount_per_dollar, :numericality => { :only_integer => true, :greater_than => 0 }
   validates :symbol, :length => { :is => 1 }, :allow_blank => true
+  validates :max_amount, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0, :less_than_or_equal_to => MAX_AMOUNT }
   
   def conversion_rate
     1.0 / self.amount_per_dollar.to_f

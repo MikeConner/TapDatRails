@@ -34,12 +34,31 @@ describe Currency do
     expect(currency).to respond_to(:amount_per_dollar)
     expect(currency).to respond_to(:symbol)
     expect(currency).to respond_to(:denomination_values)
+    expect(currency).to respond_to(:max_amount)
   end
   
   its(:user) { should be == user }
   
   it { should be_valid }
  
+  it "should have default max amount" do
+    expect(currency.max_amount).to eq(Currency::MAX_AMOUNT)
+  end
+  
+  describe "Missing max amount" do
+    before { currency.max_amount = ' ' }
+    
+    it { should_not be_valid }
+  end
+  
+  describe "Invalid max amount" do
+    [-1, 0.5, 'abc', Currency::MAX_AMOUNT + 1].each do |amount|
+      before { currency.max_amount = amount }
+      
+      it { should_not be_valid }
+    end
+  end
+  
   it "Should have denominations" do
     expect(currency.denominations.count).to eq(2)
     expect(currency.denomination_values).to match_array([1,5])

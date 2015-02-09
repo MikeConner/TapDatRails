@@ -19,6 +19,9 @@
 .field
   = f.label :reserve_balance
   = f.number_field :reserve_balance, :min => 0
+.field
+  = f.label :max_amount
+  = f.number_field :max_amount, :min => 0, :max => Currency::MAX_AMOUNT
 %h4 Denominations
 #denomination
   = f.fields_for :denominations do |denomination_form|
