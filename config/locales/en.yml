@@ -22,6 +22,7 @@
 en:
   admins_only: 'This function reserved for administrators.'
   already_logged_in: 'User already logged in'
+  amount_exceeds_max: "Currency transaction (%{name}) exceeds maximum amount %{amount}"
   auth_token_not_found: 'Authentication token not recognized'
   currency_mismatch: 'Tap currency does not match tag currency!'
   empty_payload: 'Payload has no content'

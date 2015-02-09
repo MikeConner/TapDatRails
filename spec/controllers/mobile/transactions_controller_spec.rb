@@ -96,20 +96,18 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('currency_mismatch'))
     end
-   
+ 
     it "should create a currency transaction" do
       expect(user.currency_balance(currency)).to eq(1000)
       
       post :create, :version => 1, :tag_id => tag.tag_id, :auth_token => user.authentication_token, :amount => 100, :currency_id => currency.id
       
       expect(subject.current_user).to_not be_nil
-      #expect(subject.current_user.transactions.count).to eq(1)
-      #expect(subject.current_user.transaction_details.count).to eq(2)
+      expect(subject.current_user.transactions.count).to eq(1)
+      expect(subject.current_user.transaction_details.count).to eq(2)
       
       tx = subject.current_user.transactions.first
-      
-      puts response.inspect
-      
+            
       expect(tx.nfc_tag_id).to eq(tag.id)
       expect(tx.payload_id).to_not be_nil
       expect(tx.dollar_amount).to be_nil
@@ -245,6 +243,23 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('insufficient_funds'))
+    end
+
+    it "max amount funds" do
+      expect(user.currency_balance(currency)).to eq(1000)
+      
+      post :create, :version => 1, :tag_id => tag.tag_id, :auth_token => user.authentication_token, :amount => currency.max_amount + 1, :currency_id => currency.id
+      
+      expect(subject.current_user).to_not be_nil
+      expect(Transaction.count).to eq(0)
+      
+      expect(response.status).to eq(403)
+      
+      result = JSON.parse(response.body)
+
+      expect(result.keys.include?('response')).to be false
+      expect(result.keys.include?('error')).to be true
+      expect(result["error_description"]).to eq(I18n.t('amount_exceeds_max', :amount => currency.max_amount + 1, :name => currency.name))
     end
   end
 end
