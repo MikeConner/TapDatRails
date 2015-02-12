@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150209030039) do
+ActiveRecord::Schema.define(version: 20150212211529) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,6 +73,20 @@ ActiveRecord::Schema.define(version: 20150209030039) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "device_logs", force: true do |t|
+    t.string   "user",       limit: 16, null: false
+    t.string   "os",         limit: 32, null: false
+    t.string   "hardware",   limit: 48, null: false
+    t.string   "message",               null: false
+    t.text     "details"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "device_logs", ["hardware"], name: "index_device_logs_on_hardware", using: :btree
+  add_index "device_logs", ["os"], name: "index_device_logs_on_os", using: :btree
+  add_index "device_logs", ["user"], name: "index_device_logs_on_user", using: :btree
 
   create_table "friendly_id_slugs", force: true do |t|
     t.string   "slug",                      null: false
