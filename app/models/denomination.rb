@@ -12,6 +12,13 @@
 #  updated_at       :datetime
 #
 
+# CHARTER
+#   Define a valid denomination for a given currency. Vouchers must be issued in multiples of valid denominations
+#
+# USAGE
+#   
+# NOTES AND WARNINGS
+#
 class Denomination < ActiveRecord::Base
   mount_uploader :image, ImageUploader
   process_in_background :image
