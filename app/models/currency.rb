@@ -52,9 +52,11 @@ class Currency < ActiveRecord::Base
   belongs_to :user
   has_many :vouchers, :dependent => :restrict_with_error
   has_many :denominations, :dependent => :destroy
-
+  has_many :single_code_generators, :dependent => :destroy
+  
   accepts_nested_attributes_for :denominations, :allow_destroy => true, 
                                 :reject_if => :reject_denominations
+  accepts_nested_attributes_for :single_code_generators, :allow_destroy => true
   
   validates :expiration_days, :numericality => { :only_integer => true, :greater_than => 0 }
   validates :name, :presence => true,
@@ -66,6 +68,16 @@ class Currency < ActiveRecord::Base
   validates :amount_per_dollar, :numericality => { :only_integer => true, :greater_than => 0 }
   validates :symbol, :length => { :is => 1 }, :allow_blank => true
   validates :max_amount, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0, :less_than_or_equal_to => MAX_AMOUNT }
+  
+  def active_generators
+    generators = []
+    
+    single_code_generators.each do |generator|
+      generators.push(generator) if generator.active?
+    end
+    
+    generators
+  end
   
   def conversion_rate
     1.0 / self.amount_per_dollar.to_f

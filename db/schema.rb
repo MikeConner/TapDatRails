@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150212211529) do
+ActiveRecord::Schema.define(version: 20150213032722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -173,6 +173,18 @@ ActiveRecord::Schema.define(version: 20150212211529) do
   end
 
   add_index "rails_admin_histories", ["item", "table", "month", "year"], name: "index_rails_admin_histories", using: :btree
+
+  create_table "single_code_generators", force: true do |t|
+    t.integer  "currency_id"
+    t.string   "code",        limit: 32, null: false
+    t.date     "start_date"
+    t.date     "end_date"
+    t.integer  "value",                  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "single_code_generators", ["code"], name: "index_single_code_generators_on_code", unique: true, using: :btree
 
   create_table "transaction_details", force: true do |t|
     t.integer  "transaction_id"

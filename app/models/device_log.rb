@@ -12,6 +12,17 @@
 #  updated_at :datetime
 #
 
+# CHARTER
+#   Provide storage for unexplained errors that occur on devices
+#
+# USAGE
+#   Devices can log information or errors; web app admin page can be written to display them. May want to add something else
+# like a classification. (Could also use message for this now.)
+#
+# NOTES AND WARNINGS
+#   Requires a user authentication token to avoid hacking. Assuming this will happen to logged-in users running the app.
+# If it's necessary to log errors for phones that are not logged in, we could hard-code a special test user's code in the app.
+#
 class DeviceLog < ActiveRecord::Base
   OS_DESC_LIMIT = 32
   HARDWARE_DESC_LIMIT = 48

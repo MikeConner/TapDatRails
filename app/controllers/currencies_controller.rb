@@ -110,6 +110,7 @@ class CurrenciesController < ApplicationController
 private
   def currency_params
     params.require(:currency).permit(:expiration_days, :icon, :symbol, :remote_icon_url, :name, :status, :max_amount, :reserve_balance, :user_id, 
-                                     :denominations_attributes => [:id, :value, :image, :remote_image_url, :caption, :_destroy])
+                                     :denominations_attributes => [:id, :value, :image, :remote_image_url, :caption, :_destroy],
+                                     :single_code_generators_attributes => [:id, :value, :code, :start_date, :end_date, :_destroy])
   end
 end

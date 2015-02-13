@@ -63,9 +63,7 @@ class Mobile::V1::UsersController < ApiController
                   :mobile_profile_image_url => current_user.mobile_profile_thumb_url }
       expose response
     end
-    puts current_user.errors.full_messages
   rescue Exception => ex
-    puts ex.message
     error! :bad_request, :metadata => {:error_description => ex.message}
   end
 
@@ -83,7 +81,7 @@ class Mobile::V1::UsersController < ApiController
   # PUT /mobile/:version/users/cashout
   def cashout
     if current_user.satoshi_balance < CoinbaseAPI::WITHDRAWAL_THRESHOLD
-      error! :bad_request, :metadata => {:error_description => I18n.t('insufficient_balance')}
+      error! :bad_request, :metadata => {:error_description => I18n.t('insufficient_funds')}
     elsif current_user.inbound_btc_address.nil? or current_user.outbound_btc_address.nil?
       error! :bad_request, :metadata => {:error_description => I18n.t('invalid_btc_addresses')}
     else
@@ -113,6 +111,29 @@ class Mobile::V1::UsersController < ApiController
     # Lookup voucher; ensure it's active. Assign voucher's user, update user's balance
     voucher = Voucher.find_by_uid(params[:id])
     if voucher.nil?
+      # It could be a single code voucher -- look for it
+      generator = SingleCodeGenerator.find_by_code(params[:id])
+      if !generator.nil? and (generator.code == params[:id]) and generator.active?
+        reserve = generator.currency.reserve_balance
+        if reserve < generator.value
+          error! :bad_request, :metadata => {:error_description => I18n.t('insufficient_funds')}
+        else  
+          ActiveRecord::Base.transaction do
+            voucher = generator.currency.vouchers.create!(:uid => SecureRandom.hex(4), :amount => generator.value)
+            generator.currency.update_attribute(:reserve_balance, reserve - generator.value)
+            
+            tx = current_user.transactions.create!(transaction_params(:dest_id => voucher.id, 
+                                                                      :amount => generator.value, 
+                                                                      :comment => I18n.t('single_code_redemption', :code => params[:id])))
+                                                                 
+            tx.transaction_details.create!(details_params({:subject_id => current_user.id, :target_id => voucher.currency.user.id, :debit => voucher.amount, :conversion_rate => 1, :currency => voucher.currency.name}))
+            tx.transaction_details.create!(details_params({:subject_id => voucher.currency.user.id, :target_id => current_user.id, :credit => voucher.amount, :conversion_rate => 1, :currency => voucher.currency.name}))
+          end
+        end
+      end
+    end
+    
+    if voucher.nil?
       error! :not_found, :metadata => {:error_description => I18n.t('voucher_not_found', :uid => params[:id])}
     elsif !voucher.active?
       error! :bad_request, :metadata => {:error_description => I18n.t('inactive_voucher', :uid => params[:id])}
@@ -123,6 +144,13 @@ class Mobile::V1::UsersController < ApiController
       ActiveRecord::Base.transaction do
         voucher.update_attribute(:status, Voucher::REDEEMED)
         voucher.update_attribute(:user_id, current_user.id)
+
+        tx = current_user.transactions.create!(transaction_params({
+                                               :dest_id => voucher.id,
+                                               :comment => "Voucher redemption",
+                                               :amount => voucher.amount}))
+        tx.transaction_details.create!(details_params({:subject_id => current_user.id, :target_id => voucher.currency.user.id, :debit => voucher.amount, :conversion_rate => 1, :currency => voucher.currency.name}))
+        tx.transaction_details.create!(details_params({:subject_id => voucher.currency.user.id, :target_id => current_user.id, :credit => voucher.amount, :conversion_rate => 1, :currency => voucher.currency.name}))
         
         # Update balance
         balance = current_user.balances.find_or_create_by(:currency_id => voucher.currency.id)
@@ -139,10 +167,19 @@ class Mobile::V1::UsersController < ApiController
       end
 
       expose response
-    end
+    end    
   end
+  
 private
   def user_params
     params.require(:user).permit(:name, :email, :inbound_btc_address, :outbound_btc_address, :mobile_profile_image_url, :mobile_profile_thumb_url)
+  end
+
+  def transaction_params(params)
+    ActionController::Parameters.new(params).permit(:nfc_tag_id, :payload_id, :dest_id, :comment, :dollar_amount, :amount, :currency_id)
+  end
+  
+  def details_params(params)
+    ActionController::Parameters.new(params).permit(:subject_id, :target_id, :debit, :credit, :conversion_rate)
   end
 end

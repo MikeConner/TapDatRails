@@ -71,6 +71,34 @@ FactoryGirl.define do
       #FactoryGirl.create(:denomination, :currency => currency, :value => 20, :remote_image_url => 'https://abagond.files.wordpress.com/2014/01/20-dollar-bill-1981.jpg')
     end
     
+    factory :currency_with_generators do
+      transient do
+        num_generators 2
+      end  
+      
+      after(:create) do |currency, evaluator|
+        FactoryGirl.create_list(:single_code_generator, evaluator.num_generators, :currency => currency)
+      end         
+    end
+    
+    factory :currency_with_permanent_generator do
+      after(:create) do |currency|
+        FactoryGirl.create(:single_code_generator, :currency => currency, :start_date => nil, :end_date => nil)
+      end
+    end
+
+    factory :currency_with_unending_generator do
+      after(:create) do |currency|
+        FactoryGirl.create(:single_code_generator, :currency => currency, :start_date => 6.months.ago, :end_date => nil)
+      end
+    end
+
+    factory :currency_with_big_bang_generator do
+      after(:create) do |currency|
+        FactoryGirl.create(:single_code_generator, :currency => currency, :start_date => nil, :end_date => 6.months.from_now)
+      end
+    end
+    
     factory :currency_with_vouchers do
       transient do
         num_vouchers 2
@@ -83,6 +111,16 @@ FactoryGirl.define do
       end
     end
   end
+  
+  factory :single_code_generator do
+    currency
+    
+    code { "#{generate(:random_word)}15" }
+    start_date 1.month.ago
+    end_date 1.month.from_now
+    value { Random.rand(100) + 1 }
+  end
+  
     
   factory :balance do
     user

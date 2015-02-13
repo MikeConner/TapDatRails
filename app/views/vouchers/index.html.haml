@@ -17,3 +17,5 @@
 - if @currency.reserve_balance > 0
   .row
     = link_to 'Add Voucher', new_voucher_path(:currency_id => @currency.id)
+%br
+= link_to 'Back', currency_path(@currency)

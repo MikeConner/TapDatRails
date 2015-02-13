@@ -39,6 +39,7 @@ en:
   object_not_found: "%{obj} not found!"
   no_generator: 'Generator has no names'
   rate_not_found: 'Cannot access bitcoin conversion rate; please try again later!'
+  single_code_redemption: "Redeemed single code voucher: %{code}"
   not_currency_owner: "You aren't the owner of this currency"
   voucher_not_found: "Voucher %{uid} not found"
   inactive_voucher: "Voucher %{uid} is not active, and cannot be redeemed"

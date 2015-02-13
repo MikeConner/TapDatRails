@@ -14,4 +14,13 @@ module CurrenciesHelper
       content_tag(:a, 'Add Denomination', :href => '#', :onclick => onclick, :id => 'add_denomination')
     end
   end    
+
+  def add_generator(currency, form_builder)
+    form_builder.fields_for :single_code_generators, currency.single_code_generators.build, :child_index => 'NEW_RECORD' do |generator_form|
+      html = render(:partial => 'generator', :locals => { :f => generator_form })
+      onclick = "$('#{escape_javascript(html)}'.replace(/NEW_RECORD/g, $('.generator').length)).insertBefore('#add_generator'); return false;"
+      
+      content_tag(:a, 'Add Single Code Voucher', :href => '#', :onclick => onclick, :id => 'add_generator')
+    end
+  end    
 end
