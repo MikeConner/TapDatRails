@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
   resources :currencies
   resources :vouchers, :except => [:edit, :update]
+  resources :single_code_generators, :only => [:index, :show, :destroy]
 
   get "/how_it_works" => "static_pages#how_it_works"
   get "/legal" => "static_pages#legal"

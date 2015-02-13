@@ -1,0 +1,6 @@
+%tr
+  %td= generator.code
+  %td= number_with_delimiter(generator.value)
+  %td= generator.start_date.try(:strftime, ApplicationHelper::DATE_FORMAT)
+  %td= generator.end_date.try(:strftime, ApplicationHelper::DATE_FORMAT)
+  %td= link_to "Delete", generator, :method => :delete, :data => { :confirm => 'Are you sure?' }

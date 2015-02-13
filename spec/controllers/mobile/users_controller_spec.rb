@@ -8,8 +8,9 @@ describe Mobile::V1::UsersController, :type => :controller do
     let(:voucher) { FactoryGirl.create(:voucher) }
     # Will have issuer's user id
     let(:my_voucher) { FactoryGirl.create(:voucher) }
+    let(:currency) { FactoryGirl.create(:currency_with_permanent_generator, :reserve_balance => 1000) }
     let(:redeemed_voucher) { FactoryGirl.create(:voucher, :status => Voucher::REDEEMED) }
-        
+      
     it "should not find invalid voucher" do
       put :redeem_voucher, :version => 1, :auth_token => user.authentication_token, :id => 83242
       
@@ -50,7 +51,26 @@ describe Mobile::V1::UsersController, :type => :controller do
       
       expect(user.currency_balance(voucher.currency)).to eq(voucher.amount)
     end
-
+   
+    describe "Coupon redemption should fail if no reserve" do
+      before { currency.update_attribute(:reserve_balance, 0)  }
+      
+      it "should have insufficient funds" do
+        code = currency.single_code_generators.first.code
+        expect(currency.reserve_balance).to eq(0)
+        
+        put :redeem_voucher, :version => 1, :auth_token => user.authentication_token, :id => code
+        
+        expect(response.status).to eq(400)
+        
+        result = JSON.parse(response.body)
+        
+        expect(result.keys.include?('response')).to be false
+        expect(result.keys.include?('error')).to be true
+        expect(result["error_description"]).to eq(I18n.t('insufficient_funds'))         
+      end
+    end
+  
     it "should redeem voucher" do
       put :redeem_voucher, :version => 1, :auth_token => user.authentication_token, :id => my_voucher.uid
       
@@ -71,8 +91,35 @@ describe Mobile::V1::UsersController, :type => :controller do
       
       expect(user.currency_balance(my_voucher.currency)).to eq(my_voucher.amount)
     end
+
+    it "should redeem coupon voucher" do
+      code = currency.single_code_generators.first.code
+      
+      put :redeem_voucher, :version => 1, :auth_token => user.authentication_token, :id => code
+      
+      expect(response.status).to eq(200)
+      
+      result = JSON.parse(response.body)
+      
+      expect(currency.reload.reserve_balance).to eq(1000 - currency.single_code_generators.first.value)
+      expect(Transaction.find_by_comment(I18n.t('single_code_redemption', :code => code))).to_not be_nil
+      expect(Transaction.find_by_comment('Voucher redemption').amount).to eq(currency.single_code_generators.first.value)
+      
+      expect(result.keys.include?('response')).to be true
+      expect(result.keys.include?('error')).to be false
+      expect(result['response'].keys.include?('currency')).to be true
+      expect(result['response']['currency']['id']).to eq(currency.id)
+      expect(result['response']['currency']['name']).to eq(currency.name)
+      expect(result['response']['currency']['symbol']).to eq(currency.symbol)
+      expect(result['response']['currency']['icon']).to eq(currency.icon.url)
+      expect(result['response']['balance']).to eq(currency.single_code_generators.first.value)
+      expect(result['response']['amount_redeemed']).to eq(currency.single_code_generators.first.value)
+      expect(Balance.count).to eq(1)
+      
+      expect(user.currency_balance(currency)).to eq(currency.single_code_generators.first.value)
+    end
   end
-  
+
   describe "Cashout (insufficient)" do
     let(:user) { FactoryGirl.create(:user, :satoshi_balance => CoinbaseAPI::WITHDRAWAL_THRESHOLD / 2) }
     
@@ -86,7 +133,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
-      expect(result["error_description"]).to eq(I18n.t('insufficient_balance'))         
+      expect(result["error_description"]).to eq(I18n.t('insufficient_funds'))         
     end
   end
 
@@ -410,5 +457,5 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result['response']['nickname']).to_not eq(@old_name)
       expect(result.keys.include?('error')).to be false
     end
-  end    
+  end  
 end

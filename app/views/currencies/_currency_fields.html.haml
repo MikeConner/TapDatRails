@@ -28,4 +28,9 @@
     = render :partial => 'denomination', :locals => { :f => denomination_form }
   = add_denomination(@currency, f)
 %br
+%h4 Single Code Vouchers
+#generators
+  = f.fields_for :single_code_generators do |generator_form|
+    = render :partial => 'generator', :locals => { :f => generator_form }
+  = add_generator(@currency, f)
   

@@ -1,0 +1,18 @@
+.row
+  .large-12.columns
+    %h1== Single Code Vouchers in #{@currency.name}
+.row
+  - unless @generators.empty?
+    .large-12.columns
+      %table.table.zebra-striped
+        %thead
+          %th Code
+          %th Value
+          %th Start Date
+          %th End Date
+          %th
+        %tbody
+          - @generators.each do |generator|
+            = render :partial => 'generator', :locals => { :generator => generator }
+%br
+= link_to 'Back', currency_path(@currency)

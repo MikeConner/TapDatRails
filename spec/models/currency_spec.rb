@@ -36,6 +36,7 @@ describe Currency do
     expect(currency).to respond_to(:symbol)
     expect(currency).to respond_to(:denomination_values)
     expect(currency).to respond_to(:max_amount)
+    expect(currency).to respond_to(:active_generators)
   end
   
   its(:user) { should be == user }
@@ -45,7 +46,40 @@ describe Currency do
   it "should have default max amount" do
     expect(currency.max_amount).to eq(Currency::MAX_AMOUNT)
   end
+
+  describe "active generator (standard)" do
+    let(:currency) { FactoryGirl.create(:currency_with_generators) }
+    
+    it "should have an active generator" do
+      expect(currency.active_generators.count).to eq(2)
+    end
+  end
+
   
+  describe "active generator (permanent)" do
+    let(:currency) { FactoryGirl.create(:currency_with_permanent_generator) }
+    
+    it "should have an active generator" do
+      expect(currency.active_generators.count).to eq(1)
+    end
+  end
+
+  describe "active generator (unending)" do
+    let(:currency) { FactoryGirl.create(:currency_with_unending_generator) }
+
+    it "should have an active generator" do
+      expect(currency.active_generators.count).to eq(1)
+    end
+  end
+
+  describe "active generator (big bang)" do
+    let(:currency) { FactoryGirl.create(:currency_with_big_bang_generator) }
+
+    it "should have an active generator" do
+      expect(currency.active_generators.count).to eq(1)
+    end
+  end
+
   describe "Missing max amount" do
     before { currency.max_amount = ' ' }
     
@@ -141,7 +175,7 @@ describe Currency do
     it "should have vouchers" do
       expect(currency.vouchers.count).to eq(2)
     end
-    
+
     describe "should not delete" do
       before { currency.destroy }
       

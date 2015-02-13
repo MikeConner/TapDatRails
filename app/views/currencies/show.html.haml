@@ -10,7 +10,9 @@
   %p== Expires in #{pluralize(@currency.expiration_days, 'day')}
 %p== Reserve balance: #{@currency.reserve_balance}
 %br
-= link_to 'Show Vouchers', vouchers_path(:currency_id => @currency.id)
+= link_to 'Show Ordinary Vouchers', vouchers_path(:currency_id => @currency.id)
+%br
+= link_to 'Show Single Code Vouchers', single_code_generators_path(:currency_id => @currency.id)
 %br
 = link_to 'Edit', edit_currency_path(@currency)
 %br
