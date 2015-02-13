@@ -34,8 +34,6 @@ gem 'faker', '1.4.3'
 gem 'carrierwave', '0.10.0'
 gem "fog", '1.22.1'
 
-gem 'seed_dump'
-
 #for heroku, have to use this to get to imagemagick
 gem 'rmagick', '2.13.4', :require => false
 gem 'mini_magick', '4.0.1'
@@ -48,6 +46,10 @@ gem 'rqrcode-rails3', '0.1.7'
 gem 'bcrypt-ruby', '3.0.1'
 
 gem 'mechanize', '2.7.3'
+
+group :development do
+  gem 'seed_dump', '3.2.1'  
+end
 
 group :development, :test do
   gem 'rspec-rails', '3.1.0'
