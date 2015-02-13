@@ -299,6 +299,9 @@ GEM
       sass (~> 3.2.2)
       sprockets (~> 2.8, < 3.0)
       sprockets-rails (~> 2.0)
+    seed_dump (3.2.1)
+      activerecord (~> 4)
+      activesupport (~> 4)
     sexp_processor (4.4.4)
     sprockets (2.12.3)
       hike (~> 1.2)
@@ -373,5 +376,6 @@ DEPENDENCIES
   rspec-rails (= 3.1.0)
   rspec-tag_matchers (= 0.1.2)
   sass (~> 3.2.19)
+  seed_dump
   thin (= 1.6.3)
   uglifier (= 2.6.0)

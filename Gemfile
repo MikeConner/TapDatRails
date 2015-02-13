@@ -34,6 +34,8 @@ gem 'faker', '1.4.3'
 gem 'carrierwave', '0.10.0'
 gem "fog", '1.22.1'
 
+gem 'seed_dump'
+
 #for heroku, have to use this to get to imagemagick
 gem 'rmagick', '2.13.4', :require => false
 gem 'mini_magick', '4.0.1'
