@@ -117,6 +117,17 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(Balance.count).to eq(1)
       
       expect(user.currency_balance(currency)).to eq(currency.single_code_generators.first.value)
+
+      # try to redeem again
+      put :redeem_voucher, :version => 1, :auth_token => user.authentication_token, :id => code
+      
+      expect(response.status).to eq(400)
+
+      result = JSON.parse(response.body)
+      
+      expect(result.keys.include?('response')).to be false
+      expect(result.keys.include?('error')).to be true
+      expect(result["error_description"]).to eq(I18n.t('already_redeemed_voucher'))         
     end
   end
 

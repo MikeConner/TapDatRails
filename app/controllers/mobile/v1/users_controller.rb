@@ -118,16 +118,20 @@ class Mobile::V1::UsersController < ApiController
         if reserve < generator.value
           error! :bad_request, :metadata => {:error_description => I18n.t('insufficient_funds')}
         else  
-          ActiveRecord::Base.transaction do
-            voucher = generator.currency.vouchers.create!(:uid => SecureRandom.hex(4), :amount => generator.value)
-            generator.currency.update_attribute(:reserve_balance, reserve - generator.value)
-            
-            tx = current_user.transactions.create!(transaction_params(:dest_id => voucher.id, 
-                                                                      :amount => generator.value, 
-                                                                      :comment => I18n.t('single_code_redemption', :code => params[:id])))
-                                                                 
-            tx.transaction_details.create!(details_params({:subject_id => current_user.id, :target_id => voucher.currency.user.id, :debit => voucher.amount, :conversion_rate => 1, :currency => voucher.currency.name}))
-            tx.transaction_details.create!(details_params({:subject_id => voucher.currency.user.id, :target_id => current_user.id, :credit => voucher.amount, :conversion_rate => 1, :currency => voucher.currency.name}))
+          if current_user.transactions.where(:comment => I18n.t('single_code_redemption', :code => params[:id])).empty?
+            ActiveRecord::Base.transaction do
+              voucher = generator.currency.vouchers.create!(:uid => SecureRandom.hex(4), :amount => generator.value)
+              generator.currency.update_attribute(:reserve_balance, reserve - generator.value)
+              
+              tx = current_user.transactions.create!(transaction_params(:dest_id => voucher.id, 
+                                                                        :amount => generator.value, 
+                                                                        :comment => I18n.t('single_code_redemption', :code => params[:id])))
+                                                                   
+              tx.transaction_details.create!(details_params({:subject_id => current_user.id, :target_id => voucher.currency.user.id, :debit => voucher.amount, :conversion_rate => 1, :currency => voucher.currency.name}))
+              tx.transaction_details.create!(details_params({:subject_id => voucher.currency.user.id, :target_id => current_user.id, :credit => voucher.amount, :conversion_rate => 1, :currency => voucher.currency.name}))
+            end
+          else
+            error! :bad_request, :metadata => {:error_description => I18n.t('already_redeemed_voucher')}
           end
         end
       end
