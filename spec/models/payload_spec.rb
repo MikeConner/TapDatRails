@@ -14,6 +14,7 @@
 #  slug                     :string(255)
 #  mobile_payload_image_url :string(255)
 #  mobile_payload_thumb_url :string(255)
+#  content_type             :string(16)       default("image"), not null
 #
 
 describe Payload do
@@ -31,10 +32,35 @@ describe Payload do
     expect(payload).to respond_to(:slug)  
     expect(payload).to respond_to(:mobile_payload_image_url)
     expect(payload).to respond_to(:mobile_payload_thumb_url)
+    expect(payload).to respond_to(:content_type)
   end
-  
+ 
   its(:nfc_tag) { should be == tag }
   it { should be_valid }
+  
+  describe "Content type missing" do
+    before { payload.content_type = ' ' }
+    
+    it { should_not be_valid }
+  end
+
+  it "should have default image type" do
+    expect(Payload::VALID_CONTENT_TYPES.include?(payload.content_type)).to be true
+  end
+ 
+  describe "Content type (valid)" do
+    Payload::VALID_CONTENT_TYPES.each do |sample|
+      before { payload.content_type = sample }
+      
+      it { should be_valid }
+    end
+  end
+  
+  describe "Invalid content type" do
+    before { payload.content_type = 'Not a valid type' }
+    
+    it { should_not be_valid }
+  end
   
   describe "invalid threshold" do
     [-1, 0.5, 'abc', nil].each do |threshold|

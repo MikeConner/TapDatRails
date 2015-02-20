@@ -239,6 +239,7 @@ FactoryGirl.define do
     uri { generate(:random_url) }
     content { generate(:random_sentences) }
     threshold { Random.rand(1000) }
+    content_type { Payload::VALID_CONTENT_TYPES.sample }
   end
   
   factory :nfc_tag do

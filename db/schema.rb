@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150213032722) do
+ActiveRecord::Schema.define(version: 20150220211041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -144,17 +144,18 @@ ActiveRecord::Schema.define(version: 20150213032722) do
   end
 
   create_table "payloads", force: true do |t|
-    t.integer  "nfc_tag_id",                           null: false
+    t.integer  "nfc_tag_id",                                            null: false
     t.string   "uri"
     t.text     "content"
-    t.integer  "threshold",                default: 0, null: false
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.integer  "threshold",                           default: 0,       null: false
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
     t.string   "payload_image"
     t.string   "payload_thumb"
     t.string   "slug"
     t.string   "mobile_payload_image_url"
     t.string   "mobile_payload_thumb_url"
+    t.string   "content_type",             limit: 16, default: "image", null: false
   end
 
   add_index "payloads", ["nfc_tag_id", "threshold"], name: "index_payloads_on_nfc_tag_id_and_threshold", unique: true, using: :btree

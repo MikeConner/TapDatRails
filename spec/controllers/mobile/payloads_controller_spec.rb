@@ -47,6 +47,7 @@ describe Mobile::V1::PayloadsController, :type => :controller do
       expect(result.keys.include?('response')).to be true
       expect(result['response']['uri']).to_not be_blank
       expect(result['response']['text']).to_not be_blank
+      expect(Payload::VALID_CONTENT_TYPES.include?(result['response']['content_type'])).to be true
       expect(result['response']['threshold']).to_not be_blank       
       expect(result.keys.include?('error')).to be false
     end
@@ -121,7 +122,7 @@ describe Mobile::V1::PayloadsController, :type => :controller do
       @new_threshold = payload.threshold * 2
          
       put :update, :version => 1, :tag_id => nfc_tag.tag_id, :auth_token => user.authentication_token, :id => payload.id,
-          :payload => {:uri => new_payload.uri, :content => new_payload.content, :threshold => @new_threshold}
+          :payload => {:uri => new_payload.uri, :content => new_payload.content, :content_type => 'image', :threshold => @new_threshold}
 
       expect(subject.current_user).to_not be_nil
       expect(subject.current_user.nfc_tags.count).to eq(1)
@@ -177,6 +178,28 @@ describe Mobile::V1::PayloadsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result['error_description']).to eq("Validation failed: Threshold must be greater than or equal to 0")
+    end
+
+    it "should fail if content type invalid" do      
+      payload = nfc_tag.payloads.last
+      @new_threshold = payload.threshold * 2
+
+      put :update, :version => 1, :tag_id => nfc_tag.tag_id, :auth_token => user.authentication_token, :id => payload.id,
+          :payload => {:uri => new_payload.uri, :content => new_payload.content, :content_type => 'fish', :threshold => 1}
+
+      expect(subject.current_user).to_not be_nil
+      expect(subject.current_user.nfc_tags.count).to eq(1)
+      
+      tag = subject.current_user.nfc_tags.first
+      expect(tag.payloads.count).to eq(3)
+      
+      expect(response.status).to eq(400)
+      
+      result = JSON.parse(response.body)
+
+      expect(result.keys.include?('response')).to be false
+      expect(result.keys.include?('error')).to be true
+      expect(result['error_description']).to eq("Validation failed: Content type is not included in the list")
     end
   end
 

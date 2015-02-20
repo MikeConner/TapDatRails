@@ -14,13 +14,14 @@
 #  slug                     :string(255)
 #  mobile_payload_image_url :string(255)
 #  mobile_payload_thumb_url :string(255)
+#  content_type             :string(16)       default("image"), not null
 #
 
 # CHARTER
 #   Define the "reward" for tapping at or above a given threshold
 #
 # USAGE
-#   
+#   uri content can be: audio, video, url, text, image coupon: server validates
 # NOTES AND WARNINGS
 #   Content is either an image/thumbnail pair, Uri or text (or a combination). 
 # The URI field is reserved for non-image content (like an MP3 or regular URL).
@@ -28,6 +29,8 @@
 class Payload < ActiveRecord::Base
   extend FriendlyId
   friendly_id :generate_id, use: [:slugged, :history]
+  
+  VALID_CONTENT_TYPES = ['audio', 'video', 'url', 'text', 'image', 'coupon']
   
   mount_uploader :payload_image, ImageUploader
   mount_uploader :payload_thumb, ImageUploader
@@ -37,6 +40,7 @@ class Payload < ActiveRecord::Base
   belongs_to :nfc_tag
   
   validates :threshold, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
+  validates :content_type, :inclusion => { :in => VALID_CONTENT_TYPES }
   
   validate :has_content
   

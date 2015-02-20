@@ -38,6 +38,7 @@ class Mobile::V1::PayloadsController < ApiController
       error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'Payload')}
     else
       result = {:uri => @payload.uri, :text => @payload.content, :threshold => @payload.threshold, 
+                :content_type => @payload.content_type,
                 :payload_image => @payload.remote_payload_image_url || @payload.mobile_payload_image_url,
                 :payload_thumb => @payload.remote_payload_thumb_url || @payload.mobile_payload_thumb_url}  
       expose result
@@ -79,7 +80,7 @@ class Mobile::V1::PayloadsController < ApiController
   
 private
   def payload_params
-    params.require(:payload).permit(:content, :threshold, :uri, :payload_image, :remote_payload_image_url, :payload_thumb, :remote_payload_thumb_url, :mobile_payload_image_url, :mobile_payload_thumb_url)
+    params.require(:payload).permit(:content, :content_type, :threshold, :uri, :payload_image, :remote_payload_image_url, :payload_thumb, :remote_payload_thumb_url, :mobile_payload_image_url, :mobile_payload_thumb_url)
   end
   
   def set_tag
