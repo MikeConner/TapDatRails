@@ -12,8 +12,13 @@ class Mobile::V1::TransactionsController < ApiController
     tx_list = after.nil? ? current_user.transactions.order('created_at') : current_user.transactions.where('created_at > ?', after).order('created_at')
 
     tx_list.each do |tx|
-      payload_image = tx.payload.payload_image.url || tx.payload.mobile_payload_image_url
-      payload_thumb = tx.payload.payload_thumb.url || tx.payload.mobile_payload_thumb_url
+      if tx.payload.nil?
+        payload_image = payload_thumb = nil
+      else
+        payload_image = tx.payload.payload_image.url || tx.payload.mobile_payload_image_url
+        payload_thumb = tx.payload.payload_thumb.url || tx.payload.mobile_payload_thumb_url
+      end
+      
       other_user = User.find(tx.dest_id)
       other_thumb = other_user.profile_thumb.url || other_user.mobile_profile_thumb_url
 

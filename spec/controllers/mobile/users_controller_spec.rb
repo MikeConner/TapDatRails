@@ -90,6 +90,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(Balance.count).to eq(1)
       
       expect(user.currency_balance(my_voucher.currency)).to eq(my_voucher.amount)
+      expect(user.transactions.first.voucher_id).to eq(my_voucher.id)
     end
 
     it "should redeem coupon voucher" do
@@ -117,7 +118,9 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(Balance.count).to eq(1)
       
       expect(user.currency_balance(currency)).to eq(currency.single_code_generators.first.value)
-
+      expect(user.transactions.first.voucher_id).to eq(Voucher.first.id)
+      expect(user.vouchers.count).to eq(1)
+      
       # try to redeem again
       put :redeem_voucher, :version => 1, :auth_token => user.authentication_token, :id => code
       

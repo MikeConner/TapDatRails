@@ -120,10 +120,11 @@ class Mobile::V1::UsersController < ApiController
         else  
           if current_user.transactions.where(:comment => I18n.t('single_code_redemption', :code => params[:id])).empty?
             ActiveRecord::Base.transaction do
-              voucher = generator.currency.vouchers.create!(:uid => SecureRandom.hex(4), :amount => generator.value)
+              voucher = generator.currency.vouchers.create!(:uid => SecureRandom.hex(4), :amount => generator.value, :user_id => current_user.id)
               generator.currency.update_attribute(:reserve_balance, reserve - generator.value)
               
-              tx = current_user.transactions.create!(transaction_params(:dest_id => voucher.id, 
+              tx = current_user.transactions.create!(transaction_params(:dest_id => generator.currency.user.id,
+                                                                        :voucher_id => voucher.id, 
                                                                         :amount => generator.value, 
                                                                         :comment => I18n.t('single_code_redemption', :code => params[:id])))
                                                                    
@@ -150,7 +151,8 @@ class Mobile::V1::UsersController < ApiController
         voucher.update_attribute(:user_id, current_user.id)
 
         tx = current_user.transactions.create!(transaction_params({
-                                               :dest_id => voucher.id,
+                                               :dest_id => voucher.currency.user.id,
+                                               :voucher_id => voucher.id,
                                                :comment => "Voucher redemption",
                                                :amount => voucher.amount}))
         tx.transaction_details.create!(details_params({:subject_id => current_user.id, :target_id => voucher.currency.user.id, :debit => voucher.amount, :conversion_rate => 1, :currency => voucher.currency.name}))
@@ -180,7 +182,7 @@ private
   end
 
   def transaction_params(params)
-    ActionController::Parameters.new(params).permit(:nfc_tag_id, :payload_id, :dest_id, :comment, :dollar_amount, :amount, :currency_id)
+    ActionController::Parameters.new(params).permit(:nfc_tag_id, :payload_id, :dest_id, :comment, :dollar_amount, :amount, :currency_id, :voucher_id)
   end
   
   def details_params(params)

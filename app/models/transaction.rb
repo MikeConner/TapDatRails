@@ -13,6 +13,7 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  slug          :string(255)
+#  voucher_id    :integer
 #
 
 # CHARTER
@@ -38,6 +39,8 @@ class Transaction < ActiveRecord::Base
   belongs_to :user
   belongs_to :nfc_tag
   belongs_to :payload
+  # foreign key to reference a redeemed (possibly single code) voucher
+  belongs_to :voucher
   
   has_many :transaction_details, :dependent => :destroy
   
