@@ -17,18 +17,18 @@ class Mobile::V1::UsersController < ApiController
     expose response
 
   rescue Exception => ex
-    error! :bad_request, :metadata => {:error_description => ex.message}
+    error! :bad_request, :metadata => {:error_description => ex.message, :user_error => I18n.t('invalid_user_details') }
   end
 
   # GET /mobile/:version/users/balance_inquiry
   def balance_inquiry
     if current_user.inbound_btc_address.nil?
-      error! :not_found, :metadata => {:error_description => I18n.t('no_btc_address')}
+      error! :not_found, :metadata => {:error_description => I18n.t('no_btc_address'), :user_error => I18n.t('invalid_bitcoin_addr') }
     else
       # Result will be in Satoshi
       balance = CoinbaseAPI.instance.balance_inquiry(current_user.inbound_btc_address)
       if balance.nil?
-        error! :not_found, :metadata => {:error_description => I18n.t('address_not_found') + ': User:' + current_user.id.to_s }
+        error! :not_found, :metadata => {:error_description => I18n.t('address_not_found') + ': User:' + current_user.id.to_s, :user_error => I18n.t('invalid_bitcoin_addr') }
       else
         price = 0 == balance ? 0 : [0, CoinbaseAPI.instance.sell_price(balance.to_f / CoinbaseAPI::SATOSHI_PER_BTC.to_f)].max
 
@@ -64,7 +64,7 @@ class Mobile::V1::UsersController < ApiController
       expose response
     end
   rescue Exception => ex
-    error! :bad_request, :metadata => {:error_description => ex.message}
+    error! :bad_request, :metadata => {:error_description => ex.message, :user_error => I18n.t('user_update_error') }
   end
 
   # PUT /mobile/:version/users/reset_nickname
@@ -75,15 +75,15 @@ class Mobile::V1::UsersController < ApiController
     expose response
 
   rescue Exception => ex
-    error! :bad_request, :metadata => {:error_description => ex.message}
+    error! :bad_request, :metadata => {:error_description => ex.message, :user_error => I18n.t('nickname_reset_error')}
   end
 
   # PUT /mobile/:version/users/cashout
   def cashout
     if current_user.satoshi_balance < CoinbaseAPI::WITHDRAWAL_THRESHOLD
-      error! :bad_request, :metadata => {:error_description => I18n.t('insufficient_funds')}
+      error! :bad_request, :metadata => {:error_description => I18n.t('insufficient_funds'), :user_error => I18n.t('cashout_error') }
     elsif current_user.inbound_btc_address.nil? or current_user.outbound_btc_address.nil?
-      error! :bad_request, :metadata => {:error_description => I18n.t('invalid_btc_addresses')}
+      error! :bad_request, :metadata => {:error_description => I18n.t('invalid_btc_addresses'), :user_error => I18n.t('cashout_error') }
     else
       ActiveRecord::Base.transaction do
         # Create details
@@ -116,7 +116,7 @@ class Mobile::V1::UsersController < ApiController
       if !generator.nil? and (generator.code == params[:id]) and generator.active?
         reserve = generator.currency.reserve_balance
         if reserve < generator.value
-          error! :bad_request, :metadata => {:error_description => I18n.t('insufficient_funds')}
+          error! :bad_request, :metadata => {:error_description => I18n.t('insufficient_funds'), :user_error => I18n.t('redemption_error') }
         else  
           if current_user.transactions.where(:comment => I18n.t('single_code_redemption', :code => params[:id])).empty?
             ActiveRecord::Base.transaction do
@@ -132,19 +132,19 @@ class Mobile::V1::UsersController < ApiController
               tx.transaction_details.create!(details_params({:subject_id => voucher.currency.user.id, :target_id => current_user.id, :credit => voucher.amount, :conversion_rate => 1, :currency => voucher.currency.name}))
             end
           else
-            error! :bad_request, :metadata => {:error_description => I18n.t('already_redeemed_voucher')}
+            error! :bad_request, :metadata => {:error_description => I18n.t('already_redeemed_voucher'), :user_error => I18n.t('redemption_error') }
           end
         end
       end
     end
     
     if voucher.nil?
-      error! :not_found, :metadata => {:error_description => I18n.t('voucher_not_found', :uid => params[:id])}
+      error! :not_found, :metadata => {:error_description => I18n.t('voucher_not_found', :uid => params[:id]), :user_error => I18n.t('redemption_error') }
     elsif !voucher.active?
-      error! :bad_request, :metadata => {:error_description => I18n.t('inactive_voucher', :uid => params[:id])}
+      error! :bad_request, :metadata => {:error_description => I18n.t('inactive_voucher', :uid => params[:id]), :user_error => I18n.t('redemption_error') }
     else
       # Predefine response; this should never happen
-      response = {:error => true, :metadata => {:error_description => 'Transaction DB error'}}
+      response = {:error => true, :metadata => {:error_description => 'Transaction DB error'}, :user_error => nil }
 
       ActiveRecord::Base.transaction do
         voucher.update_attribute(:status, Voucher::REDEEMED)

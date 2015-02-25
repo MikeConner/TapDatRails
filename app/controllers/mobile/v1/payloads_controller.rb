@@ -8,7 +8,7 @@ class Mobile::V1::PayloadsController < ApiController
     expose @tag.payloads.map { |p| p.slug }
 
   rescue Exception => ex
-    error! :bad_request, :metadata => {:error_description => ex.message}    
+    error! :bad_request, :metadata => {:error_description => ex.message, :user_error => I18n.t('yapa_listing_error') }    
   end
   
   # POST /mobile/:version/payloads
@@ -24,7 +24,7 @@ class Mobile::V1::PayloadsController < ApiController
         error! :bad_request, :metadata => {:error_description => ex.message} 
       end   
     else
-      error! :bad_request, :metadata => {:error_description => payload.errors.full_messages.to_sentence}
+      error! :bad_request, :metadata => {:error_description => payload.errors.full_messages.to_sentence, :user_error => I18n.t('cannot_create_yapa') }
     end
   end
 
@@ -35,7 +35,7 @@ class Mobile::V1::PayloadsController < ApiController
     @payload = @tag.payloads.find(params[:id]) rescue nil
     
     if @payload.nil?
-      error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'Payload')}
+      error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'Payload'), :user_error => I18n.t('invalid_yapa') }
     else
       result = {:uri => @payload.uri, :text => @payload.content, :threshold => @payload.threshold, 
                 :content_type => @payload.content_type,
@@ -50,13 +50,13 @@ class Mobile::V1::PayloadsController < ApiController
     payload = @tag.payloads.find(params[:id]) rescue nil
     
     if payload.nil?
-      error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'Payload')}
+      error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'Payload'), :user_error => I18n.t('invalid_yapa') }
     else
       begin
         payload.update_attributes!(payload_params)
         head :ok
       rescue Exception => ex
-        error! :bad_request, :metadata => {:error_description => ex.message} 
+        error! :bad_request, :metadata => {:error_description => ex.message, :user_error => I18n.t('invalid_yapa_update') } 
       end   
     end 
   end
@@ -66,14 +66,14 @@ class Mobile::V1::PayloadsController < ApiController
     payload = @tag.payloads.find(params[:id]) rescue nil
     
     if payload.nil?
-      error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'Payload')}
+      error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'Payload'), :user_error => I18n.t('invalid_yapa') }
     else
       begin
         payload.destroy
         
         head :ok
       rescue Exception => ex
-        error! :bad_request, :metadata => {:error_description => ex.message}   
+        error! :bad_request, :metadata => {:error_description => ex.message, :user_error => I18n.t('invalid_yapa') }   
       end 
     end    
   end

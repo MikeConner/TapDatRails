@@ -89,6 +89,7 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
         expect(result.keys.include?('response')).to be false
         expect(result.keys.include?('error')).to be true
         expect(result['error_description']).to eq(I18n.t('missing_argument', :arg => 'tag_id'))     
+        expect(result['user_error']).to eq(I18n.t('tag_update_error'))     
       end   
        
       it "should fail if no name" do
@@ -106,6 +107,7 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
         expect(result.keys.include?('response')).to be false
         expect(result.keys.include?('error')).to be true
         expect(result['error_description']).to eq(I18n.t('missing_argument', :arg => 'name'))       
+        expect(result['user_error']).to eq(I18n.t('tag_update_error'))     
       end    
 
       it "should fail if not found" do
@@ -123,6 +125,7 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
         expect(result.keys.include?('response')).to be false
         expect(result.keys.include?('error')).to be true
         expect(result['error_description']).to eq(I18n.t('object_not_found', :obj => 'NFC Tag'))
+        expect(result['user_error']).to eq(I18n.t('invalid_tag'))     
       end   
     end
   end
@@ -210,6 +213,7 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result['error_description']).to eq(I18n.t('missing_argument', :arg => 'tag_id'))
+      expect(result['user_error']).to eq(I18n.t('invalid_tag'))     
     end    
 
     it "should fail to destroy if id not found" do      
@@ -228,6 +232,7 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result['error_description']).to eq(I18n.t('object_not_found', :obj => 'NFC Tag'))
+      expect(result['user_error']).to eq(I18n.t('invalid_tag'))     
     end    
   end
 end

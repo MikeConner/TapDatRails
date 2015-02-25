@@ -7,7 +7,7 @@ class Mobile::V1::DeviceLogsController < ApiController
     head :ok
     
   rescue Exception => ex
-    error! :bad_request, :metadata => {:error_description => ex.message}    
+    error! :bad_request, :metadata => {:error_description => ex.message, :user_error => nil}    
   end
   
 private

@@ -25,6 +25,7 @@ describe Mobile::V1::DeviceLogsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('auth_token_not_found'))
+      expect(result["user_error"]).to be_nil
     end
     
     it "should fail with no user specified" do
@@ -41,6 +42,7 @@ describe Mobile::V1::DeviceLogsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq("Validation failed: User can't be blank")      
+      expect(result["user_error"]).to be_nil
     end
     
     it "should fail with no os specified" do
@@ -57,6 +59,7 @@ describe Mobile::V1::DeviceLogsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq("Validation failed: Os can't be blank")      
+      expect(result["user_error"]).to be_nil
     end
     
     it "should fail with no hardware specified" do
@@ -73,6 +76,7 @@ describe Mobile::V1::DeviceLogsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq("Validation failed: Hardware can't be blank")      
+      expect(result["user_error"]).to be_nil
     end
 
     it "should fail with no message specified" do
@@ -89,6 +93,7 @@ describe Mobile::V1::DeviceLogsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq("Validation failed: Message can't be blank")      
+      expect(result["user_error"]).to be_nil
     end
 
     it "should create one" do

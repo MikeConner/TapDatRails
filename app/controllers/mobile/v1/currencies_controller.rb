@@ -10,8 +10,7 @@ class Mobile::V1::CurrenciesController < ApiController
     
     expose main_object(currency).merge({
       denominations: denoms
-    })
-            
+    })            
   end
   
 private

@@ -96,6 +96,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('currency_mismatch'))
+      expect(result["user_error"]).to eq(I18n.t('invalid_tap'))
     end
  
     it "should create a currency transaction" do
@@ -146,6 +147,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('missing_argument', :arg => 'tag_id'))
+      expect(result["user_error"]).to eq(I18n.t('invalid_tap'))
     end
 
     it "missing amount" do
@@ -161,6 +163,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('missing_argument', :arg => 'amount'))
+      expect(result["user_error"]).to eq(I18n.t('invalid_tap'))
     end
 
     it "invalid amount" do
@@ -176,6 +179,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('invalid_amount'))
+      expect(result["user_error"]).to eq(I18n.t('invalid_tap'))
     end
 
     it "rate not found" do
@@ -193,6 +197,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('rate_not_found'))
+      expect(result["user_error"]).to eq(I18n.t('invalid_tap'))
     end
 
     it "Ticker inaccessible" do
@@ -210,6 +215,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('rate_not_found'))
+      expect(result["user_error"]).to eq(I18n.t('invalid_tap'))
     end
 
     describe "payload not found" do
@@ -228,6 +234,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
         expect(result.keys.include?('response')).to be false
         expect(result.keys.include?('error')).to be true
         expect(result["error_description"]).to eq(I18n.t('object_not_found', :obj => 'Payload'))
+        expect(result["user_error"]).to eq(I18n.t('invalid_tap'))
       end
     end
 
@@ -244,6 +251,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('insufficient_funds'))
+      expect(result["user_error"]).to eq(I18n.t('invalid_tap'))
     end
 
     it "max amount funds" do
@@ -261,6 +269,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('amount_exceeds_max', :amount => currency.max_amount + 1, :name => currency.name))
+      expect(result["user_error"]).to eq(I18n.t('invalid_tap'))
     end
   end
 end

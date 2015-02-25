@@ -68,6 +68,7 @@ describe Mobile::V1::PayloadsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result['error_description']).to eq(I18n.t('object_not_found', :obj => 'Payload'))
+      expect(result['user_error']).to eq(I18n.t('invalid_yapa'))
     end
   end
   
@@ -111,6 +112,7 @@ describe Mobile::V1::PayloadsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result['error_description']).to eq("Threshold must be greater than or equal to 0")
+      expect(result['user_error']).to eq(I18n.t('cannot_create_yapa'))
     end
   end
 
@@ -156,6 +158,7 @@ describe Mobile::V1::PayloadsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result['error_description']).to eq(I18n.t('object_not_found', :obj => 'Payload'))
+      expect(result['user_error']).to eq(I18n.t('invalid_yapa'))
     end
 
     it "should fail if params invalid" do      
@@ -178,6 +181,7 @@ describe Mobile::V1::PayloadsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result['error_description']).to eq("Validation failed: Threshold must be greater than or equal to 0")
+      expect(result['user_error']).to eq(I18n.t('invalid_yapa_update'))
     end
 
     it "should fail if content type invalid" do      
@@ -200,6 +204,7 @@ describe Mobile::V1::PayloadsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result['error_description']).to eq("Validation failed: Content type is not included in the list")
+      expect(result['user_error']).to eq(I18n.t('invalid_yapa_update'))
     end
   end
 
@@ -234,6 +239,7 @@ describe Mobile::V1::PayloadsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result['error_description']).to eq(I18n.t('object_not_found', :obj => 'Payload'))
+      expect(result['user_error']).to eq(I18n.t('invalid_yapa'))
     end
   end
 end

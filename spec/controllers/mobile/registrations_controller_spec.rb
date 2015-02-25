@@ -92,6 +92,7 @@ describe Mobile::V1::RegistrationsController, :type => :controller do
         expect(result.keys.include?("response")).to be false
         expect(result.keys.include?("error")).to be true
         expect(result["error_description"]).to eq(I18n.t('no_generator'))
+        expect(result["user_error"]).to eq(I18n.t('invalid_registration'))
       end
     end
     
@@ -106,6 +107,7 @@ describe Mobile::V1::RegistrationsController, :type => :controller do
       expect(result.keys.include?("response")).to be false
       expect(result.keys.include?("error")).to be true
       expect(result["error_description"]).to eq(I18n.t('missing_argument', :arg => 'user'))
+        expect(result["user_error"]).to eq(I18n.t('invalid_registration'))
     end
 
     it "fails with no key" do
@@ -119,6 +121,7 @@ describe Mobile::V1::RegistrationsController, :type => :controller do
       expect(result.keys.include?("response")).to be false
       expect(result.keys.include?("error")).to be true
       expect(result["error_description"]).to eq(I18n.t('missing_argument', :arg => 'phone secret key'))
+      expect(result["user_error"]).to eq(I18n.t('invalid_registration'))
     end
   end
 end

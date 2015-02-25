@@ -21,6 +21,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('voucher_not_found', :uid => 83242))         
+      expect(result["user_error"]).to eq(I18n.t('redemption_error'))         
     end
 
     it "should find redeemed voucher" do
@@ -33,6 +34,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('inactive_voucher', :uid => redeemed_voucher.uid))         
+      expect(result["user_error"]).to eq(I18n.t('redemption_error'))         
     end
 
     it "should find other user's voucher -- doesn't matter; they aren't owned until redeemed" do
@@ -68,6 +70,7 @@ describe Mobile::V1::UsersController, :type => :controller do
         expect(result.keys.include?('response')).to be false
         expect(result.keys.include?('error')).to be true
         expect(result["error_description"]).to eq(I18n.t('insufficient_funds'))         
+        expect(result["user_error"]).to eq(I18n.t('redemption_error'))         
       end
     end
   
@@ -131,6 +134,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('already_redeemed_voucher'))         
+      expect(result["user_error"]).to eq(I18n.t('redemption_error'))         
     end
   end
 
@@ -148,6 +152,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('insufficient_funds'))         
+      expect(result["user_error"]).to eq(I18n.t('cashout_error'))            
     end
   end
 
@@ -167,6 +172,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('invalid_btc_addresses'))            
+      expect(result["user_error"]).to eq(I18n.t('cashout_error'))            
     end
   end
   
@@ -186,6 +192,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('invalid_btc_addresses'))            
+      expect(result["user_error"]).to eq(I18n.t('cashout_error'))            
     end
   end
 
@@ -251,6 +258,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('no_btc_address'))      
+      expect(result["user_error"]).to eq(I18n.t('invalid_bitcoin_addr'))      
     end
   end
 
@@ -296,6 +304,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to match(I18n.t('address_not_found'))      
+      expect(result["user_error"]).to eq(I18n.t('invalid_bitcoin_addr'))      
     end
   end
 
@@ -336,6 +345,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result.keys.include?("response")).to be false
       expect(result.keys.include?("error")).to be true
       expect(result["error_description"]).to eq(I18n.t('auth_token_not_found'))
+      expect(result["user_error"]).to be_nil
     end
   end
   
@@ -391,6 +401,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result.keys.include?("response")).to be false
       expect(result.keys.include?("error")).to be true
       expect(result["error_description"]).to eq(I18n.t('no_generator'))
+      expect(result["user_error"]).to eq(I18n.t('nickname_reset_error'))
     end
   end  
 

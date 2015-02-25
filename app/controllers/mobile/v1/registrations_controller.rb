@@ -38,13 +38,13 @@ class Mobile::V1::RegistrationsController < ApiController
           response = {:nickname => user.name, :auth_token => user.authentication_token}
           expose response
         rescue Exception => ex
-          error! :bad_request, :metadata => {:error_description => ex.message}
+          error! :bad_request, :metadata => {:error_description => ex.message, :user_error => I18n.t('invalid_registration') }
         end
       else
-        error! :bad_request, :metadata => {:error_description => I18n.t('missing_argument', :arg => 'phone secret key')}
+        error! :bad_request, :metadata => {:error_description => I18n.t('missing_argument', :arg => 'phone secret key'), :user_error => I18n.t('invalid_registration') }
       end
     else
-      error! :bad_request, :metadata => {:error_description => I18n.t('missing_argument', :arg => 'user')}
+      error! :bad_request, :metadata => {:error_description => I18n.t('missing_argument', :arg => 'user'), :user_error => I18n.t('invalid_registration') }
     end
   end
 end
