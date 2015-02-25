@@ -13,17 +13,18 @@ class Mobile::V1::TransactionsController < ApiController
 
     tx_list.each do |tx|
       if tx.payload.nil?
-        payload_image = payload_thumb = nil
+        payload_image = payload_thumb = content_type = nil
       else
         payload_image = tx.payload.payload_image.url || tx.payload.mobile_payload_image_url
         payload_thumb = tx.payload.payload_thumb.url || tx.payload.mobile_payload_thumb_url
+        content_type = tx.payload.content_type
       end
       
       other_user = User.find(tx.dest_id)
       other_thumb = other_user.profile_thumb.url || other_user.mobile_profile_thumb_url
 
       response.push({:id => tx.slug, :date => tx.created_at, :payload_image => payload_image, :payload_thumb => payload_thumb,
-                     :amount => tx.amount, :dollar_amount => tx.dollar_amount,
+                     :payload_content_type => content_type, :amount => tx.amount, :dollar_amount => tx.dollar_amount,
                      :comment => tx.comment, :other_user_thumb => other_thumb, :other_user_nickname => other_user.name})
     end
 
@@ -119,7 +120,8 @@ class Mobile::V1::TransactionsController < ApiController
                                 :payload => {:text => payload.content,
                                              :uri => payload.uri,
                                              :image => payload.remote_payload_image_url || payload.mobile_payload_image_url,
-                                             :thumb => payload.remote_payload_thumb_url || payload.mobile_payload_thumb_url}}
+                                             :thumb => payload.remote_payload_thumb_url || payload.mobile_payload_thumb_url,
+                                             :content_type => payload.content_type}}
                     expose response
                   end
                 rescue ActiveRecord::Rollback => ex

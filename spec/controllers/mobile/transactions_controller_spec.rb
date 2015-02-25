@@ -72,6 +72,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       expect(result['response']['payload'].keys.include?('image')).to be true
       expect(result['response']['payload'].keys.include?('thumb')).to be true
       expect(result['response']['payload'].keys.include?('uri')).to be true
+      expect(result['response']['payload'].keys.include?('content_type')).to be true
       expect(result.keys.include?('error')).to be false
     end    
   end
