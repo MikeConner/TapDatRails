@@ -2,7 +2,7 @@ describe Mobile::V1::UsersController, :type => :controller do
   before do
     request.env["devise.mapping"] = Devise.mappings[:user]
   end
-  
+
   describe "Redeem voucher" do
     let(:user) { FactoryGirl.create(:user) }
     let(:voucher) { FactoryGirl.create(:voucher) }
@@ -218,7 +218,7 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result.keys.include?('error')).to be false
     end
   end
-  
+
   describe "Balance inquiry (currencies)" do
     let(:user) { FactoryGirl.create(:user_with_balances) }
     
@@ -331,7 +331,33 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result["response"]["exchange_rate"]).to be_nil      
     end
   end
-  
+
+  describe "Balance inquiry (test mode)" do
+    let(:user) { FactoryGirl.create(:user) }
+    
+    before do
+      CoinbaseAPI.instance.test_mode = true
+      CoinbaseAPI.instance.test_balance = 408000
+    end
+    
+    it "should work" do
+      get :balance_inquiry, :version => 1, :auth_token => user.authentication_token
+            
+      expect(subject.current_user.inbound_btc_address).to eq(user.inbound_btc_address)
+      expect(subject.current_user.satoshi_balance).to eq(408000)
+      
+      expect(response.status).to eq(200)
+      
+      result = JSON.parse(response.body)
+      
+      expect(result.keys.include?('response')).to be true
+      expect(result.keys.include?('error')).to be false
+      expect(result["response"]["btc_balance"]).to eq(408000)      
+      expect(result["response"]["dollar_balance"]).to_not eq(0)      
+      expect(result["response"]["exchange_rate"]).to_not be_nil      
+    end
+  end
+ 
   describe "Try with invalid token" do
     it "should fail" do
       get :show, :version => 1, :id => 0, :auth_token => SecureRandom.hex(16)
@@ -482,5 +508,5 @@ describe Mobile::V1::UsersController, :type => :controller do
       expect(result['response']['nickname']).to_not eq(@old_name)
       expect(result.keys.include?('error')).to be false
     end
-  end  
+  end 
 end

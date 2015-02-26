@@ -13,6 +13,9 @@ class CoinbaseAPI
   
   # api is nil if we're testing
   def initialize
+    @test_mode = false
+    @test_balance = 0
+    
     if COINBASE_API_KEY.nil? or COINBASE_SECRET_KEY.nil?
       Rails.logger.info "Cannot initialize Coinbase"
     else
@@ -24,6 +27,8 @@ class CoinbaseAPI
   # This is not our entire account balance (which the Coinbase API would provide)
   # We want the balance of *one* of the addresses, which we can get from Blockchain
   def balance_inquiry(address)  
+    return self.test_balance if self.test_mode?
+    
     begin
       page = @agent.get("https://blockchain.info/q/addressbalance/#{address}")
     rescue Exception => ex
@@ -79,4 +84,21 @@ class CoinbaseAPI
   rescue 
     nil
   end
+
+  # Enable test mode balances - hacky for the demo; don't want this around when we're live
+  def test_mode=(mode)
+    @test_mode = mode
+  end
+  
+  def test_mode?
+    @test_mode
+  end
+  
+  def test_balance=(balance)
+    @test_balance = balance
+  end
+  
+  def test_balance
+    @test_balance
+  end  
 end

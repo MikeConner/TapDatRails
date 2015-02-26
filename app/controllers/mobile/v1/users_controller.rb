@@ -30,6 +30,8 @@ class Mobile::V1::UsersController < ApiController
       if balance.nil?
         error! :not_found, :metadata => {:error_description => I18n.t('address_not_found') + ': User:' + current_user.id.to_s, :user_error => I18n.t('invalid_bitcoin_addr') }
       else
+        current_user.update_attribute(:satoshi_balance, balance) unless balance == current_user.satoshi_balance
+        
         price = 0 == balance ? 0 : [0, CoinbaseAPI.instance.sell_price(balance.to_f / CoinbaseAPI::SATOSHI_PER_BTC.to_f)].max
 
         response = {:btc_balance => balance,

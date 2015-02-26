@@ -67,6 +67,9 @@ class Mobile::V1::TransactionsController < ApiController
                   # If currency is nil, it's a bitcoin transaction
                   if currency.nil?
                     # Assuming amount and rate are in dollars
+                    balance = CoinbaseAPI.instance.balance_inquiry(current_user.inbound_btc_address)
+                    current_user.update_attribute(:satoshi_balance, balance) unless balance.nil? or (balance == current_user.satoshi_balance)
+
                     multiplier = 1.0 / rate
                     transaction_amount = (amount / rate * CoinbaseAPI::SATOSHI_PER_BTC.to_f).round
                     dollar_amount = (amount * 100.0).round
