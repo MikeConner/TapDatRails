@@ -67,9 +67,9 @@ cc.denominations.create(:value => 1, :remote_image_url => 'http://s3.amazonaws.c
 cc.denominations.create(:value => 5, :remote_image_url => 'http://s3.amazonaws.com/assets.prod.vetstreet.com/10/8507f0bf9d11e18fa8005056ad4734/file/cat%20claws%20135046624.jpg', :caption => "Paw") 
 
 t1 = arash.nfc_tags.create(:tag_id => 'e4e3a6bbfc', :name => 'Toad', :currency_id => cc.id)
-t1.payloads.create(:content => 'Tapped!', :uri => 'https://tapyapa.s3.amazonaws.com/f193i03ancl52rot')
+t1.payloads.create(:content => 'Tapped!', :remote_payload_image_url => 'https://tapyapa.s3.amazonaws.com/f193i03ancl52rot')
 t2 = arash.nfc_tags.create(:tag_id => 'e233de8d30', :name => 'Frog', :currency_id => cc.id)
-t2.payloads.create(:content => 'Just paid for my coffee!', :uri => 'https://tapyapa.s3.amazonaws.com/zp9vip4n39y5gqf3.jpg')
+t2.payloads.create(:content => 'Just paid for my coffee!', :remote_payload_image_url => 'https://tapyapa.s3.amazonaws.com/zp9vip4n39y5gqf3.jpg')
 
 cc.vouchers.create(:uid => "4167f884", :amount => 1800)
 cc.vouchers.create(:uid => "ce963f33", :amount => 800)
@@ -82,7 +82,7 @@ kb.denominations.create(:value => 5, :remote_image_url => 'http://2.bp.blogspot.
 kb.denominations.create(:value => 10, :remote_image_url => 'http://jasontheodor.com/wp-content/uploads//2012/04/ten.png', :caption => "Full Day")
 
 t3 = jeff.nfc_tags.create(:tag_id => 'd14e4ea59b', :name => 'Lizard', :currency_id => kb.id)
-t3.payloads.create(:content => 'Tapped!', :uri => 'https://s3.amazonaws.com/tapyapa/jm12s0doq7nq27o6.jpg')
+t3.payloads.create(:content => 'Tapped!', :remote_payload_image_url => 'https://s3.amazonaws.com/tapyapa/jm12s0doq7nq27o6.jpg')
 
 kb.vouchers.create(:uid => "4d8241d8", :amount => 1800)
 kb.vouchers.create(:uid => "8188069c", :amount => 800)
@@ -96,7 +96,7 @@ uh.denominations.create(:value => 5, :remote_image_url => 'http://2.bp.blogspot.
 uh.denominations.create(:value => 10, :remote_image_url => 'http://jasontheodor.com/wp-content/uploads//2012/04/ten.png', :caption => "Rainbow Taster")
 
 t4 = katherine.nfc_tags.create(:tag_id => 'c97a991dcc', :name => 'Coelacanth', :currency_id => uh.id)
-t4.payloads.create(:content => 'Tapped Dat!', :uri => 'https://s3.amazonaws.com/tapyapa/u11kqxskgtmu8fom.jpg')
+t4.payloads.create(:content => 'Tapped Dat!', :remote_payload_image_url => 'https://s3.amazonaws.com/tapyapa/u11kqxskgtmu8fom.jpg')
 
 uh.vouchers.create(:uid => "a769496d", :amount => 1000)
 uh.vouchers.create(:uid => "56293897", :amount => 200)
@@ -112,7 +112,7 @@ tt.denominations.create(:value => 5, :remote_image_url => 'http://2.bp.blogspot.
 tt.denominations.create(:value => 10, :remote_image_url => 'http://jasontheodor.com/wp-content/uploads//2012/04/ten.png', :caption => "Touchdown")
 
 t5 = bill.nfc_tags.create(:tag_id => 'd17f665ec2', :name => 'Listrosaur', :currency_id => tt.id)
-t5.payloads.create(:content => 'Tapnological!', :uri => 'https://s3.amazonaws.com/tapyapa/slcixyc4tcpw0nwz.jpg')
+t5.payloads.create(:content => 'Tapnological!', :remote_payload_image_url => 'https://s3.amazonaws.com/tapyapa/slcixyc4tcpw0nwz.jpg')
      
 tt.vouchers.create(:uid => "4beefdca", :amount => 500)
 tt.vouchers.create(:uid => "c9df1e77", :amount => 500)

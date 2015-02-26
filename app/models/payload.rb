@@ -22,6 +22,7 @@
 #
 # USAGE
 #   uri content can be: audio, video, url, text, image coupon: server validates
+#
 # NOTES AND WARNINGS
 #   Content is either an image/thumbnail pair, Uri or text (or a combination). 
 # The URI field is reserved for non-image content (like an MP3 or regular URL).
