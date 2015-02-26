@@ -8,14 +8,13 @@ class CoinbaseAPI
   TEST_BUY = 350.0
   TEST_SELL = 345.0
   SATOSHI_PER_BTC = 100000000
+  # ENV variable which, if set, represents the satoshi_balance it will return
+  API_TEST_BALANCE = 'COINBASE_API_TEST_BALANCE'
   
   attr_accessor :api
   
   # api is nil if we're testing
   def initialize
-    @test_mode = false
-    @test_balance = 0
-    
     if COINBASE_API_KEY.nil? or COINBASE_SECRET_KEY.nil?
       Rails.logger.info "Cannot initialize Coinbase"
     else
@@ -86,19 +85,11 @@ class CoinbaseAPI
   end
 
   # Enable test mode balances - hacky for the demo; don't want this around when we're live
-  def test_mode=(mode)
-    @test_mode = mode
-  end
-  
   def test_mode?
-    @test_mode
-  end
-  
-  def test_balance=(balance)
-    @test_balance = balance
+    !ENV[API_TEST_BALANCE].nil?
   end
   
   def test_balance
-    @test_balance
+    test_mode? ? ENV[API_TEST_BALANCE].to_i : 0
   end  
 end
