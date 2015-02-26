@@ -66,9 +66,9 @@ cc = arash.currencies.create!(:name => 'Captain Coin', :remote_icon_url => 'http
 cc.denominations.create(:value => 1, :remote_image_url => 'http://s3.amazonaws.com/assets.prod.vetstreet.com/63/900e00040c11e28ae7005056ad4734/file/cat-claw-flickr-335sm092112.jpg', :caption => "Claw")                                         
 cc.denominations.create(:value => 5, :remote_image_url => 'http://s3.amazonaws.com/assets.prod.vetstreet.com/10/8507f0bf9d11e18fa8005056ad4734/file/cat%20claws%20135046624.jpg', :caption => "Paw") 
 
-t1 = arash.nfc_tags.create(:tag_id => 'e4e3a6bbfc', :name => 'Toad', :currency_id => cc)
+t1 = arash.nfc_tags.create(:tag_id => 'e4e3a6bbfc', :name => 'Toad', :currency_id => cc.id)
 t1.payloads.create(:content => 'Tapped!', :uri => 'https://tapyapa.s3.amazonaws.com/f193i03ancl52rot')
-t2 = arash.nfc_tags.create(:tag_id => 'e233de8d30', :name => 'Toad', :currency_id => cc)
+t2 = arash.nfc_tags.create(:tag_id => 'e233de8d30', :name => 'Frog', :currency_id => cc.id)
 t2.payloads.create(:content => 'Just paid for my coffee!', :uri => 'https://tapyapa.s3.amazonaws.com/zp9vip4n39y5gqf3.jpg')
 
 cc.vouchers.create(:uid => "4167f884", :amount => 1800)
@@ -81,7 +81,7 @@ kb.denominations.create(:value => 1, :remote_image_url => 'http://madaboutwords.
 kb.denominations.create(:value => 5, :remote_image_url => 'http://2.bp.blogspot.com/-OKebfAWWfZo/UN4VC1kazKI/AAAAAAAABSQ/dQ-VUcbdZAU/s1600/five.png', :caption => "Half Day")
 kb.denominations.create(:value => 10, :remote_image_url => 'http://jasontheodor.com/wp-content/uploads//2012/04/ten.png', :caption => "Full Day")
 
-t3 = jeff.nfc_tags.create(:tag_id => 'd14e4ea59b', :name => 'Toad', :currency_id => cc)
+t3 = jeff.nfc_tags.create(:tag_id => 'd14e4ea59b', :name => 'Lizard', :currency_id => kb.id)
 t3.payloads.create(:content => 'Tapped!', :uri => 'https://s3.amazonaws.com/tapyapa/jm12s0doq7nq27o6.jpg')
 
 kb.vouchers.create(:uid => "4d8241d8", :amount => 1800)
@@ -95,7 +95,7 @@ uh.denominations.create(:value => 1, :remote_image_url => 'http://madaboutwords.
 uh.denominations.create(:value => 5, :remote_image_url => 'http://2.bp.blogspot.com/-OKebfAWWfZo/UN4VC1kazKI/AAAAAAAABSQ/dQ-VUcbdZAU/s1600/five.png', :caption => "Mane Event")
 uh.denominations.create(:value => 10, :remote_image_url => 'http://jasontheodor.com/wp-content/uploads//2012/04/ten.png', :caption => "Rainbow Taster")
 
-t4 = katherine.nfc_tags.create(:tag_id => 'c97a991dcc', :name => 'Toad', :currency_id => cc)
+t4 = katherine.nfc_tags.create(:tag_id => 'c97a991dcc', :name => 'Coelacanth', :currency_id => uh.id)
 t4.payloads.create(:content => 'Tapped Dat!', :uri => 'https://s3.amazonaws.com/tapyapa/u11kqxskgtmu8fom.jpg')
 
 uh.vouchers.create(:uid => "a769496d", :amount => 1000)
@@ -111,7 +111,7 @@ tt.denominations.create(:value => 1, :remote_image_url => 'http://madaboutwords.
 tt.denominations.create(:value => 5, :remote_image_url => 'http://2.bp.blogspot.com/-OKebfAWWfZo/UN4VC1kazKI/AAAAAAAABSQ/dQ-VUcbdZAU/s1600/five.png', :caption => "Field Goal")
 tt.denominations.create(:value => 10, :remote_image_url => 'http://jasontheodor.com/wp-content/uploads//2012/04/ten.png', :caption => "Touchdown")
 
-t5 = bill.nfc_tags.create(:tag_id => 'd17f665ec2', :name => 'Toad', :currency_id => cc)
+t5 = bill.nfc_tags.create(:tag_id => 'd17f665ec2', :name => 'Listrosaur', :currency_id => tt.id)
 t5.payloads.create(:content => 'Tapnological!', :uri => 'https://s3.amazonaws.com/tapyapa/slcixyc4tcpw0nwz.jpg')
      
 tt.vouchers.create(:uid => "4beefdca", :amount => 500)
