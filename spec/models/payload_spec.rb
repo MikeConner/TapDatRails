@@ -15,6 +15,8 @@
 #  mobile_payload_image_url :string(255)
 #  mobile_payload_thumb_url :string(255)
 #  content_type             :string(16)       default("image"), not null
+#  payload_image_processing :boolean
+#  payload_thumb_processing :boolean
 #
 
 describe Payload do
@@ -33,6 +35,8 @@ describe Payload do
     expect(payload).to respond_to(:mobile_payload_image_url)
     expect(payload).to respond_to(:mobile_payload_thumb_url)
     expect(payload).to respond_to(:content_type)
+    expect(payload).to respond_to(:payload_image_processing)
+    expect(payload).to respond_to(:payload_thumb_processing)
   end
  
   its(:nfc_tag) { should be == tag }

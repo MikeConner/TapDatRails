@@ -1,0 +1,14 @@
+%h4= f.object.legible_id
+= f.hidden_field :user_id
+= f.hidden_field :tag_id
+.field
+  = f.label :currency_id
+  = f.select :currency_id, options_for_select(@currencies)
+.field
+  = f.label :name
+  = f.text_field :name
+%h4 Yapa
+#payload
+  = f.fields_for :payloads do |payload_form|
+    = render :partial => 'payload', :locals => { :f => payload_form }
+  = add_payload(@tag, f)

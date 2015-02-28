@@ -17,7 +17,8 @@ Rails.application.routes.draw do
   resources :currencies
   resources :vouchers, :except => [:edit, :update]
   resources :single_code_generators, :only => [:index, :show, :destroy]
-
+  resources :nfc_tags
+  
   get "/how_it_works" => "static_pages#how_it_works"
   get "/legal" => "static_pages#legal"
   get "/privacy" => "static_pages#privacy"

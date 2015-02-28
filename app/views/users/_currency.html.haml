@@ -5,10 +5,31 @@
   %h3
     - unless currency.symbol.nil?
       = currency.symbol
-    = currency.name
-
-  Show balance of currency
-  here we need to have a form that will generate vouchers - enter amount (multiple of base amount in denomination - just check don't do dropdown)
-
-  Show Transaction History - Purchases, Sum of txn inbound (when people tap these tags
+    = link_to currency.name, edit_currency_path(currency)
+  %h4
+    == Reserve balance #{number_with_delimiter(currency.reserve_balance)}
+  - unless currency.vouchers.empty?
+    %table.table.zebra-striped
+      %caption Vouchers
+      %thead
+        %tr
+          %th Date
+          %th ID
+          %th Status
+          %th Amount
+          %th Assigned
+          %th Tag
+      %tbody
+        - currency.vouchers.each do |voucher|
+          %tr
+            %td= voucher.updated_at.try(:strftime, ApplicationHelper::DATE_FORMAT)
+            %td= voucher.uid
+            %td= voucher.display_status
+            %td= voucher.amount
+            %td= voucher.user.nil? ? 'N/A' : voucher.user.name
+            - transaction = Transaction.where(:voucher_id => voucher.id).first
+            - if transaction.nil? or transaction.nfc_tag.nil?
+              %td N/A
+            - else
+              %td== "#{transaction.nfc_tag.name} / #{transaction.nfc_tag.tag_id}"
 

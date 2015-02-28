@@ -1,0 +1,24 @@
+.text-center
+  .row
+    .large-12.columns
+      %h1 NFC Tags
+  .row
+    .large-12.columns
+      - unless @tags.empty?
+        %table.table.zebra-striped
+          %thead
+            %tr 
+              %th Date
+              %th Currency
+              %th Name
+              %th ID
+              %th Lifetime
+          %tbody
+            - @tags.each do |tag|
+              %tr
+                %td= tag.created_at.try(:strftime, ApplicationHelper::DATE_FORMAT)
+                %td= tag.currency.name
+                %td= link_to tag.name, nfc_tag_path(tag)
+                %td= tag.legible_id
+                %td= number_with_delimiter(tag.lifetime_balance)
+  

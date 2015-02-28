@@ -15,6 +15,8 @@
 #  mobile_payload_image_url :string(255)
 #  mobile_payload_thumb_url :string(255)
 #  content_type             :string(16)       default("image"), not null
+#  payload_image_processing :boolean
+#  payload_thumb_processing :boolean
 #
 
 # CHARTER
@@ -47,7 +49,7 @@ class Payload < ActiveRecord::Base
   
 private
   def has_content
-    if self.uri.blank? and self.content.blank?
+    if self.uri.blank? and self.content.blank? and self.payload_image.nil?
       self.errors.add :base, I18n.t('empty_payload')
     end
   end
