@@ -31,8 +31,29 @@ describe Mobile::V1::PayloadsController, :type => :controller do
   end
 
   describe "Show payload" do
-    it "should work" do
+    it "should work by id" do
       get :show, :version => 1, :tag_id => nfc_tag.tag_id, :auth_token => user.authentication_token, :id => nfc_tag.payloads.first.id
+
+      expect(subject.current_user).to_not be_nil
+      expect(subject.current_user.nfc_tags.count).to eq(1)
+      
+      tag = subject.current_user.nfc_tags.first
+      expect(tag.payloads.count).to eq(3)
+      
+      expect(response.status).to eq(200)
+      
+      result = JSON.parse(response.body)
+
+      expect(result.keys.include?('response')).to be true
+      expect(result['response']['uri']).to_not be_blank
+      expect(result['response']['text']).to_not be_blank
+      expect(Payload::VALID_CONTENT_TYPES.include?(result['response']['content_type'])).to be true
+      expect(result['response']['threshold']).to_not be_blank       
+      expect(result.keys.include?('error')).to be false
+    end
+
+    it "should work by slug" do
+      get :show, :version => 1, :tag_id => nfc_tag.tag_id, :auth_token => user.authentication_token, :id => nfc_tag.payloads.first.slug
 
       expect(subject.current_user).to_not be_nil
       expect(subject.current_user.nfc_tags.count).to eq(1)

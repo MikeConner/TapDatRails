@@ -33,6 +33,7 @@ class Mobile::V1::PayloadsController < ApiController
     set_tag
     
     @payload = @tag.payloads.find(params[:id]) rescue nil
+    @payload ||= @tag.payloads.find_by_slug(params[:id])
     
     if @payload.nil?
       error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'Payload'), :user_error => I18n.t('invalid_yapa') }
