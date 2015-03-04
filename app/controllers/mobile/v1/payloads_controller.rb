@@ -40,8 +40,8 @@ class Mobile::V1::PayloadsController < ApiController
     else
       result = {:uri => @payload.uri, :text => @payload.content, :threshold => @payload.threshold, 
                 :content_type => @payload.content_type,
-                :payload_image => @payload.remote_payload_image_url || @payload.mobile_payload_image_url,
-                :payload_thumb => @payload.remote_payload_thumb_url || @payload.mobile_payload_thumb_url}  
+                :payload_image => @payload.payload_image.nil? ? @payload.mobile_payload_image_url : @payload.payload_image.url,
+                :payload_thumb => @payload.payload_thumb.nil? ? @payload.mobile_payload_thumb_url : @payload.payload_thumb.url}  
       expose result
     end
   end

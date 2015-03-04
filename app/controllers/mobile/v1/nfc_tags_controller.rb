@@ -5,7 +5,7 @@ class Mobile::V1::NfcTagsController < ApiController
   def index
     response = []
     current_user.nfc_tags.each do |tag|
-      response.push({:id => tag.legible_id, :name => tag.name, :system_id => tag.id})
+      response.push({:id => tag.legible_id, :name => tag.name, :system_id => tag.id, :currency_id => tag.currency_id})
     end
     
     expose response
