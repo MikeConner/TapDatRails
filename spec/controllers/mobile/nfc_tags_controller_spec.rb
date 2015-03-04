@@ -21,6 +21,7 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
       expect(result['response']['id']).to_not be_blank
       expect(result['response']['system_id']).to_not be_blank
       expect(result['response']['name']).to_not be_blank
+      expect(result['response']['currency_id']).to eq(NfcTag.first.currency_id)
       expect(result['response']['name']).to eq('Tag name')
       expect(result.keys.include?('error')).to be false      
     end
