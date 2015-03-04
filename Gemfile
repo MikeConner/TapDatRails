@@ -48,15 +48,17 @@ gem 'bcrypt-ruby', '3.0.1'
 gem 'mechanize', '2.7.3'
 
 group :development do
-  gem 'seed_dump', '3.2.1'  
+  gem 'seed_dump', '3.2.1'
 end
 
 group :development, :test do
   gem 'rspec-rails', '3.1.0'
   gem 'annotate', '2.6.5'
-  gem 'better_errors', '2.0.0'
-  gem 'binding_of_caller', '0.7.2'
+
 end
+gem 'better_errors', '2.0.0'
+gem 'binding_of_caller', '0.7.2'
+
 
 group :test do
   gem 'capybara', '2.4.4'
