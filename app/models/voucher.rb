@@ -76,10 +76,14 @@ class Voucher < ActiveRecord::Base
 
   def active?
     ACTIVE == self.status
-  end         
+  end   
+  
+  def self.generate_voucher_id     
+    SecureRandom.hex(4)
+  end 
 private
   def ensure_uid
-    self.uid = SecureRandom.hex(4) if self.uid.nil?
+    self.uid = Voucher.generate_voucher_id if self.uid.nil?
   end
   
   def ensure_valid_denomination

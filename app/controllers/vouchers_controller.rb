@@ -17,7 +17,7 @@ class VouchersController < ApplicationController
 
   # GET /vouchers/new?currency_id=
   def new
-    @voucher = @currency.vouchers.build(:uid => SecureRandom.hex(4))  
+    @voucher = @currency.vouchers.build(:uid => Voucher.generate_voucher_id)  
   end
 
   # POST /vouchers?currency_id=

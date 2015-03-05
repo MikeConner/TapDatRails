@@ -15,13 +15,44 @@ class Mobile::V1::NfcTagsController < ApiController
 
   # POST /mobile/:version/nfc_tags
   def create
-    tag_id = SecureRandom.hex(5)
-    tag = current_user.nfc_tags.create!(:tag_id => tag_id)
-    
-    response = {:id => tag.legible_id, :name => 'Tag name', :system_id => tag.id}
-    expose response
-  rescue Exception => ex
-    error! :bad_request, :metadata => {:error_description => ex.message, :user_error => I18n.t('tag_create_error') }    
+    if params[:tag].blank?
+      error! :bad_request, :metadata => {:error_description => I18n.t('missing_argument', :arg => 'tag'), :user_error => I18n.t('tag_create_error') } 
+    elsif params[:payloads].blank?
+      error! :bad_request, :metadata => {:error_description => I18n.t('missing_argument', :arg => 'payloads'), :user_error => I18n.t('tag_create_error') } 
+    else
+      if params[:tag][:currency_id].blank?
+        error! :bad_request, :metadata => {:error_description => I18n.t('missing_argument', :arg => 'tag:currency_id'), :user_error => I18n.t('tag_create_error') } 
+      elsif params[:tag][:name].blank?
+        error! :bad_request, :metadata => {:error_description => I18n.t('missing_argument', :arg => 'tag:name'), :user_error => I18n.t('tag_create_error') } 
+      else
+        currency = Currency.find_by_id(params[:tag][:currency_id])
+        if currency.nil?
+          error! :bad_request, :metadata => {:error_description => I18n.t('invalid_currency'), :user_error => I18n.t('tag_create_error') } 
+        elsif currency.user_id != current_user.id
+          error! :bad_request, :metadata => {:error_description => I18n.t('not_currency_owner'), :user_error => I18n.t('tag_create_error') } 
+        else
+          ActiveRecord::Base.transaction do
+            begin
+              tag = current_user.nfc_tags.create!(:tag_id => NfcTag::generate_tag_id, :name => params[:tag][:name], :currency_id => params[:tag][:currency_id])
+              
+              params[:payloads].each do |payload|
+                tag.payloads.create!(:threshold => payload[:threshold], 
+                                     :content_type => payload[:content_type], 
+                                     :mobile_payload_image_url => payload[:payload_image],
+                                     :mobile_payload_thumb_url => payload[:payload_thumb],
+                                     :uri => payload[:uri],
+                                     :content => payload[:content])
+               end
+              
+              response = {:id => tag.legible_id, :name => tag.name, :system_id => tag.id}
+              expose response             
+            rescue ActiveRecord::Rollback => ex
+              error! :bad_request, :metadata => {:error_description => ex.message, :user_error => I18n.t('tag_create_error') }
+            end
+          end
+        end
+      end    
+    end        
   end
   
   # PUT /mobile/:version/nfc_tags/:id

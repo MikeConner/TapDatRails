@@ -13,7 +13,7 @@ class NfcTagsController < ApplicationController
   
   # GET /nfc_tags/new
   def new
-    @tag = current_user.nfc_tags.build(:tag_id => SecureRandom.hex(5))
+    @tag = current_user.nfc_tags.build(:tag_id => NfcTag.generate_tag_id)
     @currencies = current_user.currencies.collect {|u| [u.name, u.id] }
   end
   

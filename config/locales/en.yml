@@ -42,13 +42,14 @@ en:
   rate_not_found: 'Cannot access bitcoin conversion rate; please try again later!'
   single_code_redemption: "Redeemed single code voucher: %{code}"
   not_currency_owner: "You aren't the owner of this currency"
+  invalid_currency: "Invalid currency"
   voucher_not_found: "Voucher %{uid} not found"
   inactive_voucher: "Voucher %{uid} is not active, and cannot be redeemed"
   unavailable_voucher: "Voucher %{uid} has already been assigned"
   invalid_voucher: "Voucher %{uid} is not yours"
   # User errors
   tag_list_error: 'Error retrieving the tag list'
-  tag_create_error: 'Error creating tag'
+  tag_create_error: 'Error creating NFC tag'
   invalid_tag: 'Invalid tag'
   yapa_listing_error: 'Error while listing yapa'
   cannot_create_yapa: 'Error creating yapa'
@@ -61,3 +62,4 @@ en:
   nickname_reset_error: 'Unable to reset nickname'
   redemption_error: 'Sorry, unable to redeem voucher.'
   cashout_error: 'Sorry, unable to cash out. Please try again later.'
+  tag_update_error: 'Error updating NFC Tag'

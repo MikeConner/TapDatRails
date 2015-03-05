@@ -53,4 +53,8 @@ class NfcTag < ActiveRecord::Base
     
     result
   end
+  
+  def self.generate_tag_id
+    SecureRandom.hex(5)
+  end
 end
