@@ -44,6 +44,8 @@ Rails.application.routes.draw do
       resources :currencies, :only => [:show, :index]
       
       resources :device_logs, :only => [:create]
+      
+      get 'ping' => "static_api#ping"
     end
   end
 end
