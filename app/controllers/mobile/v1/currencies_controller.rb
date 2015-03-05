@@ -1,6 +1,10 @@
 class Mobile::V1::CurrenciesController < ApiController
   before_filter :authenticate_user_from_token!
   
+  def index
+    expose current_user.currencies.map { |c| c.id }
+  end
+  
   def show
     denoms = Array.new
     currency = Currency.find_by_id(params[:id])

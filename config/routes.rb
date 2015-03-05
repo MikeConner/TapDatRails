@@ -41,7 +41,7 @@ Rails.application.routes.draw do
       end
       resources :nfc_tags, :only => [:create, :update, :index, :destroy]
       resources :payloads, :except => [:new, :edit]
-      resources :currencies, :only => [:show]
+      resources :currencies, :only => [:show, :index]
       
       resources :device_logs, :only => [:create]
     end
