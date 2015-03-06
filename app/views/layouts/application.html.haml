@@ -3,7 +3,7 @@
   %head
     %meta{:charset => "utf-8"}/
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
-    %title= content_for?(:title) ? yield(:title) : "Tap Dat App"
+    %title= content_for?(:title) ? yield(:title) : "Tap"
     = stylesheet_link_tag    "application"
     = javascript_include_tag "vendor/modernizr"
     = favicon_link_tag
@@ -14,6 +14,7 @@
     = render 'layouts/application/header'
     .row.large-12.columns
       = yield
-    -#= render 'layouts/application/footer'
     = javascript_include_tag "application"
     = content_for :head
+
+    = render 'layouts/application/footer'

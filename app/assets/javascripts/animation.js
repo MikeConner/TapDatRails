@@ -1,4 +1,4 @@
-$(window).ready(function(){
+/*$(window).ready(function(){
   setTimeout(function(){
     setTimeout(function(){
       $('#container').append('<div class="dot" style="top:50%;left:50%;"></div>')
@@ -21,7 +21,7 @@ $(window).ready(function(){
 
 // click animation
 
-if (Modernizr.touch) {   
+if (Modernizr.touch) {
     $('#container').on('touchstart',function(e) {
       var left = e.originalEvent.touches[0].pageX;
       var top = e.originalEvent.touches[0].pageY;
@@ -34,7 +34,7 @@ if (Modernizr.touch) {
     document.body.addEventListener('touchmove',function(e){
         e.preventDefault();
     });
-} else {   
+} else {
     $('#container').on('mousedown',function(e) {
       var left = e.pageX;
       var top = e.pageY;
@@ -43,5 +43,5 @@ if (Modernizr.touch) {
       setTimeout(function(){
         $('#container .dot:first-of-type').remove();
       },3000);
-    }); 
-}
+    });
+}*/

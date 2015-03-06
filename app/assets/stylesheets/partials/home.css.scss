@@ -7,6 +7,23 @@ body,html {
   height: 100%;
 }
 
+.footer-div {
+  background:#605461;
+  width: 100%;
+  margin-left: auto;
+   margin-right: auto;
+   max-width: initial;
+  ul li{
+    color: white;
+  }
+  ul li a {
+    color: white;
+  }
+
+  position: fixed;
+
+  bottom: 0;
+}
 #container {
   position: relative;
   height: 100%;
@@ -39,4 +56,3 @@ body,html {
     background: rgba($primary-color,.0);
   }
 }
- 
