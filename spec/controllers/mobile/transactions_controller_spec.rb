@@ -33,7 +33,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       
       result = JSON.parse(response.body)
 
-      expect(result['response'].count).to eq(4)
+      expect(result['response'].count).to be >= 3
     end
   end
 
@@ -67,6 +67,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       expect(result['response']['dollar_amount']).to eq(tx.dollar_amount)
       expect(result['response']['final_balance']).to eq(subject.current_user.reload.satoshi_balance)
       expect(result['response']['tapped_user_thumb']).to_not be_nil
+      expect(result['response']['slug']).to eq(tx.slug)
       expect(result['response']['tapped_user_name']).to eq(stripper.name)
       expect(result['response']['payload']['text']).to eq(tx.payload.content)
       expect(result['response']['payload'].keys.include?('image')).to be true

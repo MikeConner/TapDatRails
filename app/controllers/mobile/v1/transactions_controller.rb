@@ -114,7 +114,8 @@ class Mobile::V1::TransactionsController < ApiController
                     end
                     
   
-                    response = {:amount => transaction_amount,
+                    response = {:slug => tx.slug,
+                                :amount => transaction_amount,
                                 :dollar_amount => dollar_amount,
                                 :currency_id => params[:currency_id],
                                 :final_balance => currency.nil? ? current_user.satoshi_balance : current_user.currency_balance(currency),
