@@ -10,12 +10,12 @@
     / Right Nav Section
     %ul.right
       %li= link_to 'Learn More', how_it_works_path
-      %li= link_to 'Partners', how_it_works_path
+      %li= link_to 'Partner with Us', how_it_works_path
 
-      %li= link_to 'Contact', contact_path
+      %li= link_to 'Get In Touch', contact_path
       %li
         - if current_user.nil?
-          = link_to 'myTap', new_user_session_path
+          = link_to 'My Tap', new_user_session_path
         - else
           - if current_user.admin?
             %li= link_to 'Currencies', currencies_path
