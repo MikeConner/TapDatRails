@@ -109,7 +109,7 @@ class CurrenciesController < ApplicationController
 
   # GET /currencies/:id/leader_board
   def leader_board
-    @currency = Currency.find(params[:id])
+    @currency = Currency.friendly.find(params[:id])
 
     transactions = []
     @currency.nfc_tags.where(:currency_id => @currency.id).select { |tag| transactions.concat(tag.transactions.to_a) }
