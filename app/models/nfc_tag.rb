@@ -30,6 +30,9 @@ class NfcTag < ActiveRecord::Base
   
   has_many :payloads, :dependent => :destroy
   
+  # Support leaderboard
+  has_many :transactions, :dependent => :nullify
+  
   accepts_nested_attributes_for :payloads, :allow_destroy => true
   
   validates_presence_of :tag_id

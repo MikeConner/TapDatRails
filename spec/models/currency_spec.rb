@@ -37,6 +37,7 @@ describe Currency do
     expect(currency).to respond_to(:denomination_values)
     expect(currency).to respond_to(:max_amount)
     expect(currency).to respond_to(:active_generators)
+    expect(currency).to respond_to(:slug)
   end
   
   its(:user) { should be == user }

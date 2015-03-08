@@ -14,7 +14,10 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :currencies
+  resources :currencies do
+    get 'leader_board', :on => :member
+  end
+  
   resources :vouchers, :except => [:edit, :update]
   resources :single_code_generators, :only => [:index, :show, :destroy]
   resources :nfc_tags

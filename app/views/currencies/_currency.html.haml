@@ -17,4 +17,5 @@
   - else
     %td= pluralize(currency.expiration_days, 'day')
   %td= number_with_delimiter(currency.reserve_balance)
+  %td= link_to "Board", leader_board_currency_path(currency)
   %td= link_to "Delete", currency, :method => :delete, :data => { :confirm => 'Are you sure?' }

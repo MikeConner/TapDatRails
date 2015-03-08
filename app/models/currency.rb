@@ -38,6 +38,9 @@
 #   Allow 0 in max amount (perhaps indicating no limit?)
 #
 class Currency < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :generate_id, use: [:slugged, :history]
+  
   ACTIVE = 0
   INACTIVE = 1
   NAME_LEN = 24
@@ -53,6 +56,9 @@ class Currency < ActiveRecord::Base
   has_many :vouchers, :dependent => :restrict_with_error
   has_many :denominations, :dependent => :destroy
   has_many :single_code_generators, :dependent => :destroy
+  
+  # Support leaderboard
+  has_many :nfc_tags, :dependent => :nullify
   
   accepts_nested_attributes_for :denominations, :allow_destroy => true, 
                                 :reject_if => :reject_denominations
@@ -116,4 +122,8 @@ private
       true
     end
   end  
+  
+  def generate_id
+    SecureRandom.uuid
+  end
 end

@@ -107,6 +107,24 @@ class CurrenciesController < ApplicationController
     redirect_to currencies_path
   end
 
+  # GET /currencies/:id/leader_board
+  def leader_board
+    @currency = Currency.find(params[:id])
+
+    transactions = []
+    @currency.nfc_tags.where(:currency_id => @currency.id).select { |tag| transactions.concat(tag.transactions.to_a) }
+    
+    @tappers = Transaction.where("id in (?)", transactions).select("user_id, sum(amount) as total, count(user_id) as taps").group('user_id').order('total DESC')
+    @tapped = Transaction.where("id in (?)", transactions).select("dest_id, sum(amount) as total, count(user_id) as taps").group('dest_id').order('total DESC')
+    @image_map = Hash.new
+    @names_map = Hash.new
+    
+    @tappers.map { |t| @image_map[t.user_id] = t.user.profile_thumb.url || t.user.mobile_profile_thumb_url } 
+    @tapped.map { |t| @image_map[t.dest_id] = User.find_by_id(t.dest_id).profile_thumb.url || User.find_by_id(t.dest_id).mobile_profile_thumb_url } 
+    @tappers.map { |t| @names_map[t.user_id] = User.find_by_id(t.user_id).name } 
+    @tapped.map { |t| @names_map[t.dest_id] = User.find_by_id(t.dest_id).name } 
+  end
+  
 private
   def currency_params
     params.require(:currency).permit(:expiration_days, :icon, :symbol, :remote_icon_url, :name, :status, :max_amount, :reserve_balance, :user_id, 

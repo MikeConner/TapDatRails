@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150228045740) do
+ActiveRecord::Schema.define(version: 20150308163932) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(version: 20150228045740) do
     t.integer  "amount_per_dollar",            default: 100, null: false
     t.string   "symbol",            limit: 1
     t.integer  "max_amount",                   default: 500, null: false
+    t.string   "slug"
   end
 
   add_index "currencies", ["name"], name: "index_currencies_on_name", unique: true, using: :btree
