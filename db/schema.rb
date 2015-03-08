@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20150308163932) do
   end
 
   add_index "currencies", ["name"], name: "index_currencies_on_name", unique: true, using: :btree
+  add_index "currencies", ["slug"], name: "index_currencies_on_slug", unique: true, using: :btree
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0
