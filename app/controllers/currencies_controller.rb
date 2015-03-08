@@ -1,4 +1,6 @@
 class CurrenciesController < ApplicationController
+  respond_to :html, :js
+  
   before_filter :authenticate_user!
   before_filter :ensure_admin_user, :except => [:index, :show]
   
@@ -123,6 +125,11 @@ class CurrenciesController < ApplicationController
     @tapped.map { |t| @image_map[t.dest_id] = User.find_by_id(t.dest_id).profile_thumb.url || User.find_by_id(t.dest_id).mobile_profile_thumb_url } 
     @tappers.map { |t| @names_map[t.user_id] = User.find_by_id(t.user_id).name } 
     @tapped.map { |t| @names_map[t.dest_id] = User.find_by_id(t.dest_id).name } 
+
+    respond_to do |format|
+      format.html
+      format.json { render :json => [@tappers, @tapped] }
+    end
   end
   
 private
