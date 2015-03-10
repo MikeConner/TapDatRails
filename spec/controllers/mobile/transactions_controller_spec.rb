@@ -85,13 +85,12 @@ describe Mobile::V1::TransactionsController, :type => :controller do
     let(:tag) { FactoryGirl.create(:nfc_tag_with_payloads, :user => stripper, :name => 'Default', :currency => currency) }
    
     it "should fail if currencies don't match" do
-      post :create, :version => 1, :tag_id => tag.tag_id, :auth_token => user.authentication_token, :amount => 100, :currency_id => user.balances.last.currency
-      
-      expect(subject.current_user.transactions.count).to eq(0)
-      expect(subject.current_user.transaction_details.count).to eq(0)
+      post :create, :version => 1, :tag_id => tag.tag_id, :auth_token => user.authentication_token, :amount => 1, :currency_id => user.balances.last.currency.id
       
       expect(response.status).to eq(400)
-      
+      expect(subject.current_user.reload.transactions.count).to eq(0)
+      expect(subject.current_user.reload.transaction_details.count).to eq(0)
+            
       result = JSON.parse(response.body)
 
       expect(result.keys.include?('response')).to be false

@@ -49,7 +49,7 @@ class Payload < ActiveRecord::Base
   
 private
   def has_content
-    if self.uri.blank? and self.content.blank? and self.payload_image.nil?
+    if self.uri.blank? and self.content.blank? and self.payload_image.file.nil?
       self.errors.add :base, I18n.t('empty_payload')
     end
   end

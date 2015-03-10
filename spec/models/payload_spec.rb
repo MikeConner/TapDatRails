@@ -66,8 +66,14 @@ describe Payload do
     it { should_not be_valid }
   end
   
+  describe "Missing threshold" do
+    before { payload.threshold = ' ' }
+    
+    it { should_not be_valid }
+  end
+  
   describe "invalid threshold" do
-    [-1, 0.5, 'abc', nil].each do |threshold|
+    [-1, 0.5, 'abc'].each do |threshold|
       before { payload.threshold = threshold }
       
       it { should_not be_valid }
