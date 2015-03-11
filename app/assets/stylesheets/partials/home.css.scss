@@ -20,6 +20,7 @@ body,html {
 }
 .bgrid {
   padding: 0px;
+
 }
 .touch a{
   color: #BFC833;
@@ -49,10 +50,25 @@ body,html {
 .front-bottom {
   background: #2b4358;
   padding: 40px;
-  margin:1px;
+
 }
+.small-block-grid-3 li {
+  height: 114px;
+  width: 114px;
+  }
+.small-block-grid-3 img{
+  height: inherit;
+width: inherit;
+padding: 14px;
+}
+.museum{
 
 
+  background: #15B0BF;
+}
+.carnival{
+
+}
 
 .light-blue {background: #15B0BF;}
 .yellow {background: #E0CD1E;}
