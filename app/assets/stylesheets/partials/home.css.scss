@@ -1,11 +1,72 @@
 h1, h2, h3, h4 {
   font-weight: 100;
   text-transform: capitalize;
+  color: white;
 }
 
 body,html {
   height: 100%;
+
 }
+
+.frontpage{
+  background: #616161;
+  color: white;
+
+}
+
+.sec1 {
+  background: #616161;
+}
+.bgrid {
+  padding: 0px;
+}
+.touch a{
+  color: #BFC833;
+}
+.advocate a{
+  color: #F7A991;
+}
+.play a{
+  color: #E0CD1E;
+}
+
+.front-top {
+  padding: 40px;
+}
+
+.front-left{
+  background: #48979e;
+  padding: 40px;
+
+}
+
+.front-right {
+  background: #909854;
+  padding: 40px;
+}
+
+.front-bottom {
+  background: #2b4358;
+  padding: 40px;
+  margin:1px;
+}
+
+
+
+.light-blue {background: #15B0BF;}
+.yellow {background: #E0CD1E;}
+.green { background: #BFC833;}
+.dark-blue {background: #103754;}
+.pink {background: #F7A991;}
+
+.light-blue {background: #15B0BF;}
+.light-green {background: #E0E442;}
+.grey {background: #525252;}
+
+.small-block-grid-3
+{ margin:0px;}
+
 
 .footer-div {
   background:#605461;

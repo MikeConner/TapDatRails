@@ -1,4 +1,76 @@
-#home
+#home.frontpage
   .row
-    .large-10.columns.large-centered
-      = link_to(image_tag("play.png"), root_path)
+    .large-4.columns.sec1.large-centered
+      = link_to(image_tag("logo-large.png"), root_path)
+      .row
+        .large-4.small-4.columns.centered.text-center.touch
+          = link_to("TOUCH", '#technology')
+        .large-4.small-4.columns.centered.text-center.advocate
+          = link_to("ADVOCATE", '#philanthropy')
+        .large-4.small-4.columns.centered.text-center.play
+          = link_to("PLAY", '#philology')
+    .row.large-10.columns.centered.front-top
+      At TAP, we think that clicking “like” or RTing isn’t enough when it comes to the causes and ideas that matter--it isn’t enough show of support, it isn’t enough engagement with these causes and ideas, and it doesn’t require enough responsibility from us as members of our communities. We know that there are good ideas and good people behind the screens we use to communicate with each other, and we want those ideas and people to meet IRL.
+      %br
+      %br
+      We have a simple motto that outlines our philosophy: Touch. Advocate. Play. When you scroll down, you’ll see more specifically what those words mean to us and how they can help you make your community a better, friendlier, and more interesting place to live.
+    .row.large-10.columns.centered{"data-equalizer" => ""}
+      .large-6.columns.front-left{"data-equalizer-watch" => ""}
+        %a{:name => "technology"}
+        %h3.fphead
+          TECHNOLOGY
+        Anything cash can do, TAP can do better. Bold statement? You bet. By harnessing the power of near-field communication (NFC) technology, TAP turns your phone into a bankroll and stickers into tip jars. Just like using cash, you decide how much money to give, you decide when and whether to give it, and you decide exactly to whom or to what you’re giving. All you have to do is touch your phone to a sticker.
+        %br
+        TAP works using the NFC technology on your smartphone. This technology lets your phone communicate with passive NFC stickers, each of which contains a coil of wire, like a radio antenna. When your phone sends a signal to the NFC sticker, it activates the antenna. The sticker receives the data that your phone is sending it, and your phone receives data stored on the sticker.
+        %br
+        The “near-field” part of “near-field communication” refers to a “field” of about 2-3 cm, meaning that your phone has to be close to the sticker--not just in the area, but virtually touching it. You have to be physically near the thing that is or represents the cause or idea you’re supporting, and this helps you to be more conscientious about both what you advocate and what is going on around you in your community.
+        %br
+        For more about advocacy, keep scrolling.
+      .large-6.columns.front-right{"data-equalizer-watch" => ""}
+        %a{:name => "philanthropy"}
+        %h3.fphead
+          PHILANTHROPY
+        To advocate, you give money. While slightly more expensive than clicking “like,” it is something you do almost as often, and with about the same effect: whether you’re at the coffee shop, at the boutique, or in da club, every time you spend money, you’re advocating with your dollars, and we think it’s time to put some of that money where your mouse is--or where it was.
+        %br
+        It’s no secret that people love the internet, and online giving increased last year*, not only to larger institutions, but to smaller funds and projects, as well. The growing popularity of crowdsourcing platforms like Kickstarter has led to more giving and more empowered giving--when you can see exactly where your money is going and how it will be used, you’re more likely to give your support. It doesn’t hurt that many of the projects raising funds on these platforms offer incentive gifts for donors (not unlike the fabled Public Broadcasting Fundraiser Tote of yore), which, even if of little objective value, enhance the experience of giving and establish a sense of community not only between the recipient and the donor, but also between donors.
+        %br
+        We think this model is a good one, so we’ve baked it into our system of giving. Every time you give using TAP, you’ll receive a memento of the transaction, which we call yapa. If you read the TECHNOLOGY section, you may recall that when your phone taps a sticker, it will both send data to the sticker and receive data stored on the sticker. The data the sticker sends back to your phone is the yapa. Yapa comes in many forms--image, video, audio, url, coupon, and text--and is a special gift created by the tag owner to thank donors for their contributions.
+    .row.large-10.columns.front-bottom
+      %a{:name => "philology"}
+      %h3.fphead
+        PHILOLOGY
+      Nowadays, “philology” mostly refers to the study of the historical development of languages, but its Greek translation means “a love of learning, analysis, reasoning, etc” (the “etc” is implicit). In keeping with the spirit of the current usage, we’re readopting the old, and we use “philology” to refer to our love of sweet, sweet data.
+    .row.large-10.columns.bgrid
+      .large-4.columns
+        .row.bgrid
+          = image_tag("installations.png")
+          %ul.small-block-grid-3
+            %li.light-blue ba
+            %li.yellow bo
+            %li.light-blue b3
+            %li.yellow bi
+            %li.green sdi
+            %li.dark-blue blai
+      .large-4.columns
+        .row.bgrid
+          = image_tag("events.png")
+          %ul.small-block-grid-3
+            %li.green ba
+            %li.dark-blue bo
+            %li.pink b3
+            %li.yellow bi
+            %li.light-blue sdi
+            %li.dark-blue sdi
+
+      .large-4.columns
+        .row.bgrid
+          = image_tag("tangibles_dark.png")
+          %ul.small-block-grid-3
+            %li.light-blue ba
+            %li.dark-blue bo
+            %li.yellow b3
+            %li.green bi
+            %li.pink sdi
+            %li.light-blue sdi
+      .row
+      %br

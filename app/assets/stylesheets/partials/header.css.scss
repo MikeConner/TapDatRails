@@ -2,3 +2,18 @@
   margin: 4px 0 0 10px;
   width: 80px;
 }
+
+.top-bar {
+  background: #525252;
+}
+.top-bar-section {
+  background: #525252;
+}
+.top-bar-section li:not(.has-form) a:not(.button) {
+  padding: 0 15px;
+  line-height: 45px;
+  background: #525252;
+}
+.footer-div{
+  background: #525252;
+}
