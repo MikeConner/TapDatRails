@@ -6,7 +6,7 @@ h1, h2, h3, h4 {
 
 body,html {
   height: 100%;
-
+  font-family: Calibri, Candara, Segoe, 'Segoe UI', Optima, Arial, sans-serif;
 }
 
 .frontpage{
@@ -24,16 +24,18 @@ body,html {
 }
 .touch a{
   color: #BFC833;
+  font-size: 24px;
 }
 .advocate a{
-  color: #F7A991;
+  color: #F7A991;  font-size: 24px;
 }
 .play a{
-  color: #E0CD1E;
+  color: #E0CD1E;  font-size: 24px;
 }
 
 .front-top {
   padding: 40px;
+  background: #444444;
 }
 
 .front-left{
@@ -58,8 +60,10 @@ body,html {
   }
 .small-block-grid-3 img{
   height: inherit;
-width: inherit;
-padding: 14px;
+  padding: 14px;
+  display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 .museum{
 
