@@ -70,7 +70,27 @@ class Mobile::V1::NfcTagsController < ApiController
         error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'NFC Tag'), :user_error => I18n.t('invalid_tag') }
       else
         begin 
-          tag.update_attribute(:name, params[:name])
+          ActiveRecord::Base.transaction do
+            begin
+              tag.update_attribute(:name, params[:name])
+              
+              unless params[:payloads].nil? or params[:payloads].empty?
+                tag.payloads.destroy_all
+                
+                params[:payloads].each do |payload|
+                  tag.payloads.create!(:threshold => payload[:threshold], 
+                                       :content_type => payload[:content_type], 
+                                       :mobile_payload_image_url => payload[:payload_image],
+                                       :mobile_payload_thumb_url => payload[:payload_thumb],
+                                       :uri => payload[:uri],
+                                       :content => payload[:content])
+                 end
+              end
+            rescue ActiveRecord::Rollback => ex
+              error! :bad_request, :metadata => {:error_description => ex.message, :user_error => I18n.t('tag_create_error') }
+            end
+          end
+          
           head :ok
         rescue Exception => ex
           error! :bad_request, :metadata => {:error_description => ex.message, :user_error => I18n.t('tag_update_error') } 

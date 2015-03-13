@@ -2,7 +2,7 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
   before do
     request.env["devise.mapping"] = Devise.mappings[:user]
   end
-  
+ 
   describe "Create tag" do
     let(:user) { FactoryGirl.create(:user_with_currencies) }
     let(:random_currency) { FactoryGirl.create(:currency) }
@@ -190,13 +190,13 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
 
   describe "Update tag" do
     let(:user) { FactoryGirl.create(:user_with_tags) }
-    
+   
     describe "updates a tag successfully" do
       before do
         @old_name = user.nfc_tags.first.name
         @new_name = 'Candy'
       end
-      
+
       it "should update by tag_id" do
         put :update, :version => 1, :id => 0, :auth_token => user.authentication_token, :name => @new_name, :tag_id => user.nfc_tags.first.tag_id
   
@@ -206,10 +206,59 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
         expect(user.nfc_tags.count).to eq(5)
         expect(NfcTag.count).to eq(5)
         expect(user.nfc_tags.first.reload.name).to eq(@new_name)
-              
         expect(response.status).to eq(200)
       end    
-
+     
+      describe "it should alter payloads" do
+        let(:tag) { FactoryGirl.create(:nfc_tag_with_payloads) }
+        
+        it "should be initialized" do
+          expect(tag.payloads.count).to eq(3)
+        end
+        
+        it "should overwrite them" do
+          put :update, :version => 1, :id => 0, :auth_token => tag.user.authentication_token, :tag_id => tag.tag_id, :name => 'Fish',
+                      :payloads => [{:threshold => 5,
+                                     :content_type => 'image', 
+                                     :content => 'pole dance', 
+                                     :mobile_payload_image_url => 'http://machovy.com/stripper.jpg',
+                                     :mobile_payload_thumb_url => 'http://machovy.com/stripper_thumb.jpg'}, 
+                                    {:threshold => 50,
+                                     :content_type => 'image',
+                                     :content => 'twerking contest',
+                                     :mobile_payload_image_url => 'http://machovy.com/miley.jpg',
+                                     :mobile_payload_thumb_url => 'http://machovy.com/miley_thumb.jpg', 
+                                    }]
+                                    
+          expect(subject.current_user.nfc_tags.first.reload.payloads.count).to eq(2)
+          expect(subject.current_user.nfc_tags.first.reload.payloads.last.threshold).to eq(50)
+        end
+      end
+      
+      it "should update payloads" do
+        put :update, :version => 1, :id => 0, :auth_token => user.authentication_token, :name => @new_name, :tag_id => user.nfc_tags.first.tag_id,
+                    :payloads => [{:threshold => 5,
+                                   :content_type => 'image', 
+                                   :content => 'pole dance', 
+                                   :mobile_payload_image_url => 'http://machovy.com/stripper.jpg',
+                                   :mobile_payload_thumb_url => 'http://machovy.com/stripper_thumb.jpg'}, 
+                                  {:threshold => 50,
+                                   :content_type => 'image',
+                                   :content => 'twerking contest',
+                                   :mobile_payload_image_url => 'http://machovy.com/miley.jpg',
+                                   :mobile_payload_thumb_url => 'http://machovy.com/miley_thumb.jpg', 
+                                  }]
+  
+        sleep 2
+        
+        expect(subject.current_user).to_not be_nil
+        expect(user.nfc_tags.count).to eq(5)
+        expect(NfcTag.count).to eq(5)
+        expect(user.nfc_tags.first.reload.name).to eq(@new_name)
+        expect(subject.current_user.nfc_tags.first.payloads.last.threshold).to eq(50)      
+        expect(response.status).to eq(200)
+      end    
+      
       it "should update by legible tag_id" do
         put :update, :version => 1, :id => 0, :auth_token => user.authentication_token, :name => @new_name, :tag_id => user.nfc_tags.first.legible_id
   
@@ -395,6 +444,6 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
       expect(result.keys.include?('error')).to be true
       expect(result['error_description']).to eq(I18n.t('object_not_found', :obj => 'NFC Tag'))
       expect(result['user_error']).to eq(I18n.t('invalid_tag'))     
-    end    
-  end
+    end
+  end        
 end
