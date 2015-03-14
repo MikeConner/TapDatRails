@@ -1,0 +1,88 @@
+.leaderboard {
+  background: $oil;
+  padding: 4rem 0;
+
+  .stats .columns {
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+
+  h1 {
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: rem-calc(16);
+  }
+
+  table {
+    background: $midnight;
+    margin: 0;
+    width: 100%;
+    border-spacing: inherit;
+
+    thead {
+      background: $oil;
+
+      th {
+        font-weight: normal;
+        color: $aluminum;
+      }
+    }
+
+    tr {
+      &:first-child td {
+        color: $lime;
+      }
+
+      &:nth-of-type(even) {
+        background: $steel;
+      }
+    }
+
+    td {
+      font-weight: bold;
+      font-size: rem-calc(15px);
+      color: white;
+      padding: 6px 14px;
+      text-transform: capitalize;
+
+      &:first-child {
+        text-align: center;
+      }
+
+      &:nth-child(2) {
+        width: 40px;
+        padding-left: 4px;
+      }
+
+      &:nth-child(3) {
+        padding-left: 4px;
+      }
+    }
+
+    .pill {
+      background: $oil;
+      border-radius: 30px;
+      padding: 6px 10px;
+      text-align: center;
+    }
+
+    .image {
+      height: 40px;
+      width: 40px;
+      border: 2px solid $oil;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+      }
+    }
+
+  }
+}

@@ -1,26 +1,46 @@
-%section
-  .row
+%section.leaderboard
+  .row.stats
     - n = [@tappers.length, @tapped.length].max
     .small-6.columns
+      %h1 The Tappers
       %table
-        %tbody
+        %thead
+          %tr
+            %th
+            %th
+            %th name
+            %th amount
+            %th taps
         - if n >= 1
           - for x in 0..(n - 1) do
             %tr
               - if x < @tappers.length
-                // %td= image_tag @image_map[@tappers[x].user_id]
+                %td= @tappers.length[x]
+                %td
+                  .image= image_tag @image_map[@tappers[x].user_id]
                 %td= @names_map[@tappers[x].user_id]
-                %td= number_to_currency(@tappers[x].dollar)
+                %td
+                  .pill= number_to_currency(@tappers[x].dollar)
                 %td= number_with_delimiter(@tappers[x].taps)
 
     .small-6.columns
+      %h1 The Tapped
       %table
-        %tbody
+        %thead
+          %tr
+            %th
+            %th
+            %th name
+            %th amount
+            %th taps
         - if n >= 1
           - for x in 0..(n - 1) do
             %tr
               - if x < @tapped.length
-                // %td= image_tag @image_map[@tappers[x].user_id]
+                %td= @tappers.length[x]
+                %td
+                  .image= image_tag @image_map[@tappers[x].user_id]
                 %td= @names_map[@tappers[x].user_id]
                 %td= number_to_currency(@tappers[x].dollar)
-                %td= number_with_delimiter(@tappers[x].taps)
+                %td
+                  .pill= number_with_delimiter(@tappers[x].taps)

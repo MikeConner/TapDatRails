@@ -2,12 +2,12 @@
   background: $oil;
 
   img {
-    width: 115px;
-    padding: 10px 20px 10px 20px;
+    width: 135px;
+    padding: 12px 32px;
   }
 }
 
 .top-bar-section li:not(.has-form) a:not(.button):hover {
   transition: all 0.25s ease-in-out;
-  box-shadow: inset 0px -200px 0px -195px $lime;
+  box-shadow: inset 0px -200px 0px -197px $lime;
 }
