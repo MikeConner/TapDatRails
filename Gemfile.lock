@@ -173,6 +173,8 @@ GEM
     kaminari (0.16.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
+    knockoutjs-rails (3.3.0)
+      railties (>= 3.1, < 5)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     mechanize (2.7.3)
@@ -361,6 +363,7 @@ DEPENDENCIES
   haml (= 4.1.0.beta.1)
   haml-rails (= 0.6.0)
   jquery-rails (= 3.1.2)
+  knockoutjs-rails
   mechanize (= 2.7.3)
   mini_magick (= 4.0.1)
   newrelic_rpm (= 3.9.8.273)
