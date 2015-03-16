@@ -11,7 +11,7 @@ class CurrenciesController < ApplicationController
 
   # GET /currencies/1
   def show
-    @currency = Currency.find(params[:id])
+    @currency = Currency.friendly.find(params[:id])
   end
 
   # GET /currencies/new
@@ -25,7 +25,7 @@ class CurrenciesController < ApplicationController
 
   # GET /currencies/1/edit
   def edit
-    @currency = Currency.find(params[:id])
+    @currency = Currency.friendly.find(params[:id])
     @issuers = User.all.collect {|u| [u.name, u.id] }
     if @issuers.empty?
       redirect_to currencies_path, :notice => 'No currency issuers available'
@@ -59,7 +59,7 @@ class CurrenciesController < ApplicationController
 
   # PUT /currencies/1
   def update
-    @currency = Currency.find(params[:id])
+    @currency = Currency.friendly.find(params[:id])
     
     funding_transaction = Hash.new
     
@@ -103,7 +103,7 @@ class CurrenciesController < ApplicationController
 
   # DELETE /currencies/1
   def destroy
-    @currency = Currency.find(params[:id])
+    @currency = Currency.friendly.find(params[:id])
     @currency.destroy
 
     redirect_to currencies_path
