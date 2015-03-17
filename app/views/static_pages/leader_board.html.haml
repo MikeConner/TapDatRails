@@ -12,10 +12,10 @@
             %th amount
             %th taps
         - if n >= 1
-          - for x in 0..(n - 1) do
+          - for x in 0..5 do
             %tr
               - if x < @tappers.length
-                %td= @tappers.length[x]
+                %td= @tappers.length
                 %td
                   .image= image_tag @image_map[@tappers[x].user_id]
                 %td= @names_map[@tappers[x].user_id]
@@ -34,7 +34,7 @@
             %th amount
             %th taps
         - if n >= 1
-          - for x in 0..(n - 1) do
+          - for x in 0..5 do
             %tr
               - if x < @tapped.length
                 %td= @tappers.length[x]
