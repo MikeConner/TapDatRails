@@ -240,6 +240,7 @@ FactoryGirl.define do
     content { generate(:random_sentences) }
     threshold { Random.rand(1000) }
     content_type { Payload::VALID_CONTENT_TYPES.sample }
+    description { generate(:random_phrase) }
   end
   
   factory :nfc_tag do
@@ -249,8 +250,8 @@ FactoryGirl.define do
     tag_id { SecureRandom.hex(5) }
     name "Tag name"
     
-    factory :nfc_tag_with_currency do
-      currency
+    factory :bitcoin_nfc_tag do
+      currency_id nil
     end
     
     factory :nfc_tag_with_payloads do

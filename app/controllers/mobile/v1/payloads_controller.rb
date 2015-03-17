@@ -38,7 +38,7 @@ class Mobile::V1::PayloadsController < ApiController
     if @payload.nil?
       error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'Payload'), :user_error => I18n.t('invalid_yapa') }
     else
-      result = {:uri => @payload.uri, :text => @payload.content, :threshold => @payload.threshold, 
+      result = {:uri => @payload.uri, :text => @payload.content, :description => @payload.description, :threshold => @payload.threshold, 
                 :content_type => @payload.content_type,
                 :payload_image => @payload.payload_image.nil? ? @payload.mobile_payload_image_url : @payload.payload_image.url,
                 :payload_thumb => @payload.payload_thumb.nil? ? @payload.mobile_payload_thumb_url : @payload.payload_thumb.url}  
@@ -81,7 +81,7 @@ class Mobile::V1::PayloadsController < ApiController
   
 private
   def payload_params
-    params.require(:payload).permit(:content, :content_type, :threshold, :uri, :payload_image, :remote_payload_image_url, :payload_thumb, :remote_payload_thumb_url, :mobile_payload_image_url, :mobile_payload_thumb_url)
+    params.require(:payload).permit(:content, :content_type, :threshold, :uri, :description, :payload_image, :remote_payload_image_url, :payload_thumb, :remote_payload_thumb_url, :mobile_payload_image_url, :mobile_payload_thumb_url)
   end
   
   def set_tag

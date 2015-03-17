@@ -32,6 +32,7 @@ describe Payload do
     expect(payload).to respond_to(:content)  
     expect(payload).to respond_to(:threshold)  
     expect(payload).to respond_to(:slug)  
+    expect(payload).to respond_to(:description)  
     expect(payload).to respond_to(:mobile_payload_image_url)
     expect(payload).to respond_to(:mobile_payload_thumb_url)
     expect(payload).to respond_to(:content_type)

@@ -33,8 +33,8 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
       expect(result['user_error']).to eq(I18n.t('tag_create_error'))     
     end
 
-    it "should fail with no currency" do
-      post :create, :version => 1, :auth_token => user.authentication_token, :tag => {:name => 'Fish' },
+    it "should create bitcoin tag" do
+      post :create, :version => 1, :auth_token => user.authentication_token, :tag => {:name => 'Fish'},
                     :payloads => [{:threshold => 1,
                                    :content_type => 'image', 
                                    :content => 'pole dance', 
@@ -48,14 +48,21 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
                                    :mobile_payload_thumb_url => 'http://machovy.com/miley_thumb.jpg', 
                                   }]
 
-      expect(response.status).to eq(400)
+      expect(subject.current_user).to eq(user)
+      expect(user.nfc_tags.count).to eq(1)
+      expect(NfcTag.count).to eq(1)
+      expect(NfcTag.first.payloads.count).to eq(2)
+      expect(NfcTag.first.currency).to be_nil
+            
+      expect(response.status).to eq(200)
       
       result = JSON.parse(response.body)
-
-      expect(result.keys.include?('response')).to be false
-      expect(result.keys.include?('error')).to be true
-      expect(result['error_description']).to eq(I18n.t('missing_argument', :arg => 'tag:currency_id'))     
-      expect(result['user_error']).to eq(I18n.t('tag_create_error'))     
+      
+      expect(result['response'].keys.include?('id')).to be true
+      expect(result['response']['id']).to_not be_blank
+      expect(result['response']['system_id']).to_not be_blank
+      expect(result['response']['name']).to eq('Fish')
+      expect(result.keys.include?('error')).to be false      
     end
 
     it "should fail with invalid currency" do
@@ -65,7 +72,8 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
                                    :content => 'pole dance', 
                                    :mobile_payload_image_url => 'http://machovy.com/stripper.jpg',
                                    :mobile_payload_thumb_url => 'http://machovy.com/stripper_thumb.jpg'}, 
-                                  {:content_type => 'video',
+                                  {:threshold => 5,
+                                   :content_type => 'video',
                                    :content => 'twerking contest',
                                    :uri => 'http://machovy.com/insider/furrytwerk.mpg',
                                    :mobile_payload_image_url => 'http://machovy.com/miley.jpg',
@@ -185,7 +193,7 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
       expect(result['response']['system_id']).to_not be_blank
       expect(result['response']['name']).to eq('Fish')
       expect(result.keys.include?('error')).to be false      
-    end
+    end    
   end
 
   describe "Update tag" do
@@ -198,7 +206,7 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
       end
 
       it "should update by tag_id" do
-        put :update, :version => 1, :id => 0, :auth_token => user.authentication_token, :name => @new_name, :tag_id => user.nfc_tags.first.tag_id
+        put :update, :version => 1, :id => 0, :auth_token => user.authentication_token, :tag => { :name => @new_name }, :tag_id => user.nfc_tags.first.tag_id
   
         sleep 2
         
@@ -217,7 +225,7 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
         end
         
         it "should overwrite them" do
-          put :update, :version => 1, :id => 0, :auth_token => tag.user.authentication_token, :tag_id => tag.tag_id, :name => 'Fish',
+          put :update, :version => 1, :id => 0, :auth_token => tag.user.authentication_token, :tag_id => tag.tag_id, :tag => { :name => 'Fish' },
                       :payloads => [{:threshold => 5,
                                      :content_type => 'image', 
                                      :content => 'pole dance', 
@@ -236,7 +244,7 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
       end
       
       it "should update payloads" do
-        put :update, :version => 1, :id => 0, :auth_token => user.authentication_token, :name => @new_name, :tag_id => user.nfc_tags.first.tag_id,
+        put :update, :version => 1, :id => 0, :auth_token => user.authentication_token, :tag => { :name => @new_name }, :tag_id => user.nfc_tags.first.tag_id,
                     :payloads => [{:threshold => 5,
                                    :content_type => 'image', 
                                    :content => 'pole dance', 
@@ -260,7 +268,7 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
       end    
       
       it "should update by legible tag_id" do
-        put :update, :version => 1, :id => 0, :auth_token => user.authentication_token, :name => @new_name, :tag_id => user.nfc_tags.first.legible_id
+        put :update, :version => 1, :id => 0, :auth_token => user.authentication_token, :tag => { :name => @new_name }, :tag_id => user.nfc_tags.first.legible_id
   
         sleep 2
         
@@ -273,7 +281,7 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
       end    
 
       it "should update by system id" do
-        put :update, :version => 1, :id => user.nfc_tags.first.id, :auth_token => user.authentication_token, :name => @new_name
+        put :update, :version => 1, :id => user.nfc_tags.first.id, :auth_token => user.authentication_token, :tag => { :name => @new_name }
   
         sleep 2
         
@@ -286,7 +294,7 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
       end    
 
       it "should fail if no id" do
-        put :update, :version => 1, :id => 0, :auth_token => user.authentication_token, :name => @new_name
+        put :update, :version => 1, :id => 0, :auth_token => user.authentication_token, :tag => { :name => @new_name }
   
         expect(subject.current_user).to_not be_nil
         expect(user.nfc_tags.count).to eq(5)
@@ -317,12 +325,12 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
   
         expect(result.keys.include?('response')).to be false
         expect(result.keys.include?('error')).to be true
-        expect(result['error_description']).to eq(I18n.t('missing_argument', :arg => 'name'))       
+        expect(result['error_description']).to eq(I18n.t('missing_argument', :arg => 'tag'))       
         expect(result['user_error']).to eq(I18n.t('tag_update_error'))     
       end    
 
       it "should fail if not found" do
-        put :update, :version => 1, :id => user.nfc_tags.first.id + 100, :auth_token => user.authentication_token, :name => @new_name
+        put :update, :version => 1, :id => user.nfc_tags.first.id + 100, :auth_token => user.authentication_token, :tag => { :name => @new_name }
   
         expect(subject.current_user).to_not be_nil
         expect(user.nfc_tags.count).to eq(5)
