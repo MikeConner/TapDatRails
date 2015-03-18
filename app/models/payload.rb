@@ -17,6 +17,7 @@
 #  content_type             :string(16)       default("image"), not null
 #  payload_image_processing :boolean
 #  payload_thumb_processing :boolean
+#  description              :string(255)
 #
 
 # CHARTER
@@ -49,7 +50,7 @@ class Payload < ActiveRecord::Base
   
 private
   def has_content
-    if self.uri.blank? and self.content.blank? and self.payload_image.file.nil?
+    if self.uri.blank? and self.content.blank? and self.description.blank? and self.payload_image.file.nil?
       self.errors.add :base, I18n.t('empty_payload')
     end
   end

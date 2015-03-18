@@ -33,6 +33,29 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
       expect(result['user_error']).to eq(I18n.t('tag_create_error'))     
     end
 
+    it "should create a minimal bitcoin tag" do
+      post :create, :version => 1, :auth_token => user.authentication_token, :tag => {:name => 'New Tag'},
+                    :payloads => [{:threshold => 11,
+                                   :content_type => 'image', 
+                                   :description => 'test'}] 
+
+      expect(subject.current_user).to eq(user)
+      expect(user.nfc_tags.count).to eq(1)
+      expect(NfcTag.count).to eq(1)
+      expect(NfcTag.first.payloads.count).to eq(1)
+      expect(NfcTag.first.currency).to be_nil
+            
+      expect(response.status).to eq(200)
+      
+      result = JSON.parse(response.body)
+      
+      expect(result['response'].keys.include?('id')).to be true
+      expect(result['response']['id']).to_not be_blank
+      expect(result['response']['system_id']).to_not be_blank
+      expect(result['response']['name']).to eq('New Tag')
+      expect(result.keys.include?('error')).to be false      
+    end
+
     it "should create bitcoin tag" do
       post :create, :version => 1, :auth_token => user.authentication_token, :tag => {:name => 'Fish'},
                     :payloads => [{:threshold => 1,
@@ -368,9 +391,36 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
         expect(r['id']).to_not be_blank
         expect(r['system_id']).to_not be_blank
         expect(r['name']).to_not be_blank
+        expect(r['payloads']).to be_empty
       end
       
       expect(result['count']).to eq(5)
+      expect(result.keys.include?('error')).to be false      
+    end
+  end
+
+  describe "List tags with payloads" do
+    let(:tag) { FactoryGirl.create(:nfc_tag_with_payloads) }
+    
+    it "list successfully" do      
+      get :index, :version => 1, :auth_token => tag.user.authentication_token
+
+      expect(subject.current_user).to_not be_nil
+      expect(NfcTag.count).to eq(1)
+            
+      expect(response.status).to eq(200)
+      
+      result = JSON.parse(response.body)
+
+      expect(result.keys.include?('response')).to be true 
+      result['response'].each do |r|
+        expect(r['id']).to_not be_blank
+        expect(r['system_id']).to_not be_blank
+        expect(r['name']).to_not be_blank
+        expect(r['payloads'].count).to eq(3)
+      end
+      
+      expect(result['count']).to eq(1)
       expect(result.keys.include?('error')).to be false      
     end
   end

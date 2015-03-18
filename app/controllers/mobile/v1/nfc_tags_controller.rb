@@ -4,8 +4,21 @@ class Mobile::V1::NfcTagsController < ApiController
   # GET /mobile/:version/nfc_tags
   def index
     response = []
+    
     current_user.nfc_tags.each do |tag|
-      response.push({:id => tag.legible_id, :name => tag.name, :system_id => tag.id, :currency_id => tag.currency_id})
+      payloads = []
+      tag.payloads.each do |payload|
+        payloads.push({:description => payload.description, 
+                       :threshold => payload.threshold, 
+                       :uri => payload.uri, 
+                       :content => payload.content, 
+                       :content_type => payload.content_type, 
+                       :payload_image => payload.mobile_payload_image_url || payload.payload_image.url,
+                       :payload_thumb => payload.mobile_payload_thumb_url || payload.payload_thumb.url,
+                       :slug => payload.slug, })
+      end
+      
+      response.push({:id => tag.legible_id, :name => tag.name, :system_id => tag.id, :currency_id => tag.currency_id, :payloads => payloads})
     end
     
     expose response
@@ -38,6 +51,7 @@ class Mobile::V1::NfcTagsController < ApiController
               params[:payloads].each do |payload|
                 tag.payloads.create!(:threshold => payload[:threshold], 
                                      :content_type => payload[:content_type], 
+                                     :description => payload[:description],
                                      :mobile_payload_image_url => payload[:payload_image],
                                      :mobile_payload_thumb_url => payload[:payload_thumb],
                                      :uri => payload[:uri],
@@ -82,6 +96,7 @@ class Mobile::V1::NfcTagsController < ApiController
                 params[:payloads].each do |payload|
                   tag.payloads.create!(:threshold => payload[:threshold], 
                                        :content_type => payload[:content_type], 
+                                       :description => payload[:description],
                                        :mobile_payload_image_url => payload[:payload_image],
                                        :mobile_payload_thumb_url => payload[:payload_thumb],
                                        :uri => payload[:uri],
