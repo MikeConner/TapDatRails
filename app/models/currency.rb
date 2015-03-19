@@ -15,6 +15,7 @@
 #  amount_per_dollar :integer          default(100), not null
 #  symbol            :string(1)
 #  max_amount        :integer          default(500), not null
+#  slug              :string(255)
 #
 
 # CHARTER

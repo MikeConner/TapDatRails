@@ -17,6 +17,7 @@
 #  content_type             :string(16)       default("image"), not null
 #  payload_image_processing :boolean
 #  payload_thumb_processing :boolean
+#  description              :string(255)
 #
 
 describe Payload do
