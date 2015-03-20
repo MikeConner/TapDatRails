@@ -2,7 +2,8 @@ class CurrenciesController < ApplicationController
   respond_to :html, :js
   
   before_filter :authenticate_user!
-  before_filter :ensure_admin_user, :except => [:index, :show]
+  before_filter :ensure_admin_user, :except => [:index, :show, :report]
+  before_filter :ensure_own_currency_or_admin, :only => [:report]
   
   # GET /currencies
   def index
@@ -109,6 +110,26 @@ class CurrenciesController < ApplicationController
     redirect_to currencies_path
   end
 
+  # GET /currencies/:id/report
+  def report
+    tx = []
+    @currency.nfc_tags.where(:currency_id => @currency.id).select { |tag| tx.concat(tag.transactions.to_a) }
+    
+    @transactions = Transaction.where("id in (?)", tx)
+    @image_map = Hash.new
+    @names_map = Hash.new
+    @tag_map = Hash.new
+    @voucher_map = Hash.new
+    
+    @transactions.map { |t| @image_map[t.user_id] = t.user.profile_thumb.url || t.user.mobile_profile_thumb_url } 
+    @transactions.map { |t| @image_map[t.dest_id] = User.find_by_id(t.dest_id).profile_thumb.url || User.find_by_id(t.dest_id).mobile_profile_thumb_url } 
+    @transactions.map { |t| @names_map[t.user_id] = User.find_by_id(t.user_id).name } 
+    @transactions.map { |t| @names_map[t.dest_id] = User.find_by_id(t.dest_id).name } 
+    
+    @transactions.map { |t| @tag_map[t.nfc_tag_id] = NfcTag.find(t.nfc_tag_id).legible_id unless t.nfc_tag_id.nil? }
+    @transactions.map { |t| @voucher_map[t.voucher_id] = Voucher.find(t.voucher_id).uid unless t.voucher_id.nil? }
+  end
+  
   # GET /currencies/:id/leader_board
   def leader_board
     @currency = Currency.friendly.find(params[:id])
@@ -133,6 +154,14 @@ class CurrenciesController < ApplicationController
   end
   
 private
+  def ensure_own_currency_or_admin
+    @currency = Currency.friendly.find(params[:id])
+    
+    unless current_user.admin? or (@currency.user == current_user)
+      redirect_to currencies_path, :alert => I18n.t('not_currency_owner')
+    end
+  end
+  
   def currency_params
     params.require(:currency).permit(:expiration_days, :icon, :symbol, :remote_icon_url, :name, :status, :max_amount, :reserve_balance, :user_id, 
                                      :denominations_attributes => [:id, :value, :image, :remote_image_url, :caption, :_destroy],
