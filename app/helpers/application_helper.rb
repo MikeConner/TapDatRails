@@ -4,4 +4,7 @@ module ApplicationHelper
   VALID_EMAILS = ["j@z.com", "jeff.bennett@pittsburghmoves.com", "fish_42@verizon.net", "a.b.c.d@e.f.g.h.biz"]
   
   DATE_FORMAT = '%b %d, %Y'
+
+  MAILER_FROM_ADDRESS = 'admin@tapdatapp.co'
+  SMTP_PASSWORD = '%%))$$@macho'
 end

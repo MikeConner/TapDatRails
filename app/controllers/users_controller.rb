@@ -5,8 +5,12 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.js do
         user = User.find(params[:id])
+        old_email = user.email
+        
         user.update_attributes(user_params)
         
+        user.reset_password unless (user.email == old_email) or user.generated_email?
+
         head :ok
       end
     end    
