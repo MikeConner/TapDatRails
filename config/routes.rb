@@ -42,7 +42,7 @@ Rails.application.routes.draw do
         
         put 'redeem_voucher', :on => :member
       end
-      resources :nfc_tags, :only => [:create, :update, :index, :destroy]
+      resources :nfc_tags, :except => [:new, :edit]
       resources :payloads, :except => [:new, :edit]
       resources :currencies, :only => [:show, :index]
       
