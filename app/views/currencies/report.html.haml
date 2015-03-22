@@ -1,0 +1,27 @@
+.row
+  .large-12.columns
+    %h1
+      = @currency.name
+      Tap Report
+%section
+  .row
+    .small-12.columns
+      %table
+        %thead
+          %tr
+            %th Tapper
+            %th Tapped
+            %th Tag
+            %th Amount
+            %th $
+            %th Voucher
+            %th Comment
+        %tbody
+          - @transactions.each do |tx|
+            %tr
+              %td= image_tag @image_map[tx.user_id], :style => 'width:60px', :alt => @names_map[tx.user_id]
+              %td= image_tag @image_map[tx.dest_id], :style => 'width:60px', :alt => @names_map[tx.dest_id]
+              %td= @tag_map[tx.nfc_tag_id]
+              %td= number_with_delimiter(tx.amount)
+              %td= @voucher_map[tx.voucher_id]
+              %td= tx.comment

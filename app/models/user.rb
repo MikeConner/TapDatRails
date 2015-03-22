@@ -29,6 +29,8 @@
 #  role                     :integer          default(0), not null
 #
 
+require 'nickname_generator'
+
 # CHARTER
 #   Encapsulate a TapDat user (web or mobile)
 #
@@ -90,6 +92,15 @@ class User < ActiveRecord::Base
     
     balance.nil? ? 0 : balance.amount
   end
+  
+  def reset_password
+    pwd = NicknameGenerator.generate_nickname
+    self.password = pwd
+    if save
+      UserMailer.delay.welcome_email(self, pwd)
+    end
+  end
+  
 protected
   def ensure_authentication_token!
     if self.authentication_token.blank?

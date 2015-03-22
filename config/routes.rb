@@ -15,7 +15,10 @@ Rails.application.routes.draw do
   end
 
   resources :currencies do
-    get 'leader_board', :on => :member
+    member do
+      get 'leader_board'
+      get 'report'
+    end
   end
   
   resources :vouchers, :except => [:edit, :update]
@@ -42,7 +45,7 @@ Rails.application.routes.draw do
         
         put 'redeem_voucher', :on => :member
       end
-      resources :nfc_tags, :only => [:create, :update, :index, :destroy]
+      resources :nfc_tags, :except => [:new, :edit]
       resources :payloads, :except => [:new, :edit]
       resources :currencies, :only => [:show, :index]
       

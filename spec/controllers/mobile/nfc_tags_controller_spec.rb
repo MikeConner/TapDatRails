@@ -2,6 +2,18 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
   before do
     request.env["devise.mapping"] = Devise.mappings[:user]
   end
+  render_views
+ 
+  describe "Show tag" do
+    let(:tag) { FactoryGirl.create(:nfc_tag) }
+    
+    it "should get the app page" do
+      get :show, :version => 1, :id => tag.tag_id
+            
+      expect(response.status).to eq(200)    
+      expect(response.body).to match(tag.tag_id)
+    end
+  end
  
   describe "Create tag" do
     let(:user) { FactoryGirl.create(:user_with_currencies) }

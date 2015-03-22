@@ -1,5 +1,10 @@
 class Mobile::V1::NfcTagsController < ApiController
-  before_filter :authenticate_user_from_token!
+  include AbstractController::Rendering
+  include ActionView::Layouts
+
+  append_view_path "#{Rails.root}/app/views"  
+  
+  before_filter :authenticate_user_from_token!, :except => [:show]
   
   # GET /mobile/:version/nfc_tags
   def index
@@ -114,6 +119,13 @@ class Mobile::V1::NfcTagsController < ApiController
         end   
       end
     end    
+  end
+  
+  # GET /mobile/:version/nfc_tags/:id
+  def show
+    @nfc_tag = NfcTag.find_by_tag_id(params[:id].gsub(/-/, ''))
+    
+    render :show
   end
   
   # DELETE /mobile/:version/nfc_tags/:id
