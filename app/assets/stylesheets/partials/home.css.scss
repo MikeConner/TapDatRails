@@ -1,20 +1,107 @@
 h1, h2, h3, h4 {
   font-weight: 100;
   text-transform: capitalize;
-  color: white;
 }
 
 body,html {
   height: 100%;
-  font-family: Calibri, Candara, Segoe, 'Segoe UI', Optima, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  font-family: Roboto;
 }
 
-.frontpage{
+.front_intro {
+  background: #EEEEEE;
+  color: #525252;
+  background: image-url("tapheader.png") no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height:500px;
+  width:100%;
+}
+
+.front_hello{
+  background: #EEEEEE;
+  color: #525252;
+  background: image-url("hello.jpeg") no-repeat ;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height:auto;
+  padding:40px;
+}
+
+.lightbg {
+  background: #EEEEEE;
+  padding: 20px;
+  opacity: .9;
+
+}
+.darkbg {
   background: #616161;
-  color: white;
+  padding: 30px;
+  opacity: .9;
+
+}
+.front_howdy{
+  background: #EEEEEE;
+  color: #525252;
+  //background: image-url("howdy.jpeg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height:auto;
+  padding:40px;
+
+}
+.front_yothere{
+  background: #EEEEEE;
+  color: #525252;
+  background: image-url("yothere.jpeg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height:auto;
+}
+.front_byenow{
+  background: #EEEEEE;
+  color: #525252;
+  background: image-url("byenow.jpeg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height:auto;
+}
+.front_apps{
+  background: #EEEEEE;
+  color: #525252;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height:auto;
+}
+
+
+
+#hello {
+  width:100%;
+  margin: 20px auto;
 
 }
 
+
+.front_technology{
+  background: #525252;
+  color: #EEEEEE;
+
+}
 .sec1 {
   background: #616161;
 }
@@ -89,22 +176,25 @@ body,html {
 
 
 .footer-div {
+  display: none;
   background:#605461;
   width: 100%;
   margin-left: auto;
-   margin-right: auto;
-   max-width: initial;
-  ul li{
+  margin-right: auto;
+  max-width: initial;
+  position: fixed;
+  bottom: 0;
+
+  ul li {
     color: white;
   }
+
   ul li a {
     color: white;
   }
 
-  position: fixed;
-
-  bottom: 0;
 }
+
 #container {
   position: relative;
   height: 100%;

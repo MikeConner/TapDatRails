@@ -7,7 +7,7 @@
       - unless @tags.empty?
         %table.table.zebra-striped
           %thead
-            %tr 
+            %tr
               %th Date
               %th Currency
               %th Name
@@ -17,8 +17,11 @@
             - @tags.each do |tag|
               %tr
                 %td= tag.created_at.try(:strftime, ApplicationHelper::DATE_FORMAT)
-                %td= tag.currency.name
+                %td
+                  - if tag.currency != nil
+                    = tag.currency.name
+                  - else
+                    Bitcoin
                 %td= link_to tag.name, nfc_tag_path(tag)
                 %td= tag.legible_id
                 %td= number_with_delimiter(tag.lifetime_balance)
-  

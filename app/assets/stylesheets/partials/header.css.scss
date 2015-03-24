@@ -1,19 +1,13 @@
-.name img {
-  margin: 4px 0 0 10px;
-  width: 80px;
+.name {
+  //background: $oil;
+
+  img {
+    width: 135px;
+    padding: 18px 32px;
+  }
 }
 
-.top-bar {
-  background: #525252;
-}
-.top-bar-section {
-  background: #525252;
-}
-.top-bar-section li:not(.has-form) a:not(.button) {
-  padding: 0 15px;
-  line-height: 45px;
-  background: #525252;
-}
-.footer-div{
-  background: #525252;
+.top-bar-section li:not(.has-form) a:not(.button):hover {
+  transition: all 0.25s ease-in-out;
+  box-shadow: inset 0px -200px 0px -197px $lime;
 }

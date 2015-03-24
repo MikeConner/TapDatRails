@@ -1,24 +1,25 @@
-%nav.top-bar{"data-topbar" => "", :role => "navigation"}
-  %ul.title-area
-    %li.name
-      = link_to(image_tag("tap-logo.png", height: 45), root_path)
-    / Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone
-    %li.toggle-topbar.menu-icon
-      %a{:href => "#"}
-        %span Menu
-  %section.top-bar-section
-    / Right Nav Section
-    %ul.right
-      %li= link_to 'Learn More', how_it_works_path
-      %li= link_to 'Partner with Us', how_it_works_path
+.contain-to-grid
+  %nav.top-bar{"data-topbar" => "", :role => "navigation"}
+    %ul.title-area
+      %li.name
+        = link_to(image_tag("tap-logo.png", height: 45), root_path)
+      / Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone
+      %li.toggle-topbar.menu-icon
+        %a{:href => "#"}
+          %span Menu
+    %section.top-bar-section
+      / Right Nav Section
+      %ul.right
+        %li= link_to 'Learn More', how_it_works_path
+        %li= link_to 'Partner with Us', how_it_works_path
 
-      %li= link_to 'Get In Touch', contact_path
-      %li
-        - if current_user.nil?
-          = link_to 'My Tap', new_user_session_path
-        - else
-          - if current_user.admin?
-            %li= link_to 'Currencies', currencies_path
-          %li= link_to 'Dashboard', dashboard_user_path(current_user)
-          %li= link_to 'Log Out', destroy_user_session_path, :method => :delete
+        %li= link_to 'Get In Touch', contact_path
+        %li
+          - if current_user.nil?
+            = link_to 'My Tap', new_user_session_path
+          - else
+            - if current_user.admin?
+              %li= link_to 'Currencies', currencies_path
+            %li= link_to 'Dashboard', dashboard_user_path(current_user)
+            %li= link_to 'Log Out', destroy_user_session_path, :method => :delete
 = render :partial => 'shared/flash_messages'
