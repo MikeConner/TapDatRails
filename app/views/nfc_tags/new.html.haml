@@ -1,11 +1,11 @@
-.text-center
+= form_for @tag do |f|
   .row
     .large-12.columns
-      %h1 New NFC Tag
+      %h4 New Tag
   .row
     .large-12.columns
-      = form_for @tag do |f|
-        = render :partial => 'shared/error_messages', :locals => { :errors => @tag.errors, :name => 'NFC Tag' }
-        = render :partial => 'tag_fields', :locals => { :f => f }
-        .actions
-          = f.submit 'Create NFC Tag'
+      = render :partial => 'shared/error_messages', :locals => { :errors => @tag.errors, :name => 'NFC Tag' }
+      = render :partial => 'tag_fields', :locals => { :f => f }
+  .row
+    .large-12.columns.small-centered
+      = f.submit 'Create NFC Tag', class: 'button'

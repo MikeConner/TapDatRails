@@ -1,5 +1,5 @@
 .leaderboard {
-  background: $oil;
+  background: #eeeeee;
   padding: 4rem 0;
 
   .stats .columns {
@@ -13,42 +13,43 @@
   }
 
   h1 {
-    color: white;
-    font-weight: bold;
+    color: #525252;
+    font-weight: light;
     text-transform: uppercase;
     text-align: center;
     font-size: rem-calc(16);
   }
 
   table {
-    background: $midnight;
+    background: #f9f9f9;
     margin: 0;
     width: 100%;
     border-spacing: inherit;
 
     thead {
-      background: $oil;
+      background: #c2d64c;
 
       th {
-        font-weight: normal;
-        color: $aluminum;
+        font-weight: normal !important;
+        text-transform: uppercase;
+        color: #525252;
       }
     }
 
     tr {
       &:first-child td {
-        color: $lime;
+        color: #616161;
       }
 
       &:nth-of-type(even) {
-        background: $steel;
+        background: #ffffff;
       }
     }
 
     td {
-      font-weight: bold;
+      font-weight: thin;
       font-size: rem-calc(15px);
-      color: white;
+      color: #525252;
       padding: 6px 14px;
       text-transform: capitalize;
 
@@ -67,8 +68,8 @@
     }
 
     .pill {
-      background: $oil;
-      border-radius: 30px;
+      
+      border-radius: 0px;
       padding: 6px 10px;
       text-align: center;
     }
@@ -76,7 +77,7 @@
     .image {
       height: 40px;
       width: 40px;
-      border: 2px solid $oil;
+      border: 2px solid #eeeeee;
       overflow: hidden;
 
       img {

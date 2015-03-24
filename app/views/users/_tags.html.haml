@@ -3,11 +3,11 @@
 %ul.small-block-grid-3
   - current_user.nfc_tags.each do |tag|
     -# background-image: url(#{tag.payloads.order(:threshold).first.mobile_payload_image_url}); Problematic; might not have it defined
-    %li.foundation-plus{:style=> "width: 200px; height: 200px; margin:10px; border: 1px solid grey; padding: 10px"}
-      = tag.name
-      %br
-      = tag.legible_id
-  %li{:style=> "width: 200px; height: 200px; margin:10px; border: 1px solid grey; padding: 10px"}
+    %li.foundation-plus{:style=> "width: 200px; height: 200px; margin:10px; border: 0px solid grey; padding: 10px;background: #FFFFFF;  border-radius: 25px;"}
+      .center-cropped{style: "background-image: url(#{tag.payloads.first.mobile_payload_image_url})"}
+
+      = tag.name.to_s + ", " + tag.legible_id
+  %li{:style=> "width: 200px; height: 200px; margin:10px; border: 0px solid grey; padding: 10px;background: #FFFFFF;  border-radius: 25px;"}
     = link_to new_nfc_tag_path do
       %i.fa.fa-plus-circle.fa-5x
         add
