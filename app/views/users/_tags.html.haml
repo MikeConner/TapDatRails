@@ -1,13 +1,37 @@
-%h1 Tags
+%h5 My Tags
 
-%ul.small-block-grid-3
-  - current_user.nfc_tags.each do |tag|
-    -# background-image: url(#{tag.payloads.order(:threshold).first.mobile_payload_image_url}); Problematic; might not have it defined
-    %li.foundation-plus{:style=> "width: 200px; height: 200px; margin:10px; border: 0px solid grey; padding: 10px;background: #FFFFFF;  border-radius: 25px;"}
+.row.panel
+  = link_to new_nfc_tag_path do
+    %i.fa.fa-plus-circle.fa-5x
+    = image_tag "yapapicture.png", size: "100x100"
+    = image_tag "yapaaudio.png", size: "100x100"
+    = image_tag "yapavideo.png", size: "100x100"
+    = image_tag "yapalink.png", size: "100x100"
+    = image_tag "yapatext.png", size: "100x100"
+    = image_tag "yapacoupon.png", size: "100x100"
+
+- current_user.nfc_tags.each do |tag|
+  .row.panel
+    .small-2.large-2.columns
+      .yapa_icon
+        - case tag.payloads.first.content_type
+          - when 'image'
+            = image_tag "yapapicture.png", size: "100x100"
+          - when 'audio'
+            = image_tag "yapaaudio.png", size: "100x100"
+          - when 'video'
+            = image_tag "yapavideo.png", size: "100x100"
+          - when 'url'
+            = image_tag "yapalink.png", size: "100x100"
+          - when 'text'
+            = image_tag "yapatext.png", size: "100x100"
+          - when 'coupon'
+            = image_tag "yapacoupon.png", size: "100x100"
+
+    .small-2.large-2.columns
       .center-cropped{style: "background-image: url(#{tag.payloads.first.mobile_payload_image_url})"}
 
-      = tag.name.to_s + ", " + tag.legible_id
-  %li{:style=> "width: 200px; height: 200px; margin:10px; border: 0px solid grey; padding: 10px;background: #FFFFFF;  border-radius: 25px;"}
-    = link_to new_nfc_tag_path do
-      %i.fa.fa-plus-circle.fa-5x
-        add
+    .small-2.large-2.columns
+      = tag.name.to_s
+    .small-2.large-2.columns
+      = tag.legible_id
