@@ -5,7 +5,7 @@
   - if user.profile_image_processing?
     Pending profile image upload
   - else
-    = image_tag user.profile_image.url || user.mobile_profile_image_url(:thumb).to_s, size: "300x300"
+    = image_tag user.profile_image.url || user.profile_image_url(:thumb).to_s, size: "300x300"
 
 .large-4.columns
   = user.email
