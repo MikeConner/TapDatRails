@@ -2,29 +2,36 @@
   Your Profile Picture, Balances and BTC
 
 .large-4.columns
-  = image_tag current_user.mobile_profile_thumb_url, size: "300x300"
+  - if user.profile_image_processing?
+    Pending profile image upload
+  - else
+    = image_tag user.profile_image.url || user.mobile_profile_image_url(:thumb).to_s, size: "300x300"
+
 .large-4.columns
-  = current_user.email
+  = user.email
   = label_tag :nickname
-  = text_field_tag :nickname, current_user.name
-  = submit_tag 'Update Nickname', :class => 'button', :onclick => "update_nickname('nickname', '#{user_path(current_user)}');"
+  = text_field_tag :nickname, user.name
+  = submit_tag 'Update Nickname', :class => 'button', :onclick => "update_nickname('nickname', '#{user_path(user)}');"
 .row
 .large-4.columns
   %h5 Deposit
-  - unless current_user.inbound_btc_address.nil?
-    = image_tag "#{qrcode_user_path(current_user)}.svg", size: "300x300"
+  - unless user.inbound_btc_address.nil?
+    - if user.inbound_btc_qrcode_processing?
+      Pending QR code image upload
+    - else
+      = image_tag "#{qrcode_user_path(user)}.svg", size: "300x300"
     %br
-    = current_user.inbound_btc_address
-  %h5 Satoshi Balance: #{current_user.satoshi_balance}
-  - unless current_user.balances.empty?
+    = user.inbound_btc_address
+  %h5 Satoshi Balance: #{user.satoshi_balance}
+  - unless user.balances.empty?
     %h5 Other balances
-    - current_user.balances.each do |balance|
+    - user.balances.each do |balance|
       = balance.currency.name
       = balance.amount
       %br
 .large-4.columns
   %h3 Withdraw
-  = text_field :outbound_addy, current_user.outbound_btc_address, :placeholder => "Outbound Addy"
+  = text_field :outbound_addy, user.outbound_btc_address, :placeholder => "Outbound Addy"
   = submit_tag 'Withdraw', :class => "button"
 
-%br
+ 
