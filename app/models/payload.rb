@@ -25,32 +25,32 @@
 #   uri content can be: audio, video, url, text, image coupon: server validates
 #
 # NOTES AND WARNINGS
-#   Content is either an image/thumbnail pair, Uri or text (or a combination). 
+#   Content is either an image/thumbnail pair, Uri or text (or a combination).
 # The URI field is reserved for non-image content (like an MP3 or regular URL).
 #
 class Payload < ActiveRecord::Base
   extend FriendlyId
   friendly_id :generate_id, use: [:slugged, :history, :finders]
-  
-  VALID_CONTENT_TYPES = ['audio', 'video', 'url', 'text', 'image', 'coupon']
-  
+
+  VALID_CONTENT_TYPES = ['image', 'audio', 'video', 'url', 'text', 'coupon']
+
   mount_uploader :payload_image, ImageUploader
   process_in_background :payload_image
 
   belongs_to :nfc_tag
-  
+
   validates :threshold, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
   validates :content_type, :inclusion => { :in => VALID_CONTENT_TYPES }
-  
+
   validate :has_content
-  
+
 private
   def has_content
     if self.uri.blank? and self.content.blank? and self.description.blank? and self.payload_image.file.nil?
       self.errors.add :base, I18n.t('empty_payload')
     end
   end
-  
+
   def generate_id
     SecureRandom.uuid
   end

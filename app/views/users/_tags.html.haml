@@ -3,31 +3,14 @@
 .row.panel
   = link_to new_nfc_tag_path do
     %i.fa.fa-plus-circle.fa-5x
-    = image_tag "yapapicture.png", size: "100x100"
-    = image_tag "yapaaudio.png", size: "100x100"
-    = image_tag "yapavideo.png", size: "100x100"
-    = image_tag "yapalink.png", size: "100x100"
-    = image_tag "yapatext.png", size: "100x100"
-    = image_tag "yapacoupon.png", size: "100x100"
+    add tag
 
-- user.nfc_tags.each do |tag|
+- user.nfc_tags.order('created_at DESC').each do |tag|
   .row.panel
     .small-2.large-2.columns
       - unless tag.payloads.empty?
         .yapa_icon
-          - case tag.payloads.first.content_type
-            - when 'image'
-              = image_tag "yapapicture.png", size: "100x100"
-            - when 'audio'
-              = image_tag "yapaaudio.png", size: "100x100"
-            - when 'video'
-              = image_tag "yapavideo.png", size: "100x100"
-            - when 'url'
-              = image_tag "yapalink.png", size: "100x100"
-            - when 'text'
-              = image_tag "yapatext.png", size: "100x100"
-            - when 'coupon'
-              = image_tag "yapacoupon.png", size: "100x100"
+          = image_tag ApplicationHelper::YAPA_TYPE_IMAGE_MAP[tag.payloads.first.content_type.to_sym], :size => "100x100"
 
     .small-2.large-2.columns
       - unless tag.payloads.empty?
@@ -37,5 +20,3 @@
       = tag.name.to_s
     .small-2.large-2.columns
       = tag.legible_id
-
- 

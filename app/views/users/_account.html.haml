@@ -1,37 +1,38 @@
-.large-12.columns
-  Your Profile Picture, Balances and BTC
-
-.large-4.columns
-  - if user.profile_image_processing?
-    Pending profile image upload
-  - else
-    = image_tag user.profile_image.url || user.profile_image_url(:thumb).to_s, size: "300x300"
-
-.large-4.columns
-  = user.email
-  = label_tag :nickname
-  = text_field_tag :nickname, user.name
-  = submit_tag 'Update Nickname', :class => 'button', :onclick => "update_nickname('nickname', '#{user_path(user)}');"
 .row
-.large-4.columns
-  %h5 Deposit
-  - unless user.inbound_btc_address.nil?
-    - if user.inbound_btc_qrcode_processing?
-      Pending QR code image upload
-    - else
-      = image_tag "#{qrcode_user_path(user)}.svg", size: "300x300"
-    %br
-    = user.inbound_btc_address
-  %h5 Satoshi Balance: #{user.satoshi_balance}
-  - unless user.balances.empty?
-    %h5 Other balances
-    - user.balances.each do |balance|
-      = balance.currency.name
-      = balance.amount
-      %br
-.large-4.columns
-  %h3 Withdraw
-  = text_field :outbound_addy, user.outbound_btc_address, :placeholder => "Outbound Addy"
-  = submit_tag 'Withdraw', :class => "button"
+  .large-8.columns
+    Your Profile Picture, Balances and BTC
+.row
+  .large-6.columns
+    = user.email
+    = label_tag :nickname
+    = text_field_tag :nickname, user.name
+    = submit_tag 'Update Nickname', :class => 'button', :onclick => "update_nickname('nickname', '#{user_path(user)}');"
 
- 
+  .large-6.columns
+    - if user.profile_image_processing?
+      Pending profile image upload
+    - else
+      = image_tag user.profile_image.url || user.profile_image_url(:thumb).to_s, size: "300x300"
+
+.row
+
+  .large-6.columns
+    %h5 Deposit
+    - unless user.inbound_btc_address.nil?
+      - if user.inbound_btc_qrcode_processing?
+        Pending QR code image upload
+      - else
+        = image_tag "#{qrcode_user_path(user)}.svg", size: "300x300"
+      %br
+      = user.inbound_btc_address
+    %h5 Satoshi Balance: #{number_with_delimiter(user.satoshi_balance)}
+    - unless user.balances.empty?
+      %h5 Other balances
+      - user.balances.each do |balance|
+        = balance.currency.name
+        = balance.amount
+        %br
+  .large-6.columns
+    %h3 Withdraw
+    = text_field :outbound_addy, user.outbound_btc_address, :placeholder => "Outbound Addy"
+    = submit_tag 'Withdraw', :class => "button"

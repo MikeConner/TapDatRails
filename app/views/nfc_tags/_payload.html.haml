@@ -1,25 +1,36 @@
-.payload
-  = f.hidden_field :_destroy
-  = content_tag(:a, 'X', :href => '#', :class => "close", :onclick => "if (confirm('Delete this yapa?')) remove_payload(this)")
-  %br
-  = f.label :threshold
-  = f.number_field :threshold, :min => 1
-  %br
-  = f.label :payload_image, 'Yapa image'
-  = f.file_field :payload_image
-  = f.object.payload_image.file.nil? ? "" : f.object.payload_image.file.filename
-  %br
-  = f.label :remote_payload_image_url, "or image URL"
-  = f.text_field :remote_payload_image_url
-  %br
-  = f.label :description, 'Short Text Description'
-  = f.text_field :description
-  %br
-  = f.label :content, 'Text Content'
-  = f.text_field :content
-  %br
-  = f.label :uri, 'URI (for video, audio, etc.)'
-  = f.text_field :uri
-  %br
-  = f.label :content_type, 'URI Content Type'
-  = f.select :content_type, options_for_select(Payload::VALID_CONTENT_TYPES, f.object.content_type)
+.panel
+  .payload
+    .row
+      .large-4.columns
+        = f.hidden_field :content_type, :value => content_type
+        = f.hidden_field :_destroy
+        = content_tag(:a, 'X', :href => '#', :class => "close", :onclick => "if (confirm('Delete this yapa?')) remove_payload(this)")
+        Type:
+        = image_tag ApplicationHelper::YAPA_TYPE_IMAGE_MAP[content_type.to_sym], :size => "100x100"
+    .row
+      .large-12.columns
+        = f.label :threshold
+        = f.number_field :threshold, :min => 1
+    - if ['image', 'coupon'].include?(content_type)
+      .row
+        .large-6.columns
+          = f.label :payload_image, 'Yapa image'
+          = f.file_field :payload_image
+          = f.object.payload_image.file.nil? ? "" : f.object.payload_image.file.filename
+        .large-6.columns
+          = f.label :remote_payload_image_url, "or image URL"
+          = f.text_field :remote_payload_image_url
+    - if 'text' == content_type
+      .row
+        .large-12.columns
+          = f.label :content, 'Text Content'
+          = f.text_area :content
+    - if ['video', 'audio', 'link'].include?(content_type)
+      .row
+        .large-12.columns
+          = f.label :uri, 'URI (for video, audio, etc.)'
+          = f.text_field :uri
+    .row
+      .large-12.columns
+        = f.label :description, 'Say something as a thank you note'
+        = f.text_field :description

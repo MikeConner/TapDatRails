@@ -7,19 +7,19 @@ class UsersController < ApplicationController
       format.js do
         user = User.find(params[:id])
         old_email = user.email
-        
+
         user.update_attributes(user_params)
-        
+
         user.reset_password unless (user.email == old_email) or user.generated_email?
 
         head :ok
       end
-    end    
+    end
   end
-    
+
   # GET /users/:id
-  def show 
-    @user = User.find(params[:id]) 
+  def show
+    @user = User.find(params[:id])
   end
 
   # GET /users/:id/qrcode
@@ -29,9 +29,9 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html
       format.svg  { render :qrcode => qr_uri, :level => :l, :unit => 10, :offset => 14 }
-    end    
+    end
   end
-  
+
   # GET /users/:id/leader_board
   def leader_board
     # Deferred

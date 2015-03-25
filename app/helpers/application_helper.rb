@@ -7,4 +7,12 @@ module ApplicationHelper
 
   MAILER_FROM_ADDRESS = 'admin@websitefortap.com'
   SMTP_PASSWORD = '%%))$$@tappy'
+
+  YAPA_TYPE_IMAGE_MAP = { :audio => 'yapaaudio.png',
+                          :video => 'yapavideo.png',
+                          :url => 'yapalink.png',
+                          :text => 'yapatext.png',
+                          :image => 'yapapicture.png',
+                          :coupon => 'yapacoupon.png'}
+
 end
