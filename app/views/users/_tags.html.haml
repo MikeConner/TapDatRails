@@ -3,12 +3,7 @@
 .row.panel
   = link_to new_nfc_tag_path do
     %i.fa.fa-plus-circle.fa-5x
-    = image_tag "yapapicture.png", size: "100x100"
-    = image_tag "yapaaudio.png", size: "100x100"
-    = image_tag "yapavideo.png", size: "100x100"
-    = image_tag "yapalink.png", size: "100x100"
-    = image_tag "yapatext.png", size: "100x100"
-    = image_tag "yapacoupon.png", size: "100x100"
+    New Tag
 
 - current_user.nfc_tags.each do |tag|
   .row.panel
