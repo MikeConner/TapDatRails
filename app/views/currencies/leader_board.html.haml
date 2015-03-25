@@ -49,7 +49,8 @@
                 %td
                   .pill= number_with_delimiter(@tappers[x].taps)
 
-
+- content_for :head do
+  %meta{:content => "3", "http-equiv" => "refresh"}
 
 
 -#
