@@ -4,7 +4,7 @@
 %ul.small-block-grid-6
   - user.payloads.each do |yapa|
     %li{:id => "#{yapa.slug}", :class => "oneyapa",
-        :style=> "background-image: url(#{yapa.mobile_payload_image_url(:thumb).to_s}); width: 200px; height: 200px; border: 1px solid black; margin:10px; padding: 10px",
+        :style=> "background-image: url(#{yapa.payload_image_url(:thumb).to_s}); width: 200px; height: 200px; border: 1px solid black; margin:10px; padding: 10px",
         :onclick => "expand_me('#{yapa.slug}');"}
       .panel.radius.round
         = truncate( yapa.content, :length => 20)      
