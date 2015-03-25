@@ -10,13 +10,11 @@
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
 #  payload_image            :string(255)
-#  payload_thumb            :string(255)
 #  slug                     :string(255)
 #  mobile_payload_image_url :string(255)
 #  mobile_payload_thumb_url :string(255)
 #  content_type             :string(16)       default("image"), not null
 #  payload_image_processing :boolean
-#  payload_thumb_processing :boolean
 #  description              :string(255)
 #
 
@@ -32,14 +30,12 @@
 #
 class Payload < ActiveRecord::Base
   extend FriendlyId
-  friendly_id :generate_id, use: [:slugged, :history]
+  friendly_id :generate_id, use: [:slugged, :history, :finders]
   
   VALID_CONTENT_TYPES = ['audio', 'video', 'url', 'text', 'image', 'coupon']
   
   mount_uploader :payload_image, ImageUploader
-  mount_uploader :payload_thumb, ImageUploader
   process_in_background :payload_image
-  process_in_background :payload_thumb
 
   belongs_to :nfc_tag
   

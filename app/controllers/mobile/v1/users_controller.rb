@@ -13,7 +13,7 @@ class Mobile::V1::UsersController < ApiController
                 :outbound_btc_address => current_user.outbound_btc_address,
                 :satoshi_balance => current_user.satoshi_balance,
                 :profile_image => current_user.profile_image.url || current_user.mobile_profile_image_url,
-                :profile_thumb => current_user.profile_thumb.url || current_user.mobile_profile_thumb_url}
+                :profile_thumb => current_user.profile_image_url(:thumb).to_s || current_user.mobile_profile_thumb_url}
     expose response
 
   rescue Exception => ex

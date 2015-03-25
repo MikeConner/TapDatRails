@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_filter :authenticate_user!
 
+  # PUT /users/:id
   def update
     respond_to do |format|
       format.js do
@@ -16,9 +17,12 @@ class UsersController < ApplicationController
     end    
   end
     
-  def dashboard  
+  # GET /users/:id
+  def show 
+    @user = User.find(params[:id]) 
   end
 
+  # GET /users/:id/qrcode
   def qrcode
     qr_uri = "bitcoin:" + current_user.inbound_btc_address
 
@@ -28,14 +32,9 @@ class UsersController < ApplicationController
     end    
   end
   
+  # GET /users/:id/leader_board
   def leader_board
-    @tappers = []
-    @tapped = Transaction.where(:dest_id => 4).select("dest_id, sum(amount) as satoshi, sum(dollar_amount) as dollar, count(dollar_amount) as taps").group('dest_id').order('dollar DESC')
-    @image_map = Hash.new
-    @names_map = Hash.new
-    
-    @tapped.map { |t| @image_map[t.dest_id] = User.find_by_id(t.dest_id).profile_thumb.url || User.find_by_id(t.dest_id).mobile_profile_thumb_url } 
-    @tapped.map { |t| @names_map[t.dest_id] = User.find_by_id(t.dest_id).name }  
+    # Deferred
   end
 
 private

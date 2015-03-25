@@ -12,7 +12,7 @@ class CurrenciesController < ApplicationController
 
   # GET /currencies/1
   def show
-    @currency = Currency.friendly.find(params[:id])
+    @currency = Currency.find(params[:id])
   end
 
   # GET /currencies/new
@@ -26,7 +26,7 @@ class CurrenciesController < ApplicationController
 
   # GET /currencies/1/edit
   def edit
-    @currency = Currency.friendly.find(params[:id])
+    @currency = Currency.find(params[:id])
     @issuers = User.all.collect {|u| [u.name, u.id] }
     if @issuers.empty?
       redirect_to currencies_path, :notice => 'No currency issuers available'
@@ -60,7 +60,7 @@ class CurrenciesController < ApplicationController
 
   # PUT /currencies/1
   def update
-    @currency = Currency.friendly.find(params[:id])
+    @currency = Currency.find(params[:id])
     
     funding_transaction = Hash.new
     
@@ -104,7 +104,7 @@ class CurrenciesController < ApplicationController
 
   # DELETE /currencies/1
   def destroy
-    @currency = Currency.friendly.find(params[:id])
+    @currency = Currency.find(params[:id])
     @currency.destroy
 
     redirect_to currencies_path
@@ -121,8 +121,8 @@ class CurrenciesController < ApplicationController
     @tag_map = Hash.new
     @voucher_map = Hash.new
     
-    @transactions.map { |t| @image_map[t.user_id] = t.user.profile_thumb.url || t.user.mobile_profile_thumb_url } 
-    @transactions.map { |t| @image_map[t.dest_id] = User.find_by_id(t.dest_id).profile_thumb.url || User.find_by_id(t.dest_id).mobile_profile_thumb_url } 
+    @transactions.map { |t| @image_map[t.user_id] = t.user.profile_image_url(:thumb).to_s || t.user.mobile_profile_thumb_url } 
+    @transactions.map { |t| @image_map[t.dest_id] = User.find_by_id(t.dest_id).profile_image_url(:thumb).to_s || User.find_by_id(t.dest_id).mobile_profile_thumb_url } 
     @transactions.map { |t| @names_map[t.user_id] = User.find_by_id(t.user_id).name } 
     @transactions.map { |t| @names_map[t.dest_id] = User.find_by_id(t.dest_id).name } 
     
@@ -132,7 +132,7 @@ class CurrenciesController < ApplicationController
   
   # GET /currencies/:id/leader_board
   def leader_board
-    @currency = Currency.friendly.find(params[:id])
+    @currency = Currency.find(params[:id])
 
     transactions = []
     @currency.nfc_tags.where(:currency_id => @currency.id).select { |tag| transactions.concat(tag.transactions.to_a) }
@@ -142,8 +142,8 @@ class CurrenciesController < ApplicationController
     @image_map = Hash.new
     @names_map = Hash.new
     
-    @tappers.map { |t| @image_map[t.user_id] = t.user.profile_thumb.url || t.user.mobile_profile_thumb_url } 
-    @tapped.map { |t| @image_map[t.dest_id] = User.find_by_id(t.dest_id).profile_thumb.url || User.find_by_id(t.dest_id).mobile_profile_thumb_url } 
+    @tappers.map { |t| @image_map[t.user_id] = t.user.profile_image_url(:thumb).to_s || t.user.mobile_profile_thumb_url } 
+    @tapped.map { |t| @image_map[t.dest_id] = User.find_by_id(t.dest_id).profile_image_url(:thumb).to_s || User.find_by_id(t.dest_id).mobile_profile_thumb_url } 
     @tappers.map { |t| @names_map[t.user_id] = User.find_by_id(t.user_id).name } 
     @tapped.map { |t| @names_map[t.dest_id] = User.find_by_id(t.dest_id).name } 
 
@@ -155,7 +155,7 @@ class CurrenciesController < ApplicationController
   
 private
   def ensure_own_currency_or_admin
-    @currency = Currency.friendly.find(params[:id])
+    @currency = Currency.find(params[:id])
     
     unless current_user.admin? or (@currency.user == current_user)
       redirect_to currencies_path, :alert => I18n.t('not_currency_owner')

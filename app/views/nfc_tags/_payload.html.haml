@@ -12,13 +12,6 @@
   = f.label :remote_payload_image_url, "or image URL"
   = f.text_field :remote_payload_image_url
   %br
-  = f.label :payload_thumb, 'Yapa image Thumbnail'
-  = f.file_field :payload_thumb
-  = f.object.payload_thumb.file.nil? ? "" : f.object.payload_thumb.file.filename
-  %br
-  = f.label :remote_payload_thumb_url, "or image URL"
-  = f.text_field :remote_payload_thumb_url
-  %br
   = f.label :description, 'Short Text Description'
   = f.text_field :description
   %br

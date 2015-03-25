@@ -9,11 +9,11 @@
 
       %li
         %a{:onclick => "select_dashboard_section('account_section');"} Account
-      - unless current_user.currencies.empty?
+      - unless @user.currencies.empty?
         %Li
           %a
             %b My Currencies
-        - current_user.currencies.each do |currency|
+        - @user.currencies.each do |currency|
           %li
             - if currency.icon_processing?
               Pending upload
@@ -27,12 +27,12 @@
   .large-10.columns
     #dashboard_content
       #account_section.dash_section.active
-        = render :partial => 'account'
+        = render :partial => 'account', :locals => { :user => @user }
       #yapa_section.dash_section
-        = render :partial => 'yapa'
+        = render :partial => 'yapa', :locals => { :user => @user }
       #tags_section.dash_section
-        = render :partial => 'tags'
+        = render :partial => 'tags', :locals => { :user => @user }
       #currency_section
-        - current_user.currencies.each do |currency|
+        - @user.currencies.each do |currency|
           = render :partial => 'currency', :locals => { :currency => currency }
 = javascript_include_tag 'dashboard'

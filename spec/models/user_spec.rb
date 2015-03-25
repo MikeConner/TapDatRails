@@ -2,31 +2,33 @@
 #
 # Table name: users
 #
-#  id                       :integer          not null, primary key
-#  email                    :string(255)      default(""), not null
-#  encrypted_password       :string(255)      default(""), not null
-#  name                     :string(255)      default(""), not null
-#  reset_password_token     :string(255)
-#  reset_password_sent_at   :datetime
-#  remember_created_at      :datetime
-#  sign_in_count            :integer          default(0)
-#  current_sign_in_at       :datetime
-#  last_sign_in_at          :datetime
-#  current_sign_in_ip       :string(255)
-#  last_sign_in_ip          :string(255)
-#  authentication_token     :string(255)
-#  created_at               :datetime         not null
-#  updated_at               :datetime         not null
-#  phone_secret_key         :string(16)       not null
-#  inbound_btc_address      :string(255)
-#  outbound_btc_address     :string(255)
-#  satoshi_balance          :integer          default(0), not null
-#  profile_image            :string(255)
-#  profile_thumb            :string(255)
-#  mobile_profile_image_url :string(255)
-#  mobile_profile_thumb_url :string(255)
-#  inbound_btc_qrcode       :string(255)
-#  role                     :integer          default(0), not null
+#  id                            :integer          not null, primary key
+#  email                         :string(255)      default(""), not null
+#  encrypted_password            :string(255)      default(""), not null
+#  name                          :string(255)      default(""), not null
+#  reset_password_token          :string(255)
+#  reset_password_sent_at        :datetime
+#  remember_created_at           :datetime
+#  sign_in_count                 :integer          default(0)
+#  current_sign_in_at            :datetime
+#  last_sign_in_at               :datetime
+#  current_sign_in_ip            :string(255)
+#  last_sign_in_ip               :string(255)
+#  authentication_token          :string(255)
+#  created_at                    :datetime         not null
+#  updated_at                    :datetime         not null
+#  phone_secret_key              :string(16)       not null
+#  inbound_btc_address           :string(255)
+#  outbound_btc_address          :string(255)
+#  satoshi_balance               :integer          default(0), not null
+#  profile_image                 :string(255)
+#  mobile_profile_image_url      :string(255)
+#  mobile_profile_thumb_url      :string(255)
+#  inbound_btc_qrcode            :string(255)
+#  role                          :integer          default(0), not null
+#  slug                          :string(255)
+#  profile_image_processing      :boolean
+#  inbound_btc_qrcode_processing :boolean
 #
 
 describe User do  
@@ -43,10 +45,11 @@ describe User do
     expect(user).to respond_to(:satoshi_balance)
     expect(user).to respond_to(:authentication_token)
     expect(user).to respond_to(:profile_image)
-    expect(user).to respond_to(:profile_thumb)
+    expect(user).to respond_to(:profile_image_processing)
     expect(user).to respond_to(:mobile_profile_image_url)
     expect(user).to respond_to(:mobile_profile_thumb_url)
     expect(user).to respond_to(:inbound_btc_qrcode)
+    expect(user).to respond_to(:inbound_btc_qrcode_processing)
     expect(user).to respond_to(:admin?)
   end
   

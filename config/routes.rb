@@ -6,14 +6,13 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  resources :users, :only => [:update] do
+  resources :users, :only => [:show, :update] do
     member do
       get 'leader_board'
-      get 'dashboard'
       get 'qrcode'
     end
   end
-
+  
   resources :currencies do
     member do
       get 'leader_board'
@@ -30,7 +29,8 @@ Rails.application.routes.draw do
   get "/privacy" => "static_pages#privacy"
   get "/contact" => "static_pages#contact"
   get "/leader_board" => "static_pages#leader_board"
-
+  get "/thumb_dimensions" => "static_pages#thumb_dimensions"
+  
   namespace :mobile do
     api :version => 1, :module => "v1" do
       resources :sessions, :only => [:create, :destroy]

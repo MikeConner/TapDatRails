@@ -1,25 +1,4 @@
 %section
   .row
     .small-12.columns
-      %table
-        %thead
-          %tr
-            %th Taps
-            %th
-            %th
-            %th
-        %tbody
-          - n = @tapped.length
-          - if n >= 1
-            - for x in 0..(n - 1) do
-              %tr
-                - if x < @tapped.length  
-                  %td= image_tag @image_map[@tapped[x].dest_id], :style => 'width:60px'
-                  %td= @names_map[@tapped[x].dest_id]
-                  %td= number_to_currency(@tapped[x].dollar)
-                  %td= number_with_delimiter(@tapped[x].taps)
-                - else
-                  %td
-                  %td
-                  %td
-                  %td
+      %h1 Deferred

@@ -2,31 +2,33 @@
 #
 # Table name: users
 #
-#  id                       :integer          not null, primary key
-#  email                    :string(255)      default(""), not null
-#  encrypted_password       :string(255)      default(""), not null
-#  name                     :string(255)      default(""), not null
-#  reset_password_token     :string(255)
-#  reset_password_sent_at   :datetime
-#  remember_created_at      :datetime
-#  sign_in_count            :integer          default(0)
-#  current_sign_in_at       :datetime
-#  last_sign_in_at          :datetime
-#  current_sign_in_ip       :string(255)
-#  last_sign_in_ip          :string(255)
-#  authentication_token     :string(255)
-#  created_at               :datetime         not null
-#  updated_at               :datetime         not null
-#  phone_secret_key         :string(16)       not null
-#  inbound_btc_address      :string(255)
-#  outbound_btc_address     :string(255)
-#  satoshi_balance          :integer          default(0), not null
-#  profile_image            :string(255)
-#  profile_thumb            :string(255)
-#  mobile_profile_image_url :string(255)
-#  mobile_profile_thumb_url :string(255)
-#  inbound_btc_qrcode       :string(255)
-#  role                     :integer          default(0), not null
+#  id                            :integer          not null, primary key
+#  email                         :string(255)      default(""), not null
+#  encrypted_password            :string(255)      default(""), not null
+#  name                          :string(255)      default(""), not null
+#  reset_password_token          :string(255)
+#  reset_password_sent_at        :datetime
+#  remember_created_at           :datetime
+#  sign_in_count                 :integer          default(0)
+#  current_sign_in_at            :datetime
+#  last_sign_in_at               :datetime
+#  current_sign_in_ip            :string(255)
+#  last_sign_in_ip               :string(255)
+#  authentication_token          :string(255)
+#  created_at                    :datetime         not null
+#  updated_at                    :datetime         not null
+#  phone_secret_key              :string(16)       not null
+#  inbound_btc_address           :string(255)
+#  outbound_btc_address          :string(255)
+#  satoshi_balance               :integer          default(0), not null
+#  profile_image                 :string(255)
+#  mobile_profile_image_url      :string(255)
+#  mobile_profile_thumb_url      :string(255)
+#  inbound_btc_qrcode            :string(255)
+#  role                          :integer          default(0), not null
+#  slug                          :string(255)
+#  profile_image_processing      :boolean
+#  inbound_btc_qrcode_processing :boolean
 #
 
 require 'nickname_generator'
@@ -43,6 +45,9 @@ require 'nickname_generator'
 # in a fake "UNKNOWN_EMAIL_DOMAIN". 
 #
 class User < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :generate_slug, use: [:slugged, :history, :finders]
+  
   include ApplicationHelper
 
   before_save :ensure_authentication_token!
@@ -59,10 +64,8 @@ class User < ActiveRecord::Base
   ADMIN_ROLE = 1
   
   mount_uploader :profile_image, ImageUploader
-  mount_uploader :profile_thumb, ImageUploader
   mount_uploader :inbound_btc_qrcode, ImageUploader
   process_in_background :profile_image
-  process_in_background :profile_thumb
   process_in_background :inbound_btc_qrcode
                     
   has_many :nfc_tags, :dependent => :destroy
@@ -117,5 +120,10 @@ protected
      
   def generate_secure_token_string
     SecureRandom.urlsafe_base64(25).tr('lIO0', 'sxyz')
+  end
+  
+private
+  def generate_slug
+    SecureRandom.uuid
   end
 end

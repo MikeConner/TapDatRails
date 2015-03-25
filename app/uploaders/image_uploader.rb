@@ -1,7 +1,9 @@
 # encoding: utf-8
 
 class ImageUploader < CarrierWave::Uploader::Base
-
+  THUMB_WIDTH = 512
+  THUMB_HEIGHT = 512
+  
   # Include RMagick or MiniMagick support:
   include CarrierWave::RMagick
   include ::CarrierWave::Backgrounder::Delay
@@ -33,9 +35,9 @@ class ImageUploader < CarrierWave::Uploader::Base
   # end
 
   # Create different versions of your uploaded files:
-  # version :thumb do
-  #   process :resize_to_fit => [50, 50]
-  # end
+  version :thumb do
+    process :resize_to_fit => [THUMB_WIDTH, THUMB_HEIGHT]
+  end
 
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:

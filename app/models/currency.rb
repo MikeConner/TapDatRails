@@ -40,7 +40,7 @@
 #
 class Currency < ActiveRecord::Base
   extend FriendlyId
-  friendly_id :generate_id, use: [:slugged, :history]
+  friendly_id :generate_id, use: [:slugged, :history, :finders]
   
   ACTIVE = 0
   INACTIVE = 1

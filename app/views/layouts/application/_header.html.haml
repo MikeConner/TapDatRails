@@ -20,6 +20,6 @@
           - else
             - if current_user.admin?
               %li= link_to 'Currencies', currencies_path
-            %li= link_to 'Dashboard', dashboard_user_path(current_user)
+            %li= link_to 'Dashboard', user_path(current_user)
             %li= link_to 'Log Out', destroy_user_session_path, :method => :delete
 = render :partial => 'shared/flash_messages'

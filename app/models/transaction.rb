@@ -34,7 +34,7 @@
 #
 class Transaction < ActiveRecord::Base
   extend FriendlyId
-  friendly_id :generate_id, use: [:slugged, :history]
+  friendly_id :generate_id, use: [:slugged, :history, :finders]
   
   belongs_to :user
   belongs_to :nfc_tag

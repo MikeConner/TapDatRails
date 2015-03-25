@@ -42,7 +42,7 @@ gem 'carrierwave_backgrounder', '0.4.1'
 gem 'newrelic_rpm', '3.9.8.273'
 gem 'delayed_job_active_record', '4.0.2'
 gem 'coinbase', '2.1.1'
-gem 'friendly_id', '5.0.4'
+gem 'friendly_id', '5.1.0'
 gem 'rqrcode-rails3', '0.1.7'
 gem 'bcrypt-ruby', '3.0.1'
 

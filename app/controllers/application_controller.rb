@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery :with => :null_session, :if => Proc.new { |c| 'application/json' == c.request.format }
 
   def after_sign_in_path_for(resource)
-    dashboard_user_path(resource)
+    user_path(resource)
   end
   
 protected

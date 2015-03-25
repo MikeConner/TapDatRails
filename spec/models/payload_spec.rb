@@ -10,13 +10,11 @@
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
 #  payload_image            :string(255)
-#  payload_thumb            :string(255)
 #  slug                     :string(255)
 #  mobile_payload_image_url :string(255)
 #  mobile_payload_thumb_url :string(255)
 #  content_type             :string(16)       default("image"), not null
 #  payload_image_processing :boolean
-#  payload_thumb_processing :boolean
 #  description              :string(255)
 #
 
@@ -29,7 +27,6 @@ describe Payload do
   it "should respond to everything" do
     expect(payload).to respond_to(:uri)
     expect(payload).to respond_to(:payload_image)
-    expect(payload).to respond_to(:payload_thumb)
     expect(payload).to respond_to(:content)  
     expect(payload).to respond_to(:threshold)  
     expect(payload).to respond_to(:slug)  
@@ -38,7 +35,6 @@ describe Payload do
     expect(payload).to respond_to(:mobile_payload_thumb_url)
     expect(payload).to respond_to(:content_type)
     expect(payload).to respond_to(:payload_image_processing)
-    expect(payload).to respond_to(:payload_thumb_processing)
   end
  
   its(:nfc_tag) { should be == tag }
@@ -90,6 +86,7 @@ describe Payload do
     before do
       payload.uri = ' '
       payload.content = ' '
+      payload.description = ' '
     end
     
     it { should_not be_valid }

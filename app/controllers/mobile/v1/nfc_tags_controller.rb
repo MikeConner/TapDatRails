@@ -19,7 +19,7 @@ class Mobile::V1::NfcTagsController < ApiController
                        :content => payload.content, 
                        :content_type => payload.content_type, 
                        :payload_image => payload.mobile_payload_image_url || payload.payload_image.url,
-                       :payload_thumb => payload.mobile_payload_thumb_url || payload.payload_thumb.url,
+                       :payload_thumb => payload.payload_image_url(:thumb).to_s || payload.payload_image_url(:thumb).to_s,
                        :slug => payload.slug, })
       end
       
