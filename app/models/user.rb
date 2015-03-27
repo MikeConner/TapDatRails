@@ -77,7 +77,8 @@ class User < ActiveRecord::Base
   has_many :payloads, -> { uniq }, :through => :transactions
   
   validates :email, :uniqueness => { case_sensitive: false },
-                    :format => { with: EMAIL_REGEX }
+                    :format => { with: EMAIL_REGEX },
+                    :allow_blank => true
   validates_presence_of :name
   validates :phone_secret_key, :presence => true, :length => { :maximum => SECRET_KEY_LEN }
   validates :satoshi_balance, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }  

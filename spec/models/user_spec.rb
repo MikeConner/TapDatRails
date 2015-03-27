@@ -124,7 +124,7 @@ describe User do
   describe "Missing email" do
     before { user.email = ' ' }
     
-    it { should_not be_valid }
+    it { should be_valid }
   end
   
   describe "Valid emails" do
