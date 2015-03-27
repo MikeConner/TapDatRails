@@ -41,12 +41,13 @@ class Payload < ActiveRecord::Base
 
   validates :threshold, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
   validates :content_type, :inclusion => { :in => VALID_CONTENT_TYPES }
-
+  validates_presence_of :description
+  
   validate :has_content
 
 private
   def has_content
-    if self.uri.blank? and self.content.blank? and self.description.blank? and self.payload_image.file.nil?
+    if self.uri.blank? and self.content.blank? and self.payload_image.file.nil?
       self.errors.add :base, I18n.t('empty_payload')
     end
   end

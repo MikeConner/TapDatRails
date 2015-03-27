@@ -46,6 +46,12 @@ describe Payload do
     it { should_not be_valid }
   end
 
+  describe "Description missing" do
+    before { payload.description = ' ' }
+    
+    it { should_not be_valid }
+  end
+
   it "should have default image type" do
     expect(Payload::VALID_CONTENT_TYPES.include?(payload.content_type)).to be true
   end
@@ -86,7 +92,6 @@ describe Payload do
     before do
       payload.uri = ' '
       payload.content = ' '
-      payload.description = ' '
     end
     
     it { should_not be_valid }

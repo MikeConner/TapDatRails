@@ -58,7 +58,7 @@ private
   def tag_params
     params.require(:nfc_tag).permit(:name, :user_id, :currency_id, :tag_id, 
                                     :payloads_attributes => [:id, :uri, :content, :content_type, :threshold, 
-                                                             :payload_image, :remote_payload_image_url, 
+                                                             :description, :payload_image, :remote_payload_image_url, 
                                                              :_destroy])    
   end
 end
