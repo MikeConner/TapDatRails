@@ -13,7 +13,7 @@ class Mobile::V1::UsersController < ApiController
                 :outbound_btc_address => current_user.outbound_btc_address,
                 :satoshi_balance => current_user.satoshi_balance,
                 :profile_image => current_user.profile_image.url || current_user.mobile_profile_image_url,
-                :profile_thumb => current_user.profile_image_url(:thumb).to_s || current_user.mobile_profile_thumb_url}
+                :profile_thumb => current_user.profile_thumb_url(:thumb).to_s || current_user.mobile_profile_thumb_url}
     expose response
 
   rescue Exception => ex
@@ -65,8 +65,10 @@ class Mobile::V1::UsersController < ApiController
                   :inbound_btc_address => current_user.inbound_btc_address,
                   :outbound_btc_address => current_user.outbound_btc_address,
                   :mobile_profile_thumb_url => current_user.mobile_profile_thumb_url,
-                  :mobile_profile_image_url => current_user.mobile_profile_thumb_url }
+                  :mobile_profile_image_url => current_user.mobile_profile_image_url }
       expose response
+    else
+      error! :bad_request, :metadata => {:error_description => current_user.errors.full_messages.to_sentence, :user_error => I18n.t('user_update_error')}
     end
   rescue Exception => ex
     error! :bad_request, :metadata => {:error_description => ex.message, :user_error => I18n.t('user_update_error') }
