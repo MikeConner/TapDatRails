@@ -60,6 +60,7 @@ class Currency < ActiveRecord::Base
   
   # Support leaderboard
   has_many :nfc_tags, :dependent => :nullify
+  has_many :transactions, :through => :nfc_tags
   
   accepts_nested_attributes_for :denominations, :allow_destroy => true, 
                                 :reject_if => :reject_denominations

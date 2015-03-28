@@ -133,12 +133,10 @@ class CurrenciesController < ApplicationController
   # GET /currencies/:id/leader_board
   def leader_board
     @currency = Currency.find(params[:id])
-
-    transactions = []
-    @currency.nfc_tags.where(:currency_id => @currency.id).select { |tag| transactions.concat(tag.transactions.to_a) }
+    transactions = @currency.transaction_ids
     
-    @tappers = Transaction.where("id in (?)", transactions).select("user_id, sum(amount) as total, count(user_id) as taps").group('user_id').order('total DESC')
-    @tapped = Transaction.where("id in (?)", transactions).select("nfc_tag_id, sum(amount) as total, count(user_id) as taps").group('nfc_tag_id').order('total DESC')
+    @tappers = Transaction.where('id in (?)', transactions).select("user_id, sum(amount) as satoshi, sum(dollar_amount) as total, count(user_id) as taps").group('user_id').order('total DESC')
+    @tapped = Transaction.where('id in (?)', transactions).select("nfc_tag_id, sum(amount) as satoshi, sum(dollar_amount) as total, count(user_id) as taps").group('nfc_tag_id').order('total DESC')
     @image_map = Hash.new
     @names_map = Hash.new
     
