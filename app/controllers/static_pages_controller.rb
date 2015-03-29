@@ -17,15 +17,14 @@ class StaticPagesController < ApplicationController
   end
   
   def leader_board
-    @tappers = Transaction.select("user_id, sum(amount) as satoshi, sum(dollar_amount) as dollar, count(dollar_amount) as taps").group('user_id').order('dollar DESC')
-    @tapped = Transaction.select("dest_id, sum(amount) as satoshi, sum(dollar_amount) as dollar, count(dollar_amount) as taps").group('dest_id').order('dollar DESC')
+    @tappers = Transaction.select("user_id, sum(amount) as satoshi, sum(dollar_amount) as total, count(user_id) as taps").group('user_id').order('total DESC')
+    @tapped = Transaction.select("nfc_tag_id, sum(amount) as satoshi, sum(dollar_amount) as total, count(user_id) as taps").group('nfc_tag_id').order('total DESC')
     @image_map = Hash.new
     @names_map = Hash.new
-    
-    @tappers.map { |t| @image_map[t.user_id] = t.user.profile_image_url(:thumb).to_s || t.user.mobile_profile_thumb_url } 
-    @tapped.map { |t| @image_map[t.dest_id] = User.find_by_id(t.dest_id).profile_image_url(:thumb).to_s || User.find_by_id(t.dest_id).mobile_profile_thumb_url } 
+
+    @tappers.map { |t| @image_map[t.user_id] = t.user.mobile_profile_thumb_url || t.user.profile_image_url(:thumb).to_s } 
     @tappers.map { |t| @names_map[t.user_id] = User.find_by_id(t.user_id).name } 
-    @tapped.map { |t| @names_map[t.dest_id] = User.find_by_id(t.dest_id).name } 
+    @tapped.map { |t| @names_map[t.nfc_tag_id] = NfcTag.find_by_id(t.nfc_tag_id).name unless t.nfc_tag_id.nil? } 
   end
   
   def thumb_dimensions

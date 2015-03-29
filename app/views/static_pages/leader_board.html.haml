@@ -9,6 +9,7 @@
             %th
             %th
             %th name
+            %th satoshi
             %th amount
             %th taps
         - if n >= 1
@@ -20,7 +21,9 @@
                   .image= image_tag @image_map[@tappers[x].user_id]
                 %td= @names_map[@tappers[x].user_id]
                 %td
-                  .pill= number_to_currency(@tappers[x].dollar)
+                  .pill= number_with_delimiter(@tappers[x].satoshi)
+                %td
+                  .pill= number_with_delimiter((@tappers[x].total || 0) / 100)
                 %td= number_with_delimiter(@tappers[x].taps)
 
     .small-6.columns
@@ -31,6 +34,7 @@
             %th
             %th
             %th name
+            %th satoshi
             %th amount
             %th taps
         - if n >= 1
@@ -38,9 +42,10 @@
             %tr
               - if x < @tapped.length
                 %td= x+1
+                %td= @names_map[@tapped[x].nfc_tag_id]
+                %td= number_with_delimiter(@tapped[x].satoshi)
+                %td= number_with_delimiter((@tapped[x].total || 0) / 100)
                 %td
-                  .image= image_tag @image_map[@tappers[x].user_id]
-                %td= @names_map[@tappers[x].user_id]
-                %td= number_to_currency(@tappers[x].dollar)
-                %td
-                  .pill= number_with_delimiter(@tappers[x].taps)
+                  .pill= number_with_delimiter(@tapped[x].taps)
+- content_for :head do
+  %meta{:content => "3", "http-equiv" => "refresh"}
