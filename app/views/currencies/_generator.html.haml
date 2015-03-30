@@ -1,15 +1,16 @@
-.generator
-  = f.hidden_field :_destroy
-  = content_tag(:a, 'X', :href => '#', :class => "close", :onclick => "if (confirm('Delete this single code voucher?')) remove_generator(this)")
-  %br
-  = f.label :code
-  = f.text_field :code, :max_length => SingleCodeGenerator::MAX_CODE_LEN
-  %br
-  = f.label :value
-  = f.number_field :value, :min => 1
-  %br
-  = f.label :start_date
-  = f.date_select :start_date
-  %br
-  = f.label :end_date
-  = f.date_select :end_date
+.generator.row
+  .large-2.columns
+    = f.hidden_field :_destroy
+    = content_tag(:a, 'X', :href => '#', :class => "close", :onclick => "if (confirm('Delete this single code voucher?')) remove_generator(this)")
+  .large-2.columns
+    = f.label :code
+    = f.text_field :code, :max_length => SingleCodeGenerator::MAX_CODE_LEN
+  .large-2.columns
+    = f.label :value
+    = f.number_field :value, :min => 1
+  .large-2.columns
+    = f.label :start_date
+    = f.date_select :start_date
+  .large-2.columns
+    = f.label :end_date
+    = f.date_select :end_date

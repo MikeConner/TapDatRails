@@ -1,16 +1,18 @@
-.denomination
-  = f.hidden_field :_destroy
-  = content_tag(:a, 'X', :href => '#', :class => "close", :onclick => "if (confirm('Delete this denomination?')) remove_denomination(this)")
-  %br
-  = f.label :value
-  = f.number_field :value, :min => 1
-  %br
-  = f.label :image
-  = f.file_field :image
-  = f.object.image.file.nil? ? "" : f.object.image.file.filename
-  %br
-  = f.label :remote_image_url, "or image URL"
-  = f.text_field :remote_image_url
-  %br
-  = f.label :caption
-  = f.text_field :caption
+.denomination.row
+  .large-2.columns
+    = f.hidden_field :_destroy
+    = content_tag(:a, 'X', :href => '#', :class => "close", :onclick => "if (confirm('Delete this denomination?')) remove_denomination(this)")
+    = image_tag f.object.image
+  .large-2.columns
+    = f.label :value
+    = f.number_field :value, :min => 1
+  .large-2.columns
+    = f.label :image
+    = f.file_field :image
+    = f.object.image.file.nil? ? "" : f.object.image.file.filename
+  .large-2.columns
+    = f.label :remote_image_url, "or image URL"
+    = f.text_field :remote_image_url
+  .large-2.columns
+    = f.label :caption
+    = f.text_field :caption

@@ -1,19 +1,34 @@
-- unless @currency.icon.nil?
-  %p= image_tag @currency.icon.url
-- unless @currency.symbol.nil?
-  %p= @currency.symbol
-%p= link_to @currency.name, currency_path(@currency)
-%p== Denominations: #{@currency.denomination_values.to_s}
-- if @currency.expiration_days.nil?
-  %p N/A
-- else
-  %p== Expires in #{pluralize(@currency.expiration_days, 'day')}
-%p== Reserve balance: #{@currency.reserve_balance}
-%br
-= link_to 'Show Ordinary Vouchers', vouchers_path(:currency_id => @currency.id)
-%br
-= link_to 'Show Single Code Vouchers', single_code_generators_path(:currency_id => @currency.id)
-%br
-= link_to 'Edit', edit_currency_path(@currency)
-%br
-= link_to 'Back', currencies_path
+.row.panel
+  .large-2.columns
+    Name:
+    = link_to @currency.name, currency_path(@currency)
+  .large-2.columns
+    - unless @currency.symbol.nil?
+      %p Currency Symbol: #{@currency.symbol}
+  .large-2.columns
+    %p== Denominations: #{@currency.denomination_values.to_s}
+  .large-2.columns
+    - if @currency.expiration_days.nil?
+      %p N/A
+    - else
+      %p== Expires in #{pluralize(@currency.expiration_days, 'day')}
+  .large-2.columns
+    %p== Reserve balance: #{@currency.reserve_balance}
+.row
+  .large-4.columns
+    - unless @currency.icon.nil?
+      %p= image_tag @currency.icon.url
+  .large-8.columns
+    - @currency.denominations.each do |den|
+      .row.panel
+        .large-2.columns
+          = den.value
+          = den.caption
+        .large-10.columns
+          = image_tag den.image, size: "200x200"
+.row
+  .large-12.columns.small-centered
+    = link_to 'Show Ordinary Vouchers', vouchers_path(:currency_id => @currency.id), class: "button"
+    = link_to 'Show Single Code Vouchers', single_code_generators_path(:currency_id => @currency.id), class: "button"
+    = link_to 'Edit', edit_currency_path(@currency), class: "button"
+    = link_to 'Back', currencies_path, class: "button"

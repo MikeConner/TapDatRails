@@ -3,15 +3,15 @@
   - if currency.icon_processing?
     %td Pending Upload
   - elsif !currency.icon.nil? and currency.icon.file.exists?
-    %td= image_tag currency.icon.url, :width => 100
+    %td.image= image_tag currency.icon.url, size: "80x80"
   - else
     %td
-  %td
+  %td{:nowrap => ""}
     - unless currency.symbol.nil?
       = currency.symbol
-    = link_to currency.name, currency_path(currency)
+    = currency.name
   %td= currency.denomination_values.to_s
-  %td= currency.single_code_generators.map { |g| g.code }
+  %td{:nowrap => ""}= currency.single_code_generators.map { |g| g.code }
   - if currency.expiration_days.nil?
     %td N/A
   - else
@@ -22,4 +22,6 @@
     \/
     %br
     = link_to "Report", report_currency_path(currency)
-  %td= link_to "Delete", currency, :method => :delete, :data => { :confirm => 'Are you sure?' }
+  %td{:nowrap => ""}
+    = link_to "Edit", currency_path(currency), class: "small button"
+    = link_to "Delete", currency, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: "button alert round small"

@@ -16,6 +16,6 @@
             = render :partial => 'voucher', :locals => { :voucher => voucher }
 - if @currency.reserve_balance > 0
   .row
-    = link_to 'Add Voucher', new_voucher_path(:currency_id => @currency.id)
+    = link_to 'Add Voucher', new_voucher_path(:currency_id => @currency.id), class: "button"
 %br
-= link_to 'Back', currency_path(@currency)
+-#= link_to 'Back', currency_path(@currency)

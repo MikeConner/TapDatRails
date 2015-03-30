@@ -1,36 +1,52 @@
-.field
-  = f.label :user_id, 'Issuer'
-  = f.select :user_id, options_for_select(@issuers, f.object.user_id)
-.field
-  = f.label :name
-  = f.text_field :name, :size => Currency::NAME_LEN
-.field
-  = f.label :expiration_days, "Please enter the number of days until currency voucher expiration (leave blank if they don't expire)"
-  = f.number_field :expiration_days, :min => 1
-.field
-  = f.label :symbol
-  = f.text_field :symbol, :maxlength => 1
-.field
-  = f.label :icon
-  = f.file_field :icon
-.field
-  = f.label :remote_icon_url, "or image URL"
-  = f.text_field :remote_icon_url
-.field
-  = f.label :reserve_balance
-  = f.number_field :reserve_balance, :min => 0
-.field
-  = f.label :max_amount
-  = f.number_field :max_amount, :min => 0, :max => Currency::MAX_AMOUNT
-%h4 Denominations
-#denomination
-  = f.fields_for :denominations do |denomination_form|
-    = render :partial => 'denomination', :locals => { :f => denomination_form }
-  = add_denomination(@currency, f)
-%br
-%h4 Single Code Vouchers
-#generators
-  = f.fields_for :single_code_generators do |generator_form|
-    = render :partial => 'generator', :locals => { :f => generator_form }
-  = add_generator(@currency, f)
-  
+.row
+  .large-4.columns
+    .field
+      = f.label :user_id, 'Issuer'
+      = f.select :user_id, options_for_select(@issuers, f.object.user_id)
+  .large-4.columns
+    .field
+      = f.label :name
+      = f.text_field :name, :size => Currency::NAME_LEN
+  .large-4.columns
+    .field
+      = f.label :symbol
+      = f.text_field :symbol, :maxlength => 1
+.row.panel
+  .large-4.columns
+    .field
+      = f.label :reserve_balance
+      = f.number_field :reserve_balance, :min => 0
+  .large-4.columns
+    .field
+      = f.label :max_amount
+      = f.number_field :max_amount, :min => 0, :max => Currency::MAX_AMOUNT
+  .large-4.columns
+    .field
+      = f.label :expiration_days
+      = f.number_field :expiration_days, :min => 1
+      Please enter the number of days until currency voucher expiration (leave blank if they don't expire)
+.row.panel.callout
+  .large-4.columns
+    = image_tag @currency.icon, size: "100x100"
+  .large-3.columns
+    .field
+      %b= f.label :icon
+      = f.file_field :icon
+  .large-3.columns
+    .field
+      = f.label :remote_icon_url, "or image URL"
+      = f.text_field :remote_icon_url
+.row
+  .large-12.columns
+    %h4 Denominations
+    #denomination
+      = f.fields_for :denominations do |denomination_form|
+        = render :partial => 'denomination', :locals => { :f => denomination_form }
+      = add_denomination(@currency, f)
+.row
+  .large-12.columns
+    %h4 Single Code Vouchers
+    #generators
+      = f.fields_for :single_code_generators do |generator_form|
+        = render :partial => 'generator', :locals => { :f => generator_form }
+      = add_generator(@currency, f)

@@ -7,7 +7,6 @@
       = form_for @currency do |f|
         = render :partial => 'shared/error_messages', :locals => { :errors => @currency.errors, :name => 'Currency' }
         = render :partial => 'currency_fields', :locals => { :f => f }
-        .actions
-          = f.submit 'Update Currency'
-        %br
+        .actions.panel
+          = f.submit 'Update Currency', class: "button"
         %br
