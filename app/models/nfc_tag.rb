@@ -24,6 +24,9 @@
 #   legible_id makes it easier for users to type in
 #
 class NfcTag < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :tag_id, use: [:finders]
+
   belongs_to :user
   # If a non-BTC tag
   belongs_to :currency

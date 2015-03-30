@@ -98,7 +98,7 @@ class User < ActiveRecord::Base
   end
   
   def reset_password
-    pwd = NicknameGenerator.generate_nickname
+    pwd = NicknameGenerator.generate_nickname.gsub(/ /, '_') + '_' + SecureRandom.hex(2)
     self.password = pwd
     if save
       UserMailer.delay.welcome_email(self, pwd)

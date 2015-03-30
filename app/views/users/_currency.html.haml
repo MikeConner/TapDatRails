@@ -41,3 +41,4 @@
                   %td N/A
                 - else
                   %td== "#{transaction.nfc_tag.name} / #{transaction.nfc_tag.tag_id}"
+      = link_to 'Create Voucher', new_voucher_path(:currency_id => currency.id), :class => 'button'

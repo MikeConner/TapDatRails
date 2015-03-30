@@ -30,6 +30,8 @@ Rails.application.routes.draw do
   get "/contact" => "static_pages#contact"
   get "/leader_board" => "static_pages#leader_board"
   get "/thumb_dimensions" => "static_pages#thumb_dimensions"
+  # Additional simple path for tag-reading performance
+  get "/tag/:id" => "nfc_tags#show"
   
   namespace :mobile do
     api :version => 1, :module => "v1" do

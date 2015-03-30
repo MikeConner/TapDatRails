@@ -1,5 +1,5 @@
 class NfcTagsController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => [:show]
   
   # GET /nfc_tags
   def index
@@ -22,7 +22,7 @@ class NfcTagsController < ApplicationController
     @tag = NfcTag.new(tag_params)
     
     if @tag.save
-      redirect_to @tag, notice: 'NFC Tag was successfully created.'
+      redirect_to user_path(current_user, :show_tags => 1), notice: 'NFC Tag was successfully created.'
     else
       @currencies = current_user.currencies.collect {|u| [u.name, u.id] }
       render 'new'
@@ -40,7 +40,7 @@ class NfcTagsController < ApplicationController
     @tag = NfcTag.find(params[:id])
     
     if @tag.update_attributes(tag_params)    
-      redirect_to @tag, notice: 'NFC Tag was successfully updated.'
+      redirect_to user_path(current_user, :show_tags => 1), notice: 'NFC Tag was successfully updated.'
     else
       @currencies = current_user.currencies.collect {|u| [u.name, u.id] }
       render 'new'

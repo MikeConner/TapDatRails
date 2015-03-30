@@ -20,6 +20,8 @@ class UsersController < ApplicationController
   # GET /users/:id
   def show
     @user = User.find(params[:id])
+    
+    @yapa = @user.payloads.limit(10)
   end
 
   # GET /users/:id/qrcode
