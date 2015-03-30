@@ -8,15 +8,36 @@
 - user.nfc_tags.order('created_at DESC').each do |tag|
   .row.panel
     .small-2.large-2.columns
-      - unless tag.payloads.empty?
-        .yapa_icon
-          = image_tag ApplicationHelper::YAPA_TYPE_IMAGE_MAP[tag.payloads.first.content_type.to_sym], :size => "100x100"
-
-    .small-2.large-2.columns
-      - unless tag.payloads.empty?
-        .center-cropped{style: "background-image: url(#{tag.payloads.first.mobile_payload_image_url})"}
-
-    .small-2.large-2.columns
       = tag.name.to_s
-    .small-2.large-2.columns
-      = tag.legible_id
+      %p= tag.legible_id
+      = link_to "Edit", edit_nfc_tag_path(tag), class: "round button info"
+    .small-10.large-10.columns
+      - tag.payloads.each do |pay|
+        .row.panel.callout.radius
+          .large-2.small-2.columns
+            .yapa_icon
+              = image_tag ApplicationHelper::YAPA_TYPE_IMAGE_MAP[pay.content_type.to_sym], :size => "100x100"
+          .small-2.large-2.columns
+            - case tag.payloads.first.content_type
+              - when 'text'
+                %p= pay.content.truncate(40)
+              - when 'image'
+                = image_tag pay.payload_image_url(:thumb).to_s.blank? ? pay.mobile_payload_thumb_url : pay.payload_image_url(:thumb).to_s
+              - when 'audio'
+                = link_to  'audio', pay.uri
+              - when 'video'
+                = link_to 'video',pay.uri
+              - when 'url'
+                = link_to "Url", pay.uri
+              - when 'coupon'
+                = image_tag pay.payload_image_url(:thumb).to_s.blank? ? pay.mobile_payload_thumb_url : pay.payload_image_url(:thumb).to_s
+          .small-8.large-8.columns
+            - if tag.currency.nil?
+              - s = "S"
+              - cn = "Satoshi (BTC)"
+            - else
+              - s = tag.currency.symbol
+              - cn = tag.currency.name.strip
+            %i Any donation above #{s} #{pay.threshold.to_s} (#{cn}):
+            %br
+            = pay.description

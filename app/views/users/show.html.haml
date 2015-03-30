@@ -10,15 +10,9 @@
       %li
         %a{:onclick => "select_dashboard_section('account_section');"} Account
       - unless @user.currencies.empty?
-        %Li
-          %a
-            %b My Currencies
-        - @user.currencies.each do |currency|
-          %li
-            - if currency.icon_processing?
-              Pending upload
-            - elsif !currency.icon.nil? and currency.icon.file.exists?
-              = image_tag currency.icon.url, :width => 100
+        %li
+          %a My Currencies
+          - @user.currencies.each do |currency|
             %a{:onclick => "set_dashboard_currency('#{currency.name}')"}
               = " - " + currency.name
 
