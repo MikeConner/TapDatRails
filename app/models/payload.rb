@@ -43,12 +43,11 @@ class Payload < ActiveRecord::Base
   validates :content_type, :inclusion => { :in => VALID_CONTENT_TYPES }
   validates_presence_of :description
 
-  # Validation should only be for description
-  #validate :has_content
+  validate :has_content
 
 private
   def has_content
-    if self.uri.blank? and self.content.blank? and self.payload_image.file.nil?
+    if self.uri.blank? and self.content.blank? and !self.payload_image.present? and self.mobile_payload_image_url.blank?
       self.errors.add :base, I18n.t('empty_payload')
     end
   end
