@@ -79,11 +79,14 @@ class Mobile::V1::TransactionsController < ApiController
                   end
                   
                   if currency.nil? and (current_user.satoshi_balance < transaction_amount)
-                    error! :forbidden, :metadata => {:error_description => I18n.t('insufficient_funds'), :balance => current_user.satoshi_balance, :user_error => I18n.t('invalid_tap') }
+                    Rails.logger.error "Insufficient funds: #{current_user.satoshi_balance} < #{transaction_amount}"
+                    error! :forbidden, :metadata => {:error_description => I18n.t('insufficient_funds'), :balance => current_user.satoshi_balance, :user_error => I18n.t('insufficient_funds') }
                   elsif !currency.nil? and (current_user.currency_balance(currency) < transaction_amount)
-                    error! :forbidden, :metadata => {:error_description => I18n.t('insufficient_funds'), :balance => current_user.currency_balance(currency), :user_error => I18n.t('invalid_tap') }
+                    Rails.logger.error "Insufficient funds: #{current_user.currency_balance(currency)} < #{transaction_amount}"
+                    error! :forbidden, :metadata => {:error_description => I18n.t('insufficient_funds'), :balance => current_user.currency_balance(currency), :user_error => I18n.t('insufficient_funds') }
                   elsif !currency.nil? and (transaction_amount > currency.max_amount)
-                    error! :forbidden, :metadata => {:error_description => I18n.t('amount_exceeds_max', :name => currency.name, :amount => transaction_amount), :balance => current_user.currency_balance(currency), :user_error => I18n.t('invalid_tap') }
+                    Rails.logger.error "Amount exceeds max tap: #{transaction_amount} > #{currency.max_amount}"
+                    error! :forbidden, :metadata => {:error_description => I18n.t('amount_exceeds_max', :name => currency.name, :amount => transaction_amount), :balance => current_user.currency_balance(currency), :user_error => I18n.t('amount_exceeds_max') }
                   else
                     tx = current_user.transactions.create!(transaction_params({:nfc_tag_id => tag.id,
                                                            :payload_id => payload.id,
@@ -128,8 +131,6 @@ class Mobile::V1::TransactionsController < ApiController
                                              :content_type => payload.content_type}}
                     expose response
                   end
-                rescue ActiveRecord::Rollback => ex
-                  error! :bad_request, :metadata => {:error_description => ex.message, :user_error => I18n.t('invalid_tap') }
                 end
               end
             end
