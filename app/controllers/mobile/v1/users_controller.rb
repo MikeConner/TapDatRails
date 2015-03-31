@@ -59,20 +59,22 @@ class Mobile::V1::UsersController < ApiController
     old_email = current_user.email
 
     if current_user.update_attributes(user_params)
-      current_user.reset_password unless (current_user.email == old_email) or current_user.generated_email?
-
-      response = {:nickname => current_user.name,
-                  :email => current_user.email,
-                  :inbound_btc_address => current_user.inbound_btc_address,
-                  :outbound_btc_address => current_user.outbound_btc_address,
-                  :mobile_profile_thumb_url => current_user.mobile_profile_thumb_url,
-                  :mobile_profile_image_url => current_user.mobile_profile_image_url }
-      expose response
+      begin
+        current_user.reset_password unless (current_user.email == old_email) or current_user.generated_email?
+  
+        response = {:nickname => current_user.name,
+                    :email => current_user.email,
+                    :inbound_btc_address => current_user.inbound_btc_address,
+                    :outbound_btc_address => current_user.outbound_btc_address,
+                    :mobile_profile_thumb_url => current_user.mobile_profile_thumb_url,
+                    :mobile_profile_image_url => current_user.mobile_profile_image_url }
+        expose response
+      rescue Exception => ex
+        error! :bad_request, :metadata => {:error_description => ex.message, :user_error => I18n.t('user_update_error') }
+      end
     else
       error! :bad_request, :metadata => {:error_description => current_user.errors.full_messages.to_sentence, :user_error => I18n.t('user_update_error')}
     end
-  rescue Exception => ex
-    error! :bad_request, :metadata => {:error_description => ex.message, :user_error => I18n.t('user_update_error') }
   end
 
   # PUT /mobile/:version/users/reset_nickname
