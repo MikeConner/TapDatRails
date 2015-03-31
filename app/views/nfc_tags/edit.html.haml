@@ -7,5 +7,7 @@
       = form_for @tag do |f|
         = render :partial => 'shared/error_messages', :locals => { :errors => @tag.errors, :name => 'NFC Tag' }
         = render :partial => 'tag_fields', :locals => { :f => f }
-        .actions
-          = f.submit 'Update NFC Tag'
+        .row
+          .large-12.columns.small-centered
+            .actions
+              = f.submit 'Update NFC Tag', class: "button"
