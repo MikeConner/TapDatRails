@@ -6,6 +6,7 @@ class Mobile::V1::UsersController < ApiController
 
   # GET /mobile/:version/users/:id
   def show
+
     response = {:nickname => current_user.name,
                 :email => current_user.generated_email? ? '' : current_user.email,
                 :inbound_btc_address => current_user.inbound_btc_address,
@@ -13,7 +14,7 @@ class Mobile::V1::UsersController < ApiController
                 :outbound_btc_address => current_user.outbound_btc_address,
                 :satoshi_balance => current_user.satoshi_balance,
                 :profile_image => current_user.profile_image.url || current_user.mobile_profile_image_url,
-                :profile_thumb => current_user.profile_thumb_url(:thumb).to_s || current_user.mobile_profile_thumb_url}
+                :profile_thumb => current_user.profile_image_url(:thumb).to_s || current_user.mobile_profile_thumb_url}
     expose response
 
   rescue Exception => ex
@@ -31,7 +32,7 @@ class Mobile::V1::UsersController < ApiController
         error! :not_found, :metadata => {:error_description => I18n.t('address_not_found') + ': User:' + current_user.id.to_s, :user_error => I18n.t('invalid_bitcoin_addr') }
       else
         current_user.update_attribute(:satoshi_balance, balance) unless balance == current_user.satoshi_balance
-        
+
         price = 0 == balance ? 0 : [0, CoinbaseAPI.instance.sell_price(balance.to_f / CoinbaseAPI::SATOSHI_PER_BTC.to_f)].max
 
         response = {:btc_balance => balance,
@@ -56,10 +57,10 @@ class Mobile::V1::UsersController < ApiController
     params[:user].delete(:inbound_btc_address)
     params[:user].delete(:satoshi_balance)
     old_email = current_user.email
-    
+
     if current_user.update_attributes(user_params)
       current_user.reset_password unless (current_user.email == old_email) or current_user.generated_email?
-      
+
       response = {:nickname => current_user.name,
                   :email => current_user.email,
                   :inbound_btc_address => current_user.inbound_btc_address,
@@ -124,17 +125,17 @@ class Mobile::V1::UsersController < ApiController
         reserve = generator.currency.reserve_balance
         if reserve < generator.value
           error! :bad_request, :metadata => {:error_description => I18n.t('insufficient_funds'), :user_error => I18n.t('redemption_error') }
-        else  
+        else
           if current_user.transactions.where(:comment => I18n.t('single_code_redemption', :code => params[:id])).empty?
             ActiveRecord::Base.transaction do
               voucher = generator.currency.vouchers.create!(:uid => SecureRandom.hex(4), :amount => generator.value, :user_id => current_user.id)
               generator.currency.update_attribute(:reserve_balance, reserve - generator.value)
-              
+
               tx = current_user.transactions.create!(transaction_params(:dest_id => generator.currency.user.id,
-                                                                        :voucher_id => voucher.id, 
-                                                                        :amount => generator.value, 
+                                                                        :voucher_id => voucher.id,
+                                                                        :amount => generator.value,
                                                                         :comment => I18n.t('single_code_redemption', :code => params[:id])))
-                                                                   
+
               tx.transaction_details.create!(details_params({:subject_id => current_user.id, :target_id => voucher.currency.user.id, :debit => voucher.amount, :conversion_rate => 1, :currency => voucher.currency.name}))
               tx.transaction_details.create!(details_params({:subject_id => voucher.currency.user.id, :target_id => current_user.id, :credit => voucher.amount, :conversion_rate => 1, :currency => voucher.currency.name}))
             end
@@ -144,7 +145,7 @@ class Mobile::V1::UsersController < ApiController
         end
       end
     end
-    
+
     if voucher.nil?
       error! :not_found, :metadata => {:error_description => I18n.t('voucher_not_found', :uid => params[:id]), :user_error => I18n.t('redemption_error') }
     elsif !voucher.active?
@@ -164,25 +165,25 @@ class Mobile::V1::UsersController < ApiController
                                                :amount => voucher.amount}))
         tx.transaction_details.create!(details_params({:subject_id => current_user.id, :target_id => voucher.currency.user.id, :debit => voucher.amount, :conversion_rate => 1, :currency => voucher.currency.name}))
         tx.transaction_details.create!(details_params({:subject_id => voucher.currency.user.id, :target_id => current_user.id, :credit => voucher.amount, :conversion_rate => 1, :currency => voucher.currency.name}))
-        
+
         # Update balance
         balance = current_user.balances.find_or_create_by(:currency_id => voucher.currency.id)
         total = voucher.currency.vouchers.redeemed.where(:user_id => current_user.id).sum(:amount)
         balance.update_attribute(:amount, total)
         currency = voucher.currency
-        
-        response = {:balance => total, 
-                    :amount_redeemed => voucher.amount, 
-                    :currency => {:icon => currency.icon.nil? ? nil : currency.icon.url, 
+
+        response = {:balance => total,
+                    :amount_redeemed => voucher.amount,
+                    :currency => {:icon => currency.icon.nil? ? nil : currency.icon.url,
                                   :symbol => currency.symbol,
                                   :name => currency.name,
                                   :id => currency.id}}
       end
 
       expose response
-    end    
+    end
   end
-  
+
 private
   def user_params
     params.require(:user).permit(:name, :email, :inbound_btc_address, :outbound_btc_address, :mobile_profile_image_url, :mobile_profile_thumb_url)
@@ -191,7 +192,7 @@ private
   def transaction_params(params)
     ActionController::Parameters.new(params).permit(:nfc_tag_id, :payload_id, :dest_id, :comment, :dollar_amount, :amount, :currency_id, :voucher_id)
   end
-  
+
   def details_params(params)
     ActionController::Parameters.new(params).permit(:subject_id, :target_id, :debit, :credit, :conversion_rate)
   end
