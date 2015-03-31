@@ -9,8 +9,8 @@
 #  credit          :integer
 #  debit           :integer
 #  conversion_rate :decimal(, )      not null
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  created_at      :datetime
+#  updated_at      :datetime
 #  currency        :string(16)       default("USD"), not null
 #
 

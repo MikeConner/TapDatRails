@@ -8,8 +8,8 @@
 #  uid             :string(16)       not null
 #  amount          :integer          not null
 #  status          :integer          default(0), not null
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  created_at      :datetime
+#  updated_at      :datetime
 #  expiration_date :date
 #
 

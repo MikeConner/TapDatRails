@@ -10,8 +10,8 @@
 #  amount        :integer
 #  dollar_amount :integer
 #  comment       :string(255)
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
+#  created_at    :datetime
+#  updated_at    :datetime
 #  slug          :string(255)
 #  voucher_id    :integer
 #

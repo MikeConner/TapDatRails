@@ -6,8 +6,8 @@
 #  user_id         :integer
 #  amount          :integer          default(0), not null
 #  expiration_date :datetime
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  created_at      :datetime
+#  updated_at      :datetime
 #  currency_id     :integer
 #
 

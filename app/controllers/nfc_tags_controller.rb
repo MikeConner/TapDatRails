@@ -8,7 +8,7 @@ class NfcTagsController < ApplicationController
   
   # GET /nfc_tags/:id
   def show
-    @tag = NfcTag.find(params[:id])
+    @tag = NfcTag.find(params[:id]) rescue nil
   end
   
   # GET /nfc_tags/new

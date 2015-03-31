@@ -7,8 +7,8 @@
 #  name             :string(255)
 #  tag_id           :string(255)      not null
 #  lifetime_balance :integer          default(0), not null
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  created_at       :datetime
+#  updated_at       :datetime
 #  currency_id      :integer
 #
 

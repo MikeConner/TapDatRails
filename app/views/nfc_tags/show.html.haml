@@ -1,14 +1,13 @@
 .text-center
   .row
-    .large-12.columns
-      %h1= @tag.name
-      %h3= @tag.legible_id
+    - unless @tag.nil?
+      .large-12.columns
+        %h1= @tag.name
+        %h3= @tag.legible_id
     .large-12.columns
       You should download the app!  More info here:
-      -# %h4== Lifetime balance: #{number_with_delimiter(@tag.lifetime_balance)}
 
-      -# unless @tag.payloads.empty?
+      - unless @tag.nil? or @tag.payloads.empty?
         - @tag.payloads.each do |payload|
           = render :partial => 'show_payload', :locals => { :payload => payload }
           %hr
--#= link_to 'Back', nfc_tags_path

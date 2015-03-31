@@ -20,8 +20,8 @@ ActiveRecord::Schema.define(version: 20150325004630) do
     t.integer  "user_id"
     t.integer  "amount",          default: 0, null: false
     t.datetime "expiration_date"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "currency_id"
   end
 
@@ -37,8 +37,8 @@ ActiveRecord::Schema.define(version: 20150325004630) do
     t.string   "icon"
     t.integer  "expiration_days"
     t.integer  "status",                       default: 0,   null: false
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "reserve_balance",              default: 0,   null: false
     t.boolean  "icon_processing"
     t.integer  "amount_per_dollar",            default: 100, null: false
@@ -60,8 +60,8 @@ ActiveRecord::Schema.define(version: 20150325004630) do
     t.datetime "failed_at"
     t.string   "locked_by"
     t.string   "queue"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
@@ -122,8 +122,8 @@ ActiveRecord::Schema.define(version: 20150325004630) do
     t.string   "name"
     t.string   "tag_id",                       null: false
     t.integer  "lifetime_balance", default: 0, null: false
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "currency_id"
   end
 
@@ -133,16 +133,16 @@ ActiveRecord::Schema.define(version: 20150325004630) do
   create_table "nicknames", force: true do |t|
     t.integer  "column",     null: false
     t.string   "word",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "opportunities", force: true do |t|
     t.string   "name"
     t.string   "email",      null: false
     t.string   "location"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "payloads", force: true do |t|
@@ -150,8 +150,8 @@ ActiveRecord::Schema.define(version: 20150325004630) do
     t.string   "uri"
     t.text     "content"
     t.integer  "threshold",                           default: 0,       null: false
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "payload_image"
     t.string   "slug"
     t.string   "mobile_payload_image_url"
@@ -172,8 +172,8 @@ ActiveRecord::Schema.define(version: 20150325004630) do
     t.string   "table"
     t.integer  "month",      limit: 2
     t.integer  "year",       limit: 8
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "rails_admin_histories", ["item", "table", "month", "year"], name: "index_rails_admin_histories", using: :btree
@@ -197,8 +197,8 @@ ActiveRecord::Schema.define(version: 20150325004630) do
     t.integer  "credit"
     t.integer  "debit"
     t.decimal  "conversion_rate",                            null: false
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "currency",        limit: 16, default: "USD", null: false
   end
 
@@ -213,8 +213,8 @@ ActiveRecord::Schema.define(version: 20150325004630) do
     t.integer  "amount"
     t.integer  "dollar_amount"
     t.string   "comment"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "slug"
     t.integer  "voucher_id"
   end
@@ -237,8 +237,8 @@ ActiveRecord::Schema.define(version: 20150325004630) do
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.string   "authentication_token"
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "phone_secret_key",              limit: 16,              null: false
     t.string   "inbound_btc_address"
     t.string   "outbound_btc_address"
@@ -265,8 +265,8 @@ ActiveRecord::Schema.define(version: 20150325004630) do
     t.string   "uid",             limit: 16,             null: false
     t.integer  "amount",                                 null: false
     t.integer  "status",                     default: 0, null: false
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.date     "expiration_date"
   end
 

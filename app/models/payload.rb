@@ -7,8 +7,8 @@
 #  uri                      :string(255)
 #  content                  :text
 #  threshold                :integer          default(0), not null
-#  created_at               :datetime         not null
-#  updated_at               :datetime         not null
+#  created_at               :datetime
+#  updated_at               :datetime
 #  payload_image            :string(255)
 #  slug                     :string(255)
 #  mobile_payload_image_url :string(255)

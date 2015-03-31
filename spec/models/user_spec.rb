@@ -15,8 +15,8 @@
 #  current_sign_in_ip            :string(255)
 #  last_sign_in_ip               :string(255)
 #  authentication_token          :string(255)
-#  created_at                    :datetime         not null
-#  updated_at                    :datetime         not null
+#  created_at                    :datetime
+#  updated_at                    :datetime
 #  phone_secret_key              :string(16)       not null
 #  inbound_btc_address           :string(255)
 #  outbound_btc_address          :string(255)

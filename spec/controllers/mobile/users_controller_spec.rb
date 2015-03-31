@@ -447,6 +447,27 @@ describe Mobile::V1::UsersController, :type => :controller do
       Nickname.create(:column => 2, :word => 'SlamFist')
     end
     
+    it "Blank email and profile test" do
+       put :update, :version => 1, :id => "me", :auth_token => user.authentication_token, 
+                    :user => {:email => "", 
+                              :name => nickname,
+                              :mobile_profile_thumb_url => "https://tapyapa.s3.amazonaws.com/58132089-be91-4be4-8fcc-5aec6efef220"}
+      
+      expect(subject.current_user).to_not be_nil
+      expect(subject.current_user.name).to eq(nickname)
+      expect(subject.current_user.mobile_profile_thumb_url).to eq("https://tapyapa.s3.amazonaws.com/58132089-be91-4be4-8fcc-5aec6efef220")
+            
+      expect(response.status).to eq(200)
+      
+      result = JSON.parse(response.body)
+      
+      expect(result['response'].keys.include?('nickname')).to be true
+      expect(result['response']['nickname']).to_not eq(@old_name)
+      expect(result['response']['inbound_btc_address']).to eq(user.inbound_btc_address)
+      expect(result['response']['email']).to eq(user.email)
+      expect(result.keys.include?('error')).to be false
+    end
+    
     it "updates user successfully" do
        put :update, :version => 1, :id => 0, :auth_token => user.authentication_token, 
                     :user => {:email => email, 

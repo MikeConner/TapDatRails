@@ -6,8 +6,8 @@
 #  name       :string(255)
 #  email      :string(255)      not null
 #  location   :string(255)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  created_at :datetime
+#  updated_at :datetime
 #
 
 # CHARTER

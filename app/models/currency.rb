@@ -8,8 +8,8 @@
 #  icon              :string(255)
 #  expiration_days   :integer
 #  status            :integer          default(0), not null
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
+#  created_at        :datetime
+#  updated_at        :datetime
 #  reserve_balance   :integer          default(0), not null
 #  icon_processing   :boolean
 #  amount_per_dollar :integer          default(100), not null
