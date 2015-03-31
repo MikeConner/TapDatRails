@@ -58,6 +58,8 @@ class Mobile::V1::TransactionsController < ApiController
           if !currency.nil? and (currency.id != tag.currency_id)
             error! :bad_request, :metadata => {:error_description => I18n.t('currency_mismatch'), :user_error => I18n.t('invalid_tap') } 
           else         
+            #TODO If they send bitcoin to a currency tag, the "amount" is going to be huge, so they'll always get the best Yapa :-)
+            # Probably should do some sort of conversion first
             payload = tag.find_payload(amount)
             if payload.nil?
               error! :not_found, :metadata => {:error_description => I18n.t('object_not_found', :obj => 'Payload'), :user_error => I18n.t('invalid_tap') }
@@ -114,8 +116,7 @@ class Mobile::V1::TransactionsController < ApiController
                       else
                         tag_balance.update_attribute(:amount, tag_balance.amount + transaction_amount)
                       end
-                    end
-                    
+                    end                   
   
                     response = {:slug => tx.slug,
                                 :amount => transaction_amount,
@@ -124,7 +125,8 @@ class Mobile::V1::TransactionsController < ApiController
                                 :final_balance => currency.nil? ? current_user.satoshi_balance : current_user.currency_balance(currency),
                                 :tapped_user_thumb => tag.user.profile_image_url(:thumb).to_s || tag.user.remote_profile_thumb_url,
                                 :tapped_user_name => tag.user.name,
-                                :payload => {:text => payload.content,
+                                :payload => {:description => payload.description,
+                                             :text => payload.content,
                                              :uri => payload.uri,
                                              :image => payload.remote_payload_image_url || payload.mobile_payload_image_url,
                                              :thumb => payload.payload_image_url(:thumb).to_s || payload.mobile_payload_thumb_url,
