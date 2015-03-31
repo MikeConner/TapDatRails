@@ -15,7 +15,7 @@
   %h4 Yapa
   #payload
     = f.fields_for :payloads do |payload_form|
-      = render :partial => 'payload', :locals => { :f => payload_form }
+      = render :partial => 'payload', :locals => { :f => payload_form, :content_type => payload_form.object.content_type }
     #yapa_insertion_point
     .row
       .large-10.columns

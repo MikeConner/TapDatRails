@@ -1,12 +1,10 @@
 .row
   .large-2.columns
     %ul.side-nav
-      -# Isn't this managed under tags?
-        %li
-          %a{:onclick => "select_dashboard_section('yapa_section');"} Yapa
+      %li
+        %a{:onclick => "select_dashboard_section('yapa_section');"} Yapa
       %li
         %a{:onclick => "select_dashboard_section('tags_section');"} Tags
-
       %li
         %a{:onclick => "select_dashboard_section('account_section');"} Account
       - unless @user.currencies.empty?
@@ -16,24 +14,16 @@
             %a{:onclick => "set_dashboard_currency('#{currency.name}')"}
               = " - " + currency.name
 
-  .large-7.columns
+  .large-10.columns
     #dashboard_content
       #account_section{:class => params.has_key?('show_tags') ? 'dash_section' : 'dash_section active'}
         = render :partial => 'account', :locals => { :user => @user }
       #yapa_section.dash_section
-        = render :partial => 'yapa', :locals => { :user => @user }
+        = render :partial => 'yapa', :locals => { :user => @user, :yapa => @yapa }
       #tags_section{:class => params.has_key?('show_tags') ? 'dash_section active' : ' dash_section'}
         = render :partial => 'tags', :locals => { :user => @user }
       #currency_section
         - @user.currencies.each do |currency|
           = render :partial => 'currency', :locals => { :currency => currency }
-
-  .large-3.columns
-    %h4 Yapa History
-    %ul.side-nav
-      - @yapa.each do |y|
-        %li
-          = image_tag y.payload_image_url(:thumb).to_s.blank? ? y.mobile_payload_thumb_url : y.payload_image_url(:thumb).to_s
-          = y.description
 
 = javascript_include_tag 'dashboard'

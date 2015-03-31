@@ -2,12 +2,12 @@
   %h4 My Yapa
   %a.left{:onclick => "collapse();"} X
 %ul.small-block-grid-6
-  - user.payloads.each do |yapa|
-    %li{:id => "#{yapa.slug}", :class => "oneyapa",
-        :style=> "background-image: url(#{yapa.payload_image_url(:thumb).to_s}); width: 200px; height: 200px; border: 1px solid black; margin:10px; padding: 10px",
-        :onclick => "expand_me('#{yapa.slug}');"}
+  - yapa.each do |y|
+    %li{:id => "#{y.slug}", :class => "oneyapa",
+        :style=> "background-image: url(#{y.payload_image_url(:thumb).to_s}); width: 200px; height: 200px; border: 1px solid black; margin:10px; padding: 10px",
+        :onclick => "expand_me('#{y.slug}');"}
       .panel.radius.round
-        = truncate( yapa.content, :length => 20)      
+        = truncate(y.content, :length => 20)      
       %br
 .row
   .panel.large-12.columns

@@ -21,7 +21,7 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     
-    @yapa = @user.payloads.order('created_at DESC').limit(10)
+    @yapa = @user.payloads.order('created_at DESC')
   end
 
   # GET /users/:id/qrcode
