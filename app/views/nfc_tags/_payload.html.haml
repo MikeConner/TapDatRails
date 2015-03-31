@@ -28,7 +28,7 @@
         .large-12.columns
           = f.label :content, 'Text Content'
           = f.text_area :content
-    - if ['video', 'audio', 'link'].include?(content_type)
+    - if ['video', 'audio', 'url'].include?(content_type)
       .row
         .large-12.columns
           = f.label :uri, 'URI (for video, audio, etc.)'
