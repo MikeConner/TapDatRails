@@ -13,11 +13,14 @@ class Mobile::V1::TransactionsController < ApiController
 
     tx_list.each do |tx|
       if tx.payload.nil?
-        payload_image = payload_thumb = content_type = nil
+        payload_image = payload_thumb = content_type = description = uri = content = nil
       else
         payload_image = tx.payload.payload_image.url || tx.payload.mobile_payload_image_url
         payload_thumb = tx.payload.payload_image_url(:thumb).to_s || tx.payload.mobile_payload_thumb_url
         content_type = tx.payload.content_type
+        description = tx.payload.description
+        uri = tx.payload.uri
+        content = tx.payload.content
       end
       
       other_user = User.find(tx.dest_id)
@@ -25,7 +28,8 @@ class Mobile::V1::TransactionsController < ApiController
 
       response.push({:id => tx.slug, :date => tx.created_at, :payload_image => payload_image, :payload_thumb => payload_thumb,
                      :payload_content_type => content_type, :amount => tx.amount, :dollar_amount => tx.dollar_amount,
-                     :comment => tx.comment, :other_user_thumb => other_thumb, :other_user_nickname => other_user.name})
+                     :comment => tx.comment, :description => description, :uri => uri, :content => content,
+                     :other_user_thumb => other_thumb, :other_user_nickname => other_user.name})
     end
 
     expose response
