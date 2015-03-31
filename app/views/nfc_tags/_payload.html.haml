@@ -2,30 +2,33 @@
   .payload
     .row
       .large-4.columns
-        = f.hidden_field :content_type, :value => content_type
+        = f.hidden_field :content_type, :value => f.object.content_type
         = f.hidden_field :_destroy
         = content_tag(:a, 'X', :href => '#', :class => "close", :onclick => "if (confirm('Delete this yapa?')) remove_payload(this)")
         Type:
-        = image_tag ApplicationHelper::YAPA_TYPE_IMAGE_MAP[content_type.to_sym], :size => "100x100"
+        = image_tag ApplicationHelper::YAPA_TYPE_IMAGE_MAP[f.object.content_type.to_sym], :size => "100x100"
     .row
       .large-12.columns
         = f.label :threshold
         = f.number_field :threshold, :min => 1
-    - if ['image', 'coupon'].include?(content_type)
+    - if ['image', 'coupon'].include?(f.object.content_type)
       .row
         .large-6.columns
           = f.label :payload_image, 'Yapa image'
           = f.file_field :payload_image
-          = f.object.payload_image.file.nil? ? "" : f.object.payload_image.file.filename
+          - url = f.object.payload_image.present? ? f.object.payload_image_url(:thumb).to_s : f.object.mobile_payload_thumb_url
+          - unless url.blank?
+            = image_tag url
+            = f.object.payload_image.file.filename if f.object.payload_image.present?
         .large-6.columns
           = f.label :remote_payload_image_url, "or image URL"
           = f.text_field :remote_payload_image_url
-    - if 'text' == content_type
+    - if 'text' == f.object.content_type
       .row
         .large-12.columns
           = f.label :content, 'Text Content'
           = f.text_area :content
-    - if ['video', 'audio', 'link'].include?(content_type)
+    - if ['video', 'audio', 'link'].include?(f.object.content_type)
       .row
         .large-12.columns
           = f.label :uri, 'URI (for video, audio, etc.)'
