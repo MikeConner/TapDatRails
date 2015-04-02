@@ -97,7 +97,7 @@ class Mobile::V1::TransactionsController < ApiController
                     tx = current_user.transactions.create!(transaction_params({:nfc_tag_id => tag.id,
                                                            :payload_id => payload.id,
                                                            :dest_id => tag.user.id,
-                                                           :comment => payload.content,
+                                                           :comment => payload.description,
                                                            # Store dollar amount as an integer # of cents
                                                            :dollar_amount => dollar_amount,
                                                            :amount => transaction_amount}))
