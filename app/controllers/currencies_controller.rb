@@ -135,8 +135,8 @@ class CurrenciesController < ApplicationController
     @currency = Currency.find(params[:id])
     transactions = @currency.transaction_ids
     
-    @tappers = Transaction.where('id in (?)', transactions).select("user_id, sum(amount) as satoshi, sum(dollar_amount) as total, count(user_id) as taps").group('user_id').order('total DESC')
-    @tapped = Transaction.where('id in (?)', transactions).select("nfc_tag_id, sum(amount) as satoshi, sum(dollar_amount) as total, count(user_id) as taps").group('nfc_tag_id').order('total DESC')
+    @tappers = Transaction.where('id in (?)', transactions).select("user_id, sum(amount) as total, count(user_id) as taps").group('user_id').order('total DESC')
+    @tapped = Transaction.where('id in (?)', transactions).select("nfc_tag_id, sum(amount) as total, count(user_id) as taps").group('nfc_tag_id').order('total DESC')
     @image_map = Hash.new
     @names_map = Hash.new
     
@@ -144,7 +144,7 @@ class CurrenciesController < ApplicationController
     @tappers.map { |t| @names_map[t.user_id] = User.find_by_id(t.user_id).name } 
     @tapped.map { |t| @names_map[t.nfc_tag_id] = NfcTag.find_by_id(t.nfc_tag_id).name unless t.nfc_tag_id.nil? } 
 
-    @last_tx = Transaction.where(:nfc_tag_id != nil).order('created_at DESC').first
+    @last_tx = Transaction.where('nfc_tag_id IS NOT NULL').order('created_at DESC').first
 
     respond_to do |format|
       format.html
