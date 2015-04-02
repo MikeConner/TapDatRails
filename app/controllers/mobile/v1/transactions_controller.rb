@@ -60,7 +60,7 @@ class Mobile::V1::TransactionsController < ApiController
         else
           # Make sure tag is the right currency
           if !currency.nil? and (currency.id != tag.currency_id)
-            error! :bad_request, :metadata => {:error_description => I18n.t('currency_mismatch'), :user_error => I18n.t('invalid_tap') } 
+            error! :bad_request, :metadata => {:error_description => I18n.t('currency_mismatch'), :tag_currency => tag.currency_id, :user_error => I18n.t('invalid_tap') } 
           else         
             #TODO If they send bitcoin to a currency tag, the "amount" is going to be huge, so they'll always get the best Yapa :-)
             # Probably should do some sort of conversion first
