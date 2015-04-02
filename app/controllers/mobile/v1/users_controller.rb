@@ -172,7 +172,8 @@ class Mobile::V1::UsersController < ApiController
 
         # Update balance
         balance = current_user.balances.find_or_create_by(:currency_id => voucher.currency.id)
-        total = voucher.currency.vouchers.redeemed.where(:user_id => current_user.id).sum(:amount)
+        #total = voucher.currency.vouchers.redeemed.where(:user_id => current_user.id).sum(:amount)
+        total = balance.amount + voucher.amount
         balance.update_attribute(:amount, total)
         currency = voucher.currency
 
