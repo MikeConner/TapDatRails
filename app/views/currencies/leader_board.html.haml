@@ -46,13 +46,30 @@
               - if x < @tapped.length
                 %td= x+1
                 %td= @names_map[@tapped[x].nfc_tag_id]
-                %td= number_with_delimiter(@tapped[x].satoshi)
-                %td= number_with_delimiter((@tapped[x].total || 0) / 100)
+                %td
+                  .pill= number_with_delimiter(@tapped[x].satoshi)
+                %td 
+                  .pill= number_with_delimiter((@tapped[x].total || 0) / 100)
                 %td
                   .pill= number_with_delimiter(@tapped[x].taps)
-  .row.stat
-    .large-10.columns.small-centered
-      %br
-      %h1 Lastest Tap
+  - unless @last_tx.nil?
+    .row.stat
+      .large-10.columns.small-centered
+        %br
+        %table
+          %caption Last Tapper
+          %thead
+            %tr
+              %th
+              %th Name
+              %th Amount
+              %th Tag
+          %tbody
+            %tr
+              %td
+                .image= image_tag @last_tx.user.mobile_profile_thumb_url || @last_tx.user.profile_image_url(:thumb).to_s
+              %td= @last_tx.user.name
+              %td= number_with_delimiter((@last_tx.dollar_amount || 0) / 100)
+              %td= @last_tx.nfc_tag.name
 - content_for :head do
   %meta{:content => "3", "http-equiv" => "refresh"}

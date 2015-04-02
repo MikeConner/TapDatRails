@@ -144,6 +144,8 @@ class CurrenciesController < ApplicationController
     @tappers.map { |t| @names_map[t.user_id] = User.find_by_id(t.user_id).name } 
     @tapped.map { |t| @names_map[t.nfc_tag_id] = NfcTag.find_by_id(t.nfc_tag_id).name unless t.nfc_tag_id.nil? } 
 
+    @last_tx = Transaction.where(:nfc_tag_id != nil).order('created_at DESC').first
+
     respond_to do |format|
       format.html
       format.json { render :json => [@tappers, @tapped] }
