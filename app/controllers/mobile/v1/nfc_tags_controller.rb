@@ -51,7 +51,7 @@ class Mobile::V1::NfcTagsController < ApiController
         else
           ActiveRecord::Base.transaction do
             begin
-              tag = current_user.nfc_tags.create!(:tag_id => NfcTag::generate_tag_id, :name => params[:tag][:name], :currency_id => currency)
+              tag = current_user.nfc_tags.create!(:tag_id => NfcTag::generate_tag_id, :name => params[:tag][:name], :currency_id => currency.id)
 
               params[:payloads].each do |payload|
                 tag.payloads.create!(:threshold => payload[:threshold], 
