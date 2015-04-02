@@ -12,6 +12,8 @@ class Mobile::V1::TransactionsController < ApiController
     tx_list = after.nil? ? current_user.transactions.order('created_at') : current_user.transactions.where('created_at > ?', after).order('created_at')
 
     tx_list.each do |tx|
+      tag_name = tx.nfc_tag.nil? ? "" : tx.nfc_tag.name
+      
       if tx.payload.nil?
         payload_image = payload_thumb = content_type = description = uri = content = nil
       else
@@ -28,7 +30,7 @@ class Mobile::V1::TransactionsController < ApiController
 
       response.push({:id => tx.slug, :date => tx.created_at, :payload_image => payload_image, :payload_thumb => payload_thumb,
                      :payload_content_type => content_type, :amount => tx.amount, :dollar_amount => tx.dollar_amount,
-                     :comment => tx.comment, :description => description, :uri => uri, :content => content,
+                     :comment => tx.comment, :description => description, :uri => uri, :content => content, :tag_name => tag_name,
                      :other_user_thumb => other_thumb, :other_user_nickname => other_user.name})
     end
 
