@@ -14,6 +14,11 @@ FactoryGirl.define do
   sequence(:sequential_tag) { |n| "Tag #{n}"}
   sequence(:random_currency) { |n| "#{Faker::Commerce.product_name.split(' ')[0..1].join(' ')} #{Random.rand(100)}" }
   
+  factory :balance_cache do
+    btc_address { generate(:random_bitcoin_address) }
+    satoshi { Random.rand(10000000) + 1000 }
+  end
+  
   factory :device_log do
     user { SecureRandom.hex(8) }
     os 'Android 4.4.2'

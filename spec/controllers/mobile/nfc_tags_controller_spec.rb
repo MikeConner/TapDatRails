@@ -49,6 +49,7 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
       post :create, :version => 1, :auth_token => user.authentication_token, :tag => {:name => 'New Tag'},
                     :payloads => [{:threshold => 11,
                                    :content_type => 'image', 
+                                   :uri => 'http://www.microsoft.com',
                                    :description => 'test'}] 
 
       expect(subject.current_user).to eq(user)
@@ -73,11 +74,13 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
                     :payloads => [{:threshold => 1,
                                    :content_type => 'image', 
                                    :content => 'pole dance', 
+                                   :description => 'description',
                                    :mobile_payload_image_url => 'http://machovy.com/stripper.jpg',
                                    :mobile_payload_thumb_url => 'http://machovy.com/stripper_thumb.jpg'}, 
                                   {:threshold => 5,
                                    :content_type => 'video',
                                    :content => 'twerking contest',
+                                   :description => 'description',
                                    :uri => 'http://machovy.com/insider/furrytwerk.mpg',
                                    :mobile_payload_image_url => 'http://machovy.com/miley.jpg',
                                    :mobile_payload_thumb_url => 'http://machovy.com/miley_thumb.jpg', 
@@ -105,11 +108,13 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
                     :payloads => [{:threshold => 1,
                                    :content_type => 'image', 
                                    :content => 'pole dance', 
+                                   :description => 'description',
                                    :mobile_payload_image_url => 'http://machovy.com/stripper.jpg',
                                    :mobile_payload_thumb_url => 'http://machovy.com/stripper_thumb.jpg'}, 
                                   {:threshold => 5,
                                    :content_type => 'video',
                                    :content => 'twerking contest',
+                                   :description => 'description',
                                    :uri => 'http://machovy.com/insider/furrytwerk.mpg',
                                    :mobile_payload_image_url => 'http://machovy.com/miley.jpg',
                                    :mobile_payload_thumb_url => 'http://machovy.com/miley_thumb.jpg', 
@@ -130,10 +135,12 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
                     :payloads => [{:threshold => 1,
                                    :content_type => 'image', 
                                    :content => 'pole dance', 
+                                   :description => 'description',
                                    :mobile_payload_image_url => 'http://machovy.com/stripper.jpg',
                                    :mobile_payload_thumb_url => 'http://machovy.com/stripper_thumb.jpg'}, 
                                   {:content_type => 'video',
                                    :content => 'twerking contest',
+                                   :description => 'description',
                                    :uri => 'http://machovy.com/insider/furrytwerk.mpg',
                                    :mobile_payload_image_url => 'http://machovy.com/miley.jpg',
                                    :mobile_payload_thumb_url => 'http://machovy.com/miley_thumb.jpg', 
@@ -154,10 +161,12 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
                     :payloads => [{:threshold => 1,
                                    :content_type => 'image', 
                                    :content => 'pole dance', 
+                                   :description => 'description',
                                    :mobile_payload_image_url => 'http://machovy.com/stripper.jpg',
                                    :mobile_payload_thumb_url => 'http://machovy.com/stripper_thumb.jpg'}, 
                                   {:content_type => 'video',
                                    :content => 'twerking contest',
+                                   :description => 'description',
                                    :uri => 'http://machovy.com/insider/furrytwerk.mpg',
                                    :mobile_payload_image_url => 'http://machovy.com/miley.jpg',
                                    :mobile_payload_thumb_url => 'http://machovy.com/miley_thumb.jpg', 
@@ -179,10 +188,12 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
                     :payloads => [{:threshold => 1,
                                    :content_type => 'image', 
                                    :content => 'pole dance', 
+                                   :description => 'description',
                                    :mobile_payload_image_url => 'http://machovy.com/stripper.jpg',
                                    :mobile_payload_thumb_url => 'http://machovy.com/stripper_thumb.jpg'}, 
                                   {:content_type => 'video',
                                    :content => 'twerking contest',
+                                   :description => 'description',
                                    :uri => 'http://machovy.com/insider/furrytwerk.mpg',
                                    :mobile_payload_image_url => 'http://machovy.com/miley.jpg',
                                    :mobile_payload_thumb_url => 'http://machovy.com/miley_thumb.jpg', 
@@ -204,11 +215,13 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
                     :payloads => [{:threshold => 1,
                                    :content_type => 'image', 
                                    :content => 'pole dance', 
+                                   :description => 'description',
                                    :mobile_payload_image_url => 'http://machovy.com/stripper.jpg',
                                    :mobile_payload_thumb_url => 'http://machovy.com/stripper_thumb.jpg'}, 
                                   {:threshold => 5,
                                    :content_type => 'video',
                                    :content => 'twerking contest',
+                                   :description => 'description',
                                    :uri => 'http://machovy.com/insider/furrytwerk.mpg',
                                    :mobile_payload_image_url => 'http://machovy.com/miley.jpg',
                                    :mobile_payload_thumb_url => 'http://machovy.com/miley_thumb.jpg', 
@@ -264,11 +277,13 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
                       :payloads => [{:threshold => 5,
                                      :content_type => 'image', 
                                      :content => 'pole dance', 
+                                     :description => 'description',
                                      :mobile_payload_image_url => 'http://machovy.com/stripper.jpg',
                                      :mobile_payload_thumb_url => 'http://machovy.com/stripper_thumb.jpg'}, 
                                     {:threshold => 50,
                                      :content_type => 'image',
                                      :content => 'twerking contest',
+                                     :description => 'description',
                                      :mobile_payload_image_url => 'http://machovy.com/miley.jpg',
                                      :mobile_payload_thumb_url => 'http://machovy.com/miley_thumb.jpg', 
                                     }]
@@ -283,11 +298,13 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
                     :payloads => [{:threshold => 5,
                                    :content_type => 'image', 
                                    :content => 'pole dance', 
+                                   :description => 'description',
                                    :mobile_payload_image_url => 'http://machovy.com/stripper.jpg',
                                    :mobile_payload_thumb_url => 'http://machovy.com/stripper_thumb.jpg'}, 
                                   {:threshold => 50,
                                    :content_type => 'image',
                                    :content => 'twerking contest',
+                                   :description => 'description',
                                    :mobile_payload_image_url => 'http://machovy.com/miley.jpg',
                                    :mobile_payload_thumb_url => 'http://machovy.com/miley_thumb.jpg', 
                                   }]
@@ -336,17 +353,17 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
         expect(NfcTag.count).to eq(5)
         expect(user.nfc_tags.first.reload.name).to_not eq(@new_name)
               
-        expect(response.status).to eq(400)
+        expect(response.status).to eq(404)
         
         result = JSON.parse(response.body)
   
         expect(result.keys.include?('response')).to be false
         expect(result.keys.include?('error')).to be true
-        expect(result['error_description']).to eq(I18n.t('missing_argument', :arg => 'tag_id'))     
-        expect(result['user_error']).to eq(I18n.t('tag_update_error'))     
+        expect(result['error_description']).to eq("The requested resource could not be found.")     
+        expect(result['error']).to eq('not_found')     
       end   
        
-      it "should fail if no name" do
+      it "should succeed if no name" do
         put :update, :version => 1, :id => user.nfc_tags.first.id, :auth_token => user.authentication_token
   
         expect(subject.current_user).to_not be_nil
@@ -354,14 +371,7 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
         expect(NfcTag.count).to eq(5)
         expect(user.nfc_tags.first.reload.name).to_not eq(@new_name)
               
-        expect(response.status).to eq(400)
-        
-        result = JSON.parse(response.body)
-  
-        expect(result.keys.include?('response')).to be false
-        expect(result.keys.include?('error')).to be true
-        expect(result['error_description']).to eq(I18n.t('missing_argument', :arg => 'tag'))       
-        expect(result['user_error']).to eq(I18n.t('tag_update_error'))     
+        expect(response.status).to eq(200)
       end    
 
       it "should fail if not found" do
@@ -375,11 +385,12 @@ describe Mobile::V1::NfcTagsController, :type => :controller do
         expect(response.status).to eq(404)
         
         result = JSON.parse(response.body)
-  
+        
+        puts result.inspect
         expect(result.keys.include?('response')).to be false
         expect(result.keys.include?('error')).to be true
-        expect(result['error_description']).to eq(I18n.t('object_not_found', :obj => 'NFC Tag'))
-        expect(result['user_error']).to eq(I18n.t('invalid_tag'))     
+        expect(result['error_description']).to eq("The requested resource could not be found.")
+        expect(result['error']).to eq('not_found')     
       end   
     end
   end

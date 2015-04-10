@@ -47,7 +47,7 @@ class Mobile::V1::TransactionsController < ApiController
     else
       currency = params[:currency_id].blank? ? nil : Currency.find_by_id(params[:currency_id])
       # Don't get the rate if we don't need it
-      rate = currency.nil? ? BitcoinTicker.instance.current_rate : nil
+      rate = currency.nil? ? BitcoinTicker.instance.get_current_rate : nil
 
       amount = params[:amount].to_f
 
@@ -94,7 +94,7 @@ class Mobile::V1::TransactionsController < ApiController
                     error! :forbidden, :metadata => {:error_description => I18n.t('insufficient_funds'), :balance => current_user.currency_balance(currency), :user_error => I18n.t('insufficient_funds') }
                   elsif !currency.nil? and (transaction_amount > currency.max_amount)
                     Rails.logger.error "Amount exceeds max tap: #{transaction_amount} > #{currency.max_amount}"
-                    error! :forbidden, :metadata => {:error_description => I18n.t('amount_exceeds_max', :name => currency.name, :amount => transaction_amount), :balance => current_user.currency_balance(currency), :user_error => I18n.t('amount_exceeds_max') }
+                    error! :forbidden, :metadata => {:error_description => I18n.t('amount_exceeds_max', :name => currency.name, :amount => transaction_amount), :balance => current_user.currency_balance(currency), :user_error => I18n.t('amount_exceeds_max', :name => currency.name, :amount => transaction_amount) }
                   else
                     tx = current_user.transactions.create!(transaction_params({:nfc_tag_id => tag.id,
                                                            :payload_id => payload.id,

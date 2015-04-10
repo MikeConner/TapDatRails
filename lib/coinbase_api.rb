@@ -25,8 +25,15 @@ class CoinbaseAPI
   
   # This is not our entire account balance (which the Coinbase API would provide)
   # We want the balance of *one* of the addresses, which we can get from Blockchain
-  def balance_inquiry(address)  
+  # force gets from blockchain
+  def balance_inquiry(address, force = false)  
     return self.test_balance if self.test_mode?
+    
+    unless force
+      balance = BalanceCache.find_by_btc_address(address).satoshi rescue nil
+      
+      return balance unless balance.nil?
+    end
     
     begin
       page = @agent.get("https://blockchain.info/q/addressbalance/#{address}")
@@ -36,7 +43,9 @@ class CoinbaseAPI
     end
     
     unless page.nil?
-      if page.code == '200'
+      if '200' == page.code
+        BalanceCache.find_or_create_by(:btc_address => address).update_attribute(:satoshi, page.content.to_i)
+        
         return page.content.to_i
       end
     end

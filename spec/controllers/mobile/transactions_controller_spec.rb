@@ -26,14 +26,14 @@ describe Mobile::V1::TransactionsController, :type => :controller do
     end
     
     it "should get half" do
-      get :index, :version => 1, :auth_token => user.authentication_token, :after => 6.months.ago
+      get :index, :version => 1, :auth_token => user.authentication_token, :after => DateTime.parse("2014-06-01")
 
       expect(subject.current_user).to eq(user)
       expect(response.status).to eq(200)
       
       result = JSON.parse(response.body)
 
-      expect(result['response'].count).to be >= 3
+      expect(result['response'].count).to be == 6
     end
   end
 
@@ -55,7 +55,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       expect(tx.payload_id).to_not be_nil
       expect(tx.dollar_amount).to eq(2000)
       expect(tx.amount).to eq((tx.transaction_details.first.conversion_rate * tx.dollar_amount * 1000000.0).round)
-      expect(tx.comment).to eq(tx.payload.content)
+      expect(tx.comment).to eq(tx.payload.description)
       expect(subject.current_user.reload.satoshi_balance).to eq(INITIAL_AMOUNT - tx.amount)
       expect(tag.user.reload.satoshi_balance).to eq(INITIAL_AMOUNT + tx.amount)
       expect(response.status).to eq(200)
@@ -114,7 +114,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       expect(tx.payload_id).to_not be_nil
       expect(tx.dollar_amount).to be_nil
       expect(tx.amount).to eq(100)
-      expect(tx.comment).to eq(tx.payload.content)
+      expect(tx.comment).to eq(tx.payload.description)
       expect(subject.current_user.currency_balance(currency)).to eq(900)
       expect(tag.user.currency_balance(currency)).to eq(100)
       expect(response.status).to eq(200)
@@ -183,7 +183,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
     end
 
     it "rate not found" do
-      allow_any_instance_of(BitcoinTicker).to receive(:current_rate).and_return(nil)
+      allow_any_instance_of(BitcoinTicker).to receive(:get_current_rate).and_return(nil)
       
       post :create, :version => 1, :tag_id => tag.tag_id, :auth_token => user.authentication_token, :amount => 20
       
@@ -201,7 +201,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
     end
 
     it "Ticker inaccessible" do
-      allow_any_instance_of(BitcoinTicker).to receive(:current_rate).and_return(nil)
+      allow_any_instance_of(BitcoinTicker).to receive(:get_current_rate).and_return(nil)
       
       post :create, :version => 1, :tag_id => 'Invalid tag', :auth_token => user.authentication_token, :amount => 20
       
@@ -251,7 +251,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('insufficient_funds'))
-      expect(result["user_error"]).to eq(I18n.t('invalid_tap'))
+      expect(result["user_error"]).to eq(I18n.t('insufficient_funds'))
     end
 
     it "max amount funds" do
@@ -269,7 +269,7 @@ describe Mobile::V1::TransactionsController, :type => :controller do
       expect(result.keys.include?('response')).to be false
       expect(result.keys.include?('error')).to be true
       expect(result["error_description"]).to eq(I18n.t('amount_exceeds_max', :amount => currency.max_amount + 1, :name => currency.name))
-      expect(result["user_error"]).to eq(I18n.t('invalid_tap'))
+      expect(result["user_error"]).to eq(I18n.t('amount_exceeds_max', :amount => currency.max_amount + 1, :name => currency.name))
     end
   end
 end

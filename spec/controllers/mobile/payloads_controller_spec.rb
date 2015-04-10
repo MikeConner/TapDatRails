@@ -118,7 +118,7 @@ describe Mobile::V1::PayloadsController, :type => :controller do
 
     it "should fail if params invalid" do      
       post :create, :version => 1, :tag_id => nfc_tag.tag_id, :auth_token => user.authentication_token, 
-           :payload => {:uri => payload.uri, :content => payload.content, :threshold => -2}
+           :payload => {:uri => payload.uri, :description => payload.description, :content => payload.content, :threshold => -2}
 
       expect(subject.current_user).to_not be_nil
       expect(subject.current_user.nfc_tags.count).to eq(1)

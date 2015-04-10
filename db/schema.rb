@@ -11,10 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150325004630) do
+ActiveRecord::Schema.define(version: 20150409023742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "balance_caches", force: true do |t|
+    t.string   "btc_address", limit: 36, null: false
+    t.integer  "satoshi",     limit: 8,  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "balance_caches", ["btc_address"], name: "index_balance_caches_on_btc_address", unique: true, using: :btree
 
   create_table "balances", force: true do |t|
     t.integer  "user_id"
