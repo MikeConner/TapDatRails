@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 
-  # Static pages - front page
-  root :to => "static_pages#home"
+  constraints(:host => "www.tapdatapp.co") do
+    root :to => 'static_pages#club'
+  end
+
+  get '/' => "static_pages#home"
 
   devise_for :users
 
@@ -12,18 +15,18 @@ Rails.application.routes.draw do
       get 'qrcode'
     end
   end
-  
+
   resources :currencies do
     member do
       get 'leader_board'
       get 'report'
     end
   end
-  
+
   resources :vouchers, :except => [:edit, :update]
   resources :single_code_generators, :only => [:index, :show, :destroy]
   resources :nfc_tags
-  
+
   get "/how_it_works" => "static_pages#how_it_works"
   get "/legal" => "static_pages#legal"
   get "/privacy" => "static_pages#privacy"
@@ -32,7 +35,7 @@ Rails.application.routes.draw do
   get "/thumb_dimensions" => "static_pages#thumb_dimensions"
   # Additional simple path for tag-reading performance
   get "/tag/:id" => "nfc_tags#show"
-  
+
   namespace :mobile do
     api :version => 1, :module => "v1" do
       resources :sessions, :only => [:create, :destroy]
@@ -44,15 +47,15 @@ Rails.application.routes.draw do
           get 'balance_inquiry'
           put 'cashout'
         end
-        
+
         put 'redeem_voucher', :on => :member
       end
       resources :nfc_tags, :except => [:new, :edit]
       resources :payloads, :except => [:new, :edit]
       resources :currencies, :only => [:show, :index]
-      
+
       resources :device_logs, :only => [:create]
-      
+
       get 'ping' => "static_api#ping"
     end
   end
