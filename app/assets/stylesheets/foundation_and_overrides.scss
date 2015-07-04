@@ -87,7 +87,8 @@ $row-width: rem-calc(1100);
 // - - - - - - - - - - - - - - - - - - - - - - - - -
 
 // We use these to define default font stacks
-$font-family-sans-serif: 'Roboto', sans-serif;
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,900,700italic,900italic);
+$font-family-sans-serif: 'Lato', sans-serif;
 // $font-family-serif: Georgia, Cambria, "Times New Roman", Times, serif;
 // $font-family-monospace: Consolas, "Liberation Mono", Courier, monospace;
 
@@ -96,11 +97,11 @@ $font-family-sans-serif: 'Roboto', sans-serif;
 // $font-weight-bold: bold !default;
 
 // We use these as default colors throughout
-$primary-color: #BFC932 ;
-$secondary-color: #EF5451;
-$lime: #E0E341;
-$blush: #F7A991;
-$midnight: #4A4A4A;
+$primary-color: #FD006B ;
+$secondary-color: #B8E986;
+$sand: #FFF5E3;
+$blush: #731C45;
+$midnight: #1F1F1F;
 $oil: #343434;
 $steel: #606060;
 $jumbo: #898989;
@@ -1390,7 +1391,7 @@ $topbar-dropdown-link-color: #afafaf;
 
 // Set the link colors and styles for top-level nav
 $topbar-link-color: #afafaf;
-$topbar-link-color-hover: $lime;
+$topbar-link-color-hover: white;
 // $topbar-link-color-active: $white;
 // $topbar-link-color-active-hover: $white;
 // $topbar-link-weight: $font-weight-normal;

@@ -1,13 +1,15 @@
 .name {
   //background: $oil;
-
   img {
-    width: 135px;
+    width: 250px;
     padding: 18px 32px;
   }
 }
 
-.top-bar-section li:not(.has-form) a:not(.button):hover {
+.top-bar-section li:not(.has-form) a:not(.button) {
   transition: all 0.25s ease-in-out;
-  box-shadow: inset 0px -200px 0px -197px $lime;
+
+  &:hover {
+    box-shadow: inset 0px -200px 0px -195px $primary-color;
+  }
 }
