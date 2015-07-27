@@ -15,12 +15,16 @@ section:not(.top-bar-section) {
     text-align: center;
   }
 
+  h1, h2, h3, h4 {
+    line-height: 1!important;
+  }
+
   h2 {
     font-family: 'lato';
     font-weight: 900;
     font-style: italic;
     font-size: 50px;
-    color: $primary-color;
+    color: white;
   }
 
   p {
@@ -35,6 +39,7 @@ section:not(.top-bar-section) {
 
 .rewards {
   text-align: center;
+  background: white;
 
   img {
     margin: 4rem auto;
@@ -46,6 +51,9 @@ section:not(.top-bar-section) {
 }
 
 .features {
+    .fa {
+        color: $blush; 
+    }
   p {
     padding: 0 2rem;
     margin: 2rem 0;
@@ -53,7 +61,7 @@ section:not(.top-bar-section) {
 }
 
 .about {
-  background: $midnight;
+  background: $blush;
   color: white;
 
   .about-tap li {

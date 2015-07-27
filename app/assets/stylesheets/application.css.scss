@@ -18,6 +18,8 @@
 h1, h2, h3, h4, h5, h6 {
   color: $primary-color;
   font-weight: 100;
+  line-height: 1;
+  margin-bottom: 1.5rem;
 }
 
 ul {
@@ -43,6 +45,7 @@ h2.underline {
 
   &.white {
     color: white;
+
     &:after {
       background: white;
     }
@@ -52,7 +55,6 @@ h2.underline {
 .fa-1 {
   font-size: 10px;
 }
-
 .fa-2 {
   font-size: 20px;
 }
