@@ -1,5 +1,6 @@
 // Foundation
 @import "foundation_and_overrides";
+@import "font-awesome";
 
 // Google Fonts
 @import url(http://fonts.googleapis.com/css?family=Roboto:900,300,400|Nunito:400,300,700);
@@ -11,4 +12,79 @@
 @import "partials/header";
 @import "partials/dashboard";
 @import "partials/leaderboard";
+@import "partials/footer";
 @import "font-awesome";
+
+h1, h2, h3, h4, h5, h6 {
+  color: $primary-color;
+  font-weight: 100;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+}
+
+h2.underline {
+  color: $midnight;
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 16px;
+  margin-bottom: 1rem;
+
+  &:after {
+    content: '';
+    width: 40px;
+    height: 4px;
+    background: $primary-color;
+    margin: 0.25rem auto;
+    display: block;
+  }
+
+  &.white {
+    color: white;
+    &:after {
+      background: white;
+    }
+  }
+}
+
+.fa-1 {
+  font-size: 10px;
+}
+
+.fa-2 {
+  font-size: 20px;
+}
+
+.fa-3 {
+  font-size: 30px;
+}
+
+.fa-4 {
+  font-size: 40px;
+}
+
+.fa-5 {
+  font-size: 50px;
+}
+
+.fa-6 {
+  font-size: 60px;
+}
+
+.fa-7 {
+  font-size: 70px;
+}
+
+.fa-8 {
+  font-size: 80px;
+}
+
+.fa-9 {
+  font-size: 90px;
+}
+
+.fa-10 {
+  font-size: 100px;
+}
