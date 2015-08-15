@@ -17,21 +17,17 @@
         - if current_user.nil?
           %li
             -# = link_to 'My Tap', new_user_session_path
-            %a{href: '#'}
+            %a{href: 'https://www.facebook.com/TapDatTipApp', :target => "_blank"}
               %span
                 %i.fa.fa-facebook-square
           %li
-            %a{href: '#'}
+            %a{href: 'https://twitter.com/TapDatTipApp', :target => "_blank"}
               %span
                 %i.fa.fa-twitter
           %li
-            %a{href: '#'}
+            %a{href: '/users/sign_in'}
               %span
-                %i.fa.fa-instagram
-          %li
-            %a{href: '#'}
-              %span
-                %i.fa.fa-envelope-o
+                %i.fa.fa-rocket
         - else
           - if current_user.admin?
             %li= link_to 'Currencies', currencies_path
