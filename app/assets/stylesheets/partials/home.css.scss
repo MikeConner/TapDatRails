@@ -64,6 +64,53 @@ section:not(.top-bar-section) {
   }
 }
 
+.highlights {
+  background: $blush;
+  color: white;
+  padding: 0!important;
+  display: flex;
+  flex-wrap: wrap;
+
+  .margin {
+    margin-bottom: 6rem;
+  }
+
+  .list-container {
+    width: 50%;
+    padding: 4rem;
+    $border-color: lighten($blush, 5%);
+    transition: background 0.25s ease-in-out;
+
+    &:first-child {
+      border-right: 1px solid $border-color;
+      border-bottom: 1px solid $border-color;
+    }
+
+    &:last-child {
+      border-left: 1px solid $border-color;
+      border-top: 1px solid $border-color;
+    }
+
+    &:hover {
+      background: $border-color;
+    }
+  }
+
+  li {
+    display: flex;
+    margin-bottom: 1rem;
+
+    &:before {
+      font-family: 'FontAwesome';
+      content: '\f10c';
+      margin-right: 0.5rem;
+      font-size: 10px;
+      padding-top: 6px;
+      color: $primary-color;
+    }
+  }
+}
+
 .about {
   background: $blush;
   color: white;
