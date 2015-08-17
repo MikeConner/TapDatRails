@@ -68,9 +68,12 @@ section:not(.top-bar-section) {
   background: $blush;
   color: white;
   padding: 0!important;
-  display: flex;
-  flex-wrap: wrap;
 
+  .flex {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
   .margin {
     margin-bottom: 6rem;
   }
