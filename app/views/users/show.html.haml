@@ -26,5 +26,4 @@
       #currency_section
         - @user.currencies.each do |currency|
           = render :partial => 'currency', :locals => { :currency => currency }
-
 = javascript_include_tag 'dashboard'
