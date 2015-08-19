@@ -55,9 +55,12 @@ section:not(.top-bar-section) {
 }
 
 .features {
-    .fa {
-        color: $blush;
-    }
+  background: white;
+
+  .fa {
+      color: $blush;
+  }
+  
   p {
     padding: 0 2rem;
     margin: 2rem 0;
@@ -73,7 +76,7 @@ section:not(.top-bar-section) {
     display: flex;
     flex-wrap: wrap;
   }
-  
+
   .margin {
     margin-bottom: 6rem;
   }

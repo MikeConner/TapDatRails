@@ -13,7 +13,8 @@
     = render 'layouts/application/shim'
   %body
     = render 'layouts/application/header'
-    = yield
+    .main
+      = yield
     = javascript_include_tag "application"
     = content_for :head
 

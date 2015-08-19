@@ -1,4 +1,6 @@
 - flash.each do |key, value|
-  %div.large-12.columns{:class => "alert-box alert-#{key}", "data-alert" => ""}
-    %a.close{"data-dismiss" => "alert", :href => '#'} ×
-    = content_tag(:div, value)
+  %div{:class => "alert-box alert-#{key}", "data-alert" => ""}
+    .row
+      .large-12.columns
+        %a.close{"data-dismiss" => "alert", :href => '#'} ×
+        = content_tag(:div, value)
