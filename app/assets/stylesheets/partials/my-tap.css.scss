@@ -1,0 +1,17 @@
+.my-tap {
+  .side-nav {
+    background: white;
+
+    .title {
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 10px;
+      color: darkgray;
+      border-bottom: 2px solid $primary-color;
+
+      &:hover {
+        background: none;
+      }
+    }
+  }
+}

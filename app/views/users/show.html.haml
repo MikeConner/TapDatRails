@@ -1,6 +1,8 @@
-.row
-  .large-2.columns
+.row.my-tap
+  .large-3.columns
     %ul.side-nav
+      %li
+        %a.title Manage Account
       %li
         %a{:onclick => "select_dashboard_section('yapa_section');"} Yapa
       %li
@@ -9,13 +11,12 @@
         %a{:onclick => "select_dashboard_section('account_section');"} Account
       - unless @user.currencies.empty?
         %li
-          %a My Currencies
+          %a.title My Currencies
           - @user.currencies.each do |currency|
             %a{:onclick => "set_dashboard_currency('#{currency.name}')"}
-              = " - " + currency.name
-
-  .large-10.columns
-    #dashboard_content
+              =currency.name
+  .large-9.columns
+    %section#dashboard_content
       #account_section{:class => params.has_key?('show_tags') ? 'dash_section' : 'dash_section active'}
         = render :partial => 'account', :locals => { :user => @user }
       #yapa_section.dash_section
