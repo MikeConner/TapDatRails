@@ -27,12 +27,12 @@
     border-spacing: inherit;
 
     thead {
-      background: #c2d64c;
+      background: $primary-color;
 
       th {
         font-weight: normal !important;
         text-transform: uppercase;
-        color: #525252;
+        color: white;
       }
     }
 
