@@ -42,7 +42,7 @@
               - if x < @tapped.length
                 %td= x+1
                 %td= @names_map[@tapped[x].nfc_tag_id]
-                %td 
+                %td
                   .pill= number_with_delimiter(@tapped[x].total || 0)
                 %td
                   .pill= number_with_delimiter(@tapped[x].taps)
