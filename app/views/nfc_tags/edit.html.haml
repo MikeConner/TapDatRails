@@ -8,6 +8,6 @@
         = render :partial => 'shared/error_messages', :locals => { :errors => @tag.errors, :name => 'NFC Tag' }
         = render :partial => 'tag_fields', :locals => { :f => f }
         .row
-          .large-12.columns.small-centered
+          .large-12.columns 
             .actions
               = f.submit 'Update NFC Tag', class: "button"
