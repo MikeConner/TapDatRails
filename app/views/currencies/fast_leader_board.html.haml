@@ -67,5 +67,5 @@
               %td#last_tapper_name= @last_tx.user.name
               %td#last_tapper_amount= number_with_delimiter(@last_tx.amount)
               %td#last_tapper_tag= @last_tx.nfc_tag.name
-#fast_leader_board{:path => "#{update_poll_currency_path(@currency)}.js"}
+#fast_leader_board{:update_path => "#{update_poll_currency_path(@currency)}.js", :poll_path => "#{last_tx_currency_path(@currency)}.js", :last_tx => @last_tx.id}
 = javascript_include_tag 'fast_leader_board'

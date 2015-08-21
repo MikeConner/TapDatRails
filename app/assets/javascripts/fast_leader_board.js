@@ -1,23 +1,32 @@
-var last_tapper_hash = "";
+var last_tx_id = -1;
+var current_tx_id = -1;
 var tappers = [];
 var tapped = [];
 
-$(function(){ 
-  last_tapper_hash = compute_hash();
-
+$(function() { 
+  last_tx_id = current_tx_id = $('#fast_leader_board').attr('last_tx');
+  	
   setTimeout(check_for_updates, 5000);	
 });
 
-function compute_hash() {
-  return $('#last_tapper_name').text() + "_" + $('#last_tapper_amount').text() + "_" + $('#last_tapper_tag').text();	
+function poll_last_tx() {
+  $.ajax({
+    type: "GET",
+    url: $('#fast_leader_board').attr('poll_path'),
+    success: function(data) { 
+    	current_tx_id = data 
+    },
+    error: function(xhr, ajaxOptions, thrownError)
+     { alert('error code: ' + xhr.status + ' \n'+'error:\n' + thrownError ); }
+  });  
 }
 
 function check_for_updates() {
   if ($('#fast_leader_board').length > 0) {
-    var current_hash = compute_hash();
-  
-    if (current_hash != last_tapper_hash) {
-      last_tapper_hash = current_hash;
+    poll_last_tx();
+
+    if (current_tx_id != last_tx_id) {
+      last_tx_id = current_tx_id;
       
       tappers = [];
       tapped = [];
@@ -35,7 +44,7 @@ function check_for_updates() {
       $.ajax({
   	    type: "PUT",
 	    data: data_obj,
-	    url: $('#fast_leader_board').attr('path'),
+	    url: $('#fast_leader_board').attr('update_path'),
 	    success: function(data) { process_update(data); },
         error: function(xhr, ajaxOptions, thrownError)
          { alert('error code: ' + xhr.status + ' \n'+'error:\n' + thrownError ); }

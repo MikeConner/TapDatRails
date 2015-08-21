@@ -175,6 +175,15 @@ class CurrenciesController < ApplicationController
     end
   end
   
+  def last_tx
+    @last_tx = Transaction.where('nfc_tag_id IS NOT NULL').order('created_at DESC').first
+
+    respond_to do |format|
+      format.html
+      format.js { render :text => @last_tx.nil? ? -1 : @last_tx.id }
+    end
+  end
+  
   # PUT /currencies/:id/update_poll
   def update_poll
     puts params
