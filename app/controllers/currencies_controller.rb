@@ -175,6 +175,17 @@ class CurrenciesController < ApplicationController
     end
   end
   
+  # PUT /currencies/:id/update_poll
+  def update_poll
+    puts params
+    
+    respond_to do |format|
+      format.html
+      format.js { head :ok }
+    end
+  end
+  
+  # GET /currencies/:id/clear_tx
   def clear_tx
     @currency = Currency.find(params[:id])
     

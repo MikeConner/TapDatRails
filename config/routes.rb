@@ -22,6 +22,7 @@ Rails.application.routes.draw do
       get 'fast_leader_board'
       get 'report'
       get 'clear_tx'
+      put 'update_poll'
     end
   end
 
