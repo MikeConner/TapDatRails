@@ -174,7 +174,7 @@ class CurrenciesController < ApplicationController
       x=x+1
     end
     @lasttx = Array.new
-    @lasttx << {:amount => @last_tx.amount, :name => @last_tx.user.name, :image =>  @last_tx.user.mobile_profile_thumb_url || @last_tx.user.profile_image_url(:thumb).to_s, :yapa => @last_tx.payload.mobile_payload_image_url,
+    @lasttx << {:amount => @last_tx.amount, :name => @last_tx.user.name, :image =>  @last_tx.user.mobile_profile_thumb_url || @last_tx.user.profile_image_url(:thumb).to_s, :yapa => @last_tx.payload.mobile_payload_image_url || @last_tx.payload_image_url(:thumb).to_s,
     :tag => @last_tx.nfc_tag.name}
 
 

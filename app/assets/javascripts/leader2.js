@@ -96,6 +96,14 @@ function updatelatest(latest){
   $("#latestamount").html(latest[0]["amount"]);
   $("#latesttag").html(latest[0]["tag"]);
   $("#latesttagimage").html("<img src='" + latest[0]["yapa"] + "'>");
-  $("#latestuserimage").html("<img src='" + latest[0]["image"]+ "'>");
+
+
+  if (latest[0]["image"]==""){
+    $("#latestuserimage").html("<img src='/images/deflb1.png'>");
+ 
+  }else{
+      $("#latestuserimage").html("<img src='" + latest[0]["image"]+ "'>");
+  }
+
 
 };
