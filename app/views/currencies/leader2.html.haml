@@ -1,0 +1,88 @@
+- n = [@tappers.length, @tapped.length].max
+- rows = 5
+
+%section.leaderboard{:style => "background-image: url('https://tapdat.s3.amazonaws.com/uploads/currency/icon/6/fl3.png'); background-repeat: no-repeat; background-size: contain; background-position-x: center; background-color: #333333;"}
+  .row
+    %h1#demo
+
+  .row.stats
+    .small-6.columns
+      %h1 Big tippers
+      %table{:style => "opacity:.9;"}
+        %thead
+          %tr
+            %th
+            %th
+            %th
+            %th amount
+            %th taps
+        - for x in 0..4 do
+          %tr
+            - if x < 5
+              %td= x+1
+              %td
+                - imagefile = "deflb" + (x+1).to_s + ".png"
+                .image= image_tag imagefile
+                -# @image_map[@tappers[x].user_id]
+              %td NAME
+              -# = @names_map[@tappers[x].user_id]
+              %td
+                .pill $0
+                -#= number_with_delimiter(@tappers[x].total || 0)
+              %td 0
+              -#= number_with_delimiter(@tappers[x].taps)
+
+    .small-6.columns
+      %h1 top performers
+      %table{:style => "opacity:.9;"}
+        %thead
+          %tr
+            %th
+            %th
+            %th
+            %th amount
+            %th taps
+        - for x in 0..4 do
+          %tr
+            - if x < 5
+              %td= x+1
+              %td
+                - imagefile = "deflb" + (x+1).to_s + ".png"
+                .image= image_tag imagefile
+                -# @image_map[@tappers[x].user_id]
+
+              %td TAG
+              -#= @names_map[@tapped[x].nfc_tag_id]
+              %td
+                .pill $0
+                -#= number_with_delimiter(@tapped[x].total || 0)
+              %td
+                .pill 0
+                -#= number_with_delimiter(@tapped[x].taps)
+
+  .row.stat
+    .large-10.columns.small-centered
+      %br
+      %table{:style => "opacity:.9;"}
+        %caption Last Tapper
+        %thead
+          %tr
+            %th Latest tipper
+            %th
+            %th Amount
+            %th Tag
+            %th
+        %tbody
+          %tr
+            %td
+              .image#latestuserimage
+              -#= image_tag @last_tx.user.mobile_profile_thumb_url || @last_tx.user.profile_image_url(:thumb).to_s
+            %td#latestname NAME
+            -#= @last_tx.user.name
+            %td#latestamount
+            -#= number_with_delimiter(@last_tx.amount)
+            %td#latesttag
+            -#= @last_tx.nfc_tag.name
+            %td
+              .image#latesttagimage
+= javascript_include_tag "leader2"
