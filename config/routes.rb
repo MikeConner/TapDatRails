@@ -35,7 +35,8 @@ Rails.application.routes.draw do
   get "/thumb_dimensions" => "static_pages#thumb_dimensions"
   # Additional simple path for tag-reading performance
   get "/tag/:id" => "nfc_tags#show"
-
+  get "/reset" => "static_pages#reset"
+  
   namespace :mobile do
     api :version => 1, :module => "v1" do
       resources :sessions, :only => [:create, :destroy]
