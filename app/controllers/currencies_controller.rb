@@ -170,7 +170,7 @@ class CurrenciesController < ApplicationController
     x=1
     @tappedlist = Array.new
     @tapped.each do |tapped|
-      @tappedlist << {:rank => x, :name => tapped.nfc_tag.name, :total => tapped.total, :taps => tapped.taps, :image => tapped.nfc_tag.payloads.first.mobile_payload_image_url}
+      @tappedlist << {:rank => x, :name => tapped.nfc_tag.name, :total => tapped.total, :taps => tapped.taps, :image => tapped.nfc_tag.payloads.first.mobile_payload_image_url || tapped.nfc_tag.payloads.first.payload_image_url(:thumb).to_s}
       x=x+1
     end
     @lasttx = Array.new
