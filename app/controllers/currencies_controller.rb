@@ -179,7 +179,7 @@ class CurrenciesController < ApplicationController
 
 
     respond_to do |format|
-      format.html
+      format.html{ render :layout => 'leader'}
       format.json { render :json => [:tapped => @tappedlist, :tappers => @tapperlist, :latest => @lasttx ] }
     end
   end
