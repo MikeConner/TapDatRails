@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       get 'last_tx'
       get 'clear_tx'
       put 'update_poll'
+      get 'leader2'
     end
   end
 

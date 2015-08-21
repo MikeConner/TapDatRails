@@ -13,6 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require foundation
-//= require_tree .
+//= stub leader2
 
 $(function(){ $(document).foundation(); });
