@@ -19,7 +19,9 @@ Rails.application.routes.draw do
   resources :currencies do
     member do
       get 'leader_board'
+      get 'fast_leader_board'
       get 'report'
+      get 'clear_tx'
     end
   end
 
@@ -35,7 +37,6 @@ Rails.application.routes.draw do
   get "/thumb_dimensions" => "static_pages#thumb_dimensions"
   # Additional simple path for tag-reading performance
   get "/tag/:id" => "nfc_tags#show"
-  get "/reset" => "static_pages#reset"
   
   namespace :mobile do
     api :version => 1, :module => "v1" do

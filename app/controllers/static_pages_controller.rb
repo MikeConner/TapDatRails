@@ -1,8 +1,6 @@
 class StaticPagesController < ApplicationController
   respond_to :html, :js
 
-  before_filter :ensure_admin, :only => [:reset]
-
   def club
   end
   
@@ -35,13 +33,7 @@ class StaticPagesController < ApplicationController
   def thumb_dimensions
     render :json => {:width => ImageUploader::THUMB_WIDTH, :height => ImageUploader::THUMB_HEIGHT}
   end
-  
-  def reset
-    Transaction.destroy_all
     
-    redirect_to root_path, :notice => 'Data Cleared'
-  end
-  
 private
   def ensure_admin    
     unless current_user.admin?

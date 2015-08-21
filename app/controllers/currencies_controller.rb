@@ -151,7 +151,42 @@ class CurrenciesController < ApplicationController
       format.json { render :json => [@tappers, @tapped] }
     end
   end
+
+  # Leader board that doesn't refresh the screen
+  # GET /currencies/:id/fast_leader_board
+  def fast_leader_board
+    @currency = Currency.find(params[:id])
+    transactions = @currency.transaction_ids
+    
+    @tappers = Transaction.where('id in (?)', transactions).select("user_id, sum(amount) as total, count(user_id) as taps").group('user_id').order('total DESC').limit(5)
+    @tapped = Transaction.where('id in (?)', transactions).select("nfc_tag_id, sum(amount) as total, count(user_id) as taps").group('nfc_tag_id').order('total DESC').limit(5)
+    @image_map = Hash.new
+    @names_map = Hash.new
+    
+    @tappers.map { |t| @image_map[t.user_id] = t.user.mobile_profile_thumb_url || t.user.profile_image_url(:thumb).to_s } 
+    @tappers.map { |t| @names_map[t.user_id] = User.find_by_id(t.user_id).name } 
+    @tapped.map { |t| @names_map[t.nfc_tag_id] = NfcTag.find_by_id(t.nfc_tag_id).name unless t.nfc_tag_id.nil? } 
+
+    @last_tx = Transaction.where('nfc_tag_id IS NOT NULL').order('created_at DESC').first
+
+    respond_to do |format|
+      format.html 
+      format.json { render :json => [@tappers, @tapped] }
+    end
+  end
   
+  def clear_tx
+    @currency = Currency.find(params[:id])
+    
+    ids = Transaction.where('nfc_tag_id IS NOT NULL').joins(:nfc_tag).select { |t| t.nfc_tag.currency_id == @currency.id }.map(&:id)
+    unless ids.empty?
+      puts "Deleting #{ids.count} transactions"
+      Transaction.where('id in (?)', ids).destroy_all
+    end
+    
+    redirect_to currencies_path, :notice => 'Data Cleared'
+  end
+
 private
   def ensure_own_currency_or_admin
     @currency = Currency.find(params[:id])

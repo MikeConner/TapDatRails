@@ -1,0 +1,71 @@
+.row
+  .large-12.columns
+    %h1
+      = @currency.name
+      Leader Board
+%section.leaderboard
+  .row.stats
+    - n = [@tappers.length, @tapped.length].max
+    .small-6.columns
+      %h1 The Tappers
+      %table
+        %thead
+          %tr
+            %th
+            %th
+            %th name
+            %th amount
+            %th taps
+        - if n >= 1
+          - for x in 0..4 do
+            %tr
+              - if x < @tappers.length
+                .tapper{:user => @tappers[x].user_id}
+                %td= x+1
+                %td
+                  .image= image_tag @image_map[@tappers[x].user_id]
+                %td= @names_map[@tappers[x].user_id]
+                %td
+                  .pill= number_with_delimiter(@tappers[x].total || 0)
+                %td= number_with_delimiter(@tappers[x].taps)
+    .small-6.columns
+      %h1 The Tapped
+      %table
+        %thead
+          %tr
+            %th
+            %th name
+            %th amount
+            %th taps
+        - if n >= 1
+          - for x in 0..4 do
+            %tr
+              - if x < @tapped.length
+                .tapped{:tag => @tapped[x].nfc_tag_id}
+                %td= x+1
+                %td= @names_map[@tapped[x].nfc_tag_id]
+                %td
+                  .pill= number_with_delimiter(@tapped[x].total || 0)
+                %td
+                  .pill= number_with_delimiter(@tapped[x].taps)
+  - unless @last_tx.nil?
+    .row.stat
+      .large-10.columns.small-centered
+        %br
+        %table
+          %caption Last Tapper
+          %thead
+            %tr
+              %th
+              %th Name
+              %th Amount
+              %th Tag
+          %tbody
+            %tr
+              %td
+                .image= image_tag @last_tx.user.mobile_profile_thumb_url || @last_tx.user.profile_image_url(:thumb).to_s
+              %td#last_tapper_name= @last_tx.user.name
+              %td#last_tapper_amount= number_with_delimiter(@last_tx.amount)
+              %td#last_tapper_tag= @last_tx.nfc_tag.name
+#fast_leader_board
+= javascript_include_tag 'fast_leader_board'

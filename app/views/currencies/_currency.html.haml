@@ -18,10 +18,12 @@
     %td= pluralize(currency.expiration_days, 'day')
   %td= number_with_delimiter(currency.reserve_balance)
   %td
-    = link_to "Board", leader_board_currency_path(currency)
+    = link_to "Board", fast_leader_board_currency_path(currency)
     \/
     %br
     = link_to "Report", report_currency_path(currency)
   %td{:nowrap => ""}
     = link_to "Edit", currency_path(currency), class: "small button"
     = link_to "Delete", currency, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: "button alert round small"
+    - if current_user.admin?
+      = link_to 'Clear Data', clear_tx_currency_path(currency), :class => 'small button'
