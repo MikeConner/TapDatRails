@@ -56,5 +56,10 @@ function check_for_updates() {
 }
 
 function process_update(data) {
+	var tappers = data[0];
+	var tapped = data[1];
+	var image_map = data[2];
+	var names_map = data[3];
 	
+	// Update individual fields
 }

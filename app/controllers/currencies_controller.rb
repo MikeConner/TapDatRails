@@ -186,11 +186,76 @@ class CurrenciesController < ApplicationController
   
   # PUT /currencies/:id/update_poll
   def update_poll
-    puts params
+    # This will create a fixed size array (5), nil padded
+    client_tappers = 5.times.collect { |i| params[:tappers][i].to_i}
+    client_tapped = 5.times.collect { |i| params[:tapped][i].to_i }
     
+    # has sequential ids of users (tappers) and nfc_tags (tapped) currently at the client
+    # Compute here at the server, and send down the changes
+    @currency = Currency.find(params[:id])
+    transactions = @currency.transaction_ids
+    
+    @tappers = Transaction.where('id in (?)', transactions).select("user_id, sum(amount) as total, count(user_id) as taps").group('user_id').order('total DESC').limit(5)
+    @tapped = Transaction.where('id in (?)', transactions).select("nfc_tag_id, sum(amount) as total, count(user_id) as taps").group('nfc_tag_id').order('total DESC').limit(5)
+      
+    server_tappers = Array.new(5, 0)
+    server_tapped = Array.new(5, 0)
+      
+    x = 0
+    @tappers.each do |tapper|
+      server_tappers[x] = tapper.user_id
+      x += 1      
+    end
+
+    x = 0
+    @tapped.each do |tapped|
+      server_tapped[x] = tapped.nfc_tag_id
+      x += 1
+    end
+        
+    @changed_tappers = Array.new(5)
+    @changed_tapped = Array.new(5)
+    
+    # Fill changed arrays with nil (if no change), or the different transaction (if changed)
+    unless client_tappers == server_tappers
+      for x in 0..4 do
+        if client_tappers[x] == server_tappers[x]
+          @changed_tappers[x] = nil
+        else
+          @changed_tappers[x] = @tappers[x]
+        end
+      end
+    end   
+    
+    unless client_tapped == server_tapped      
+      for x in 0..4 do
+        if client_tapped[x] == server_tapped[x]
+          @changed_tapped[x] = nil
+        else
+          @changed_tapped[x] = @tapped[x]
+        end
+      end
+    end
+
+    @image_map = Hash.new
+    @names_map = Hash.new
+    
+    @changed_tappers.each do |t|
+      next if t.nil?
+      
+      @image_map[t.user_id] = t.user.mobile_profile_thumb_url || t.user.profile_image_url(:thumb).to_s 
+      @names_map[t.user_id] = User.find_by_id(t.user_id).name
+    end
+    
+    @changed_tapped.each do |t|
+      next if t.nil?
+      
+      @names_map[t.nfc_tag_id] = NfcTag.find_by_id(t.nfc_tag_id).name unless t.nfc_tag_id.nil?
+    end
+          
     respond_to do |format|
       format.html
-      format.js { head :ok }
+      format.js { render :json => [@changed_tappers, @changed_tapped, @image_map, @names_map] }
     end
   end
   

@@ -20,14 +20,7 @@
           - for x in 0..4 do
             %tr
               - if x < @tappers.length
-                .tapper{:user => @tappers[x].user_id}
-                %td= x+1
-                %td
-                  .image= image_tag @image_map[@tappers[x].user_id]
-                %td= @names_map[@tappers[x].user_id]
-                %td
-                  .pill= number_with_delimiter(@tappers[x].total || 0)
-                %td= number_with_delimiter(@tappers[x].taps)
+                = render :partial => 'tapper', :locals => { :x => x, :tapper => @tappers[x], :image => @image_map[@tappers[x].user_id], :name => @names_map[@tappers[x].user_id] }
     .small-6.columns
       %h1 The Tapped
       %table
@@ -41,13 +34,7 @@
           - for x in 0..4 do
             %tr
               - if x < @tapped.length
-                .tapped{:tag => @tapped[x].nfc_tag_id}
-                %td= x+1
-                %td= @names_map[@tapped[x].nfc_tag_id]
-                %td
-                  .pill= number_with_delimiter(@tapped[x].total || 0)
-                %td
-                  .pill= number_with_delimiter(@tapped[x].taps)
+                = render :partial => 'tapped', :locals => { :x => x, :tapped => @tapped[x], :name => @names_map[@tapped[x].nfc_tag_id] }
   - unless @last_tx.nil?
     .row.stat
       .large-10.columns.small-centered
