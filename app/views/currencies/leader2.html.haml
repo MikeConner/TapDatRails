@@ -1,3 +1,4 @@
+
 - n = [@tappers.length, @tapped.length].max
 - rows = 5
 
@@ -16,7 +17,74 @@
             %th
             %th amount
             %th taps
-        - for x in 0..4 do
+
+          %tr
+            %td#rank1
+            %td
+              .image#tapimage1= image_tag "deflb1.png"
+              -# @image_map[@tappers[x].user_id]
+            %td#tapname1
+            -# = @names_map[@tappers[x].user_id]
+            %td
+              .pill#tapamount1
+              -#= number_with_delimiter(@tappers[x].total || 0)
+            %td#taptaps1
+            -#= number_with_delimiter(@tappers[x].taps)
+
+          %tr
+            %td#rank2
+            %td
+              .image#tapimage2= image_tag "deflb2.png"
+              -# @image_map[@tappers[x].user_id]
+            %td#tapname2
+            -# = @names_map[@tappers[x].user_id]
+            %td
+              .pill#tapamount2
+              -#= number_with_delimiter(@tappers[x].total || 0)
+            %td#taptaps2
+            -#= number_with_delimiter(@tappers[x].taps)
+
+          %tr
+            %td#rank3
+            %td
+              .image#tapimage3= image_tag "deflb3.png"
+              -# @image_map[@tappers[x].user_id]
+            %td#tapname3
+            -# = @names_map[@tappers[x].user_id]
+            %td
+              .pill#tapamount3
+              -#= number_with_delimiter(@tappers[x].total || 0)
+            %td#taptaps3
+            -#= number_with_delimiter(@tappers[x].taps)
+
+          %tr
+            %td#rank4
+            %td
+              .image#tapimage4= image_tag "deflb4.png"
+              -# @image_map[@tappers[x].user_id]
+            %td#tapname4
+            -# = @names_map[@tappers[x].user_id]
+            %td
+              .pill#tapamount4
+              -#= number_with_delimiter(@tappers[x].total || 0)
+            %td#taptaps4
+            -#= number_with_delimiter(@tappers[x].taps)
+
+          %tr
+            %td#rank5
+            %td
+              .image#tapimage5= image_tag "deflb5.png"
+              -# @image_map[@tappers[x].user_id]
+            %td#tapname5
+            -# = @names_map[@tappers[x].user_id]
+            %td
+              .pill#tapamount5
+              -#= number_with_delimiter(@tappers[x].total || 0)
+            %td#taptaps5
+            -#= number_with_delimiter(@tappers[x].taps)
+
+
+        -# for x in 0..1 do
           %tr
             - if x < 5
               %td= x+1
@@ -42,22 +110,27 @@
             %th
             %th amount
             %th taps
-        - for x in 0..4 do
+
+
+
+
+
+        - for x in 1..5 do
           %tr
-            - if x < 5
-              %td= x+1
-              %td
-                - imagefile = "deflb" + (x+1).to_s + ".png"
+            - if x < 6
+              %td{:id => "tagrank"+x.to_s}
+              %td{:id => "tagimage"+x.to_s}
+                - imagefile = "deflb" + (x).to_s + ".png"
                 .image= image_tag imagefile
                 -# @image_map[@tappers[x].user_id]
 
-              %td TAG
+              %td{:id => "tagname"+x.to_s}
               -#= @names_map[@tapped[x].nfc_tag_id]
               %td
-                .pill $0
+                .pill{:id => "tagamount"+x.to_s}
                 -#= number_with_delimiter(@tapped[x].total || 0)
               %td
-                .pill 0
+                .pill{:id => "tagtaps"+x.to_s}
                 -#= number_with_delimiter(@tapped[x].taps)
 
   .row.stat
@@ -85,4 +158,5 @@
             -#= @last_tx.nfc_tag.name
             %td
               .image#latesttagimage
-= javascript_include_tag "leader2"
+- content_for :javascript_includes do
+  = javascript_include_tag "leader2"
