@@ -119,9 +119,9 @@
           %tr
             - if x < 6
               %td{:id => "tagrank"+x.to_s}
-              %td{:id => "tagimage"+x.to_s}
+              %td
                 - imagefile = "deflb" + (x).to_s + ".png"
-                .image= image_tag imagefile
+                .image{:id => "tagimage"+x.to_s}= image_tag imagefile
                 -# @image_map[@tappers[x].user_id]
 
               %td{:id => "tagname"+x.to_s}
