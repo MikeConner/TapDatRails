@@ -1,4 +1,6 @@
 module CurrenciesHelper
+  TOP_N = 5
+  
   def add_denomination(currency, form_builder)
     # Precompute the html for a new content block by calling render on the same partial used for display
     # The index is just "NEW_RECORD", since it doesn't exist yet; it will be replaced later
@@ -22,5 +24,5 @@ module CurrenciesHelper
       
       content_tag(:a, 'Add Single Code Voucher', :href => '#', :onclick => onclick, :id => 'add_generator')
     end
-  end    
+  end  
 end

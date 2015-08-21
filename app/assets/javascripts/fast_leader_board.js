@@ -2,9 +2,11 @@ var last_tx_id = -1;
 var current_tx_id = -1;
 var tappers = [];
 var tapped = [];
+var TOP_N = 5;
 
 $(function() { 
   last_tx_id = current_tx_id = $('#fast_leader_board').attr('last_tx');
+  TOP_N = $('#fast_leader_board').attr('top_n');
   	
   setTimeout(check_for_updates, 5000);	
 });
@@ -55,11 +57,21 @@ function check_for_updates() {
   }  
 }
 
-function process_update(data) {
-	var tappers = data[0];
-	var tapped = data[1];
-	var image_map = data[2];
-	var names_map = data[3];
-	
-	// Update individual fields
+function process_update(updates) {
+  obj = JSON.parse(updates);
+
+  tappers = obj[0];
+  tapped = obj[1];  
+  
+  for (x = 0; x < TOP_N; x++) {
+  	if (null != tappers[x]) {
+  		$('#tapper_' + x).replaceWith(tappers[x]);
+  	}
+  }
+
+  for (x = 0; x < TOP_N; x++) {
+  	if (null != tapped[x]) {
+  		$('#tapped_' + x).replaceWith(tapped[x]);
+  	}
+  }
 }

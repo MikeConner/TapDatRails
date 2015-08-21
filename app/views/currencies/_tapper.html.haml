@@ -1,8 +1,9 @@
-.tapper{:user => tapper.user_id}
-%td= x+1
-%td
-  .image= image_tag image
-%td= name
-%td
-  .pill= number_with_delimiter(tapper.total || 0)
-%td= number_with_delimiter(tapper.taps)
+%tr{:id => "tapper_#{x}"}
+  .tapper{:user => tapper.user_id}
+  %td= x+1
+  %td
+    .image= image_tag image
+  %td= name
+  %td
+    .pill= number_with_delimiter(tapper.total || 0)
+  %td= number_with_delimiter(tapper.taps)

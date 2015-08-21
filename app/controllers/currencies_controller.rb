@@ -158,8 +158,8 @@ class CurrenciesController < ApplicationController
     @currency = Currency.find(params[:id])
     transactions = @currency.transaction_ids
     
-    @tappers = Transaction.where('id in (?)', transactions).select("user_id, sum(amount) as total, count(user_id) as taps").group('user_id').order('total DESC').limit(5)
-    @tapped = Transaction.where('id in (?)', transactions).select("nfc_tag_id, sum(amount) as total, count(user_id) as taps").group('nfc_tag_id').order('total DESC').limit(5)
+    @tappers = Transaction.where('id in (?)', transactions).select("user_id, sum(amount) as total, count(user_id) as taps").group('user_id').order('total DESC').limit(CurrenciesHelper::TOP_N)
+    @tapped = Transaction.where('id in (?)', transactions).select("nfc_tag_id, sum(amount) as total, count(user_id) as taps").group('nfc_tag_id').order('total DESC').limit(CurrenciesHelper::TOP_N)
     @image_map = Hash.new
     @names_map = Hash.new
     
@@ -186,20 +186,20 @@ class CurrenciesController < ApplicationController
   
   # PUT /currencies/:id/update_poll
   def update_poll
-    # This will create a fixed size array (5), nil padded
-    client_tappers = 5.times.collect { |i| params[:tappers][i].to_i}
-    client_tapped = 5.times.collect { |i| params[:tapped][i].to_i }
+    # This will create a fixed size array (CurrenciesHelper::TOP_N), nil padded
+    client_tappers = CurrenciesHelper::TOP_N.times.collect { |i| params[:tappers][i].to_i}
+    client_tapped = CurrenciesHelper::TOP_N.times.collect { |i| params[:tapped][i].to_i }
     
     # has sequential ids of users (tappers) and nfc_tags (tapped) currently at the client
     # Compute here at the server, and send down the changes
     @currency = Currency.find(params[:id])
     transactions = @currency.transaction_ids
     
-    @tappers = Transaction.where('id in (?)', transactions).select("user_id, sum(amount) as total, count(user_id) as taps").group('user_id').order('total DESC').limit(5)
-    @tapped = Transaction.where('id in (?)', transactions).select("nfc_tag_id, sum(amount) as total, count(user_id) as taps").group('nfc_tag_id').order('total DESC').limit(5)
+    @tappers = Transaction.where('id in (?)', transactions).select("user_id, sum(amount) as total, count(user_id) as taps").group('user_id').order('total DESC').limit(CurrenciesHelper::TOP_N)
+    @tapped = Transaction.where('id in (?)', transactions).select("nfc_tag_id, sum(amount) as total, count(user_id) as taps").group('nfc_tag_id').order('total DESC').limit(CurrenciesHelper::TOP_N)
       
-    server_tappers = Array.new(5, 0)
-    server_tapped = Array.new(5, 0)
+    server_tappers = Array.new(CurrenciesHelper::TOP_N, 0)
+    server_tapped = Array.new(CurrenciesHelper::TOP_N, 0)
       
     x = 0
     @tappers.each do |tapper|
@@ -213,12 +213,12 @@ class CurrenciesController < ApplicationController
       x += 1
     end
         
-    @changed_tappers = Array.new(5)
-    @changed_tapped = Array.new(5)
+    @changed_tappers = Array.new(CurrenciesHelper::TOP_N)
+    @changed_tapped = Array.new(CurrenciesHelper::TOP_N)
     
     # Fill changed arrays with nil (if no change), or the different transaction (if changed)
     unless client_tappers == server_tappers
-      for x in 0..4 do
+      for x in 0..(CurrenciesHelper::TOP_N - 1) do
         if client_tappers[x] == server_tappers[x]
           @changed_tappers[x] = nil
         else
@@ -228,7 +228,7 @@ class CurrenciesController < ApplicationController
     end   
     
     unless client_tapped == server_tapped      
-      for x in 0..4 do
+      for x in 0..(CurrenciesHelper::TOP_N - 1) do
         if client_tapped[x] == server_tapped[x]
           @changed_tapped[x] = nil
         else
@@ -240,22 +240,43 @@ class CurrenciesController < ApplicationController
     @image_map = Hash.new
     @names_map = Hash.new
     
+    @tapper_updates = Hash.new
+    @tapped_updates = Hash.new
+    
+    idx = 0
     @changed_tappers.each do |t|
-      next if t.nil?
-      
+      if t.nil?
+        @tapper_updates[idx] = nil
+        idx += 1
+        next
+      end
+
       @image_map[t.user_id] = t.user.mobile_profile_thumb_url || t.user.profile_image_url(:thumb).to_s 
       @names_map[t.user_id] = User.find_by_id(t.user_id).name
+      
+      @tapper_updates[idx] = render_to_string(:partial => 'tapper', :locals => { :x => idx, :tapper => @tappers[idx], :image => @image_map[t.user_id], :name => @names_map[t.user_id] })
+
+      idx += 1      
     end
     
+    idx = 0
     @changed_tapped.each do |t|
-      next if t.nil?
-      
-      @names_map[t.nfc_tag_id] = NfcTag.find_by_id(t.nfc_tag_id).name unless t.nfc_tag_id.nil?
+      if t.nil?
+        @tapped_updates[idx] = nil
+        idx += 1
+        next
+      end
+
+      @names_map[t.nfc_tag_id] = NfcTag.find_by_id(t.nfc_tag_id).name unless t.nfc_tag_id.nil?      
+
+      @tapped_updates[idx] = render_to_string(:partial => 'tapped', :locals => { :x => idx, :tapped => @tapped[idx], :name => @names_map[t.nfc_tag_id] })         
+
+      idx += 1
     end
-          
+              
     respond_to do |format|
       format.html
-      format.js { render :json => [@changed_tappers, @changed_tapped, @image_map, @names_map] }
+      format.js { render :json => [@tapper_updates, @tapped_updates] }
     end
   end
   

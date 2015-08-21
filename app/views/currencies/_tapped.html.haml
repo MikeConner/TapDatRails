@@ -1,7 +1,8 @@
-.tapped{:tag => tapped.nfc_tag_id}
-%td= x+1
-%td= name
-%td
-  .pill= number_with_delimiter(tapped.total || 0)
-%td
-  .pill= number_with_delimiter(tapped.taps)
+%tr{:id => "tapped_#{x}"}
+  .tapped{:tag => tapped.nfc_tag_id}
+  %td= x+1
+  %td= name
+  %td
+    .pill= number_with_delimiter(tapped.total || 0)
+  %td
+    .pill= number_with_delimiter(tapped.taps)

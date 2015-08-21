@@ -17,10 +17,11 @@
             %th amount
             %th taps
         - if n >= 1
-          - for x in 0..4 do
-            %tr
-              - if x < @tappers.length
-                = render :partial => 'tapper', :locals => { :x => x, :tapper => @tappers[x], :image => @image_map[@tappers[x].user_id], :name => @names_map[@tappers[x].user_id] }
+          - for x in 0..(CurrenciesHelper::TOP_N - 1) do
+            - if x < @tappers.length
+              = render :partial => 'tapper', :locals => { :x => x, :tapper => @tappers[x], :image => @image_map[@tappers[x].user_id], :name => @names_map[@tappers[x].user_id] }
+            - else
+              %tr
     .small-6.columns
       %h1 The Tapped
       %table
@@ -31,10 +32,11 @@
             %th amount
             %th taps
         - if n >= 1
-          - for x in 0..4 do
-            %tr
-              - if x < @tapped.length
-                = render :partial => 'tapped', :locals => { :x => x, :tapped => @tapped[x], :name => @names_map[@tapped[x].nfc_tag_id] }
+          - for x in 0..(CurrenciesHelper::TOP_N - 1) do
+            - if x < @tapped.length
+              = render :partial => 'tapped', :locals => { :x => x, :tapped => @tapped[x], :name => @names_map[@tapped[x].nfc_tag_id] }
+            - else
+              %tr
   - unless @last_tx.nil?
     .row.stat
       .large-10.columns.small-centered
@@ -54,5 +56,5 @@
               %td#last_tapper_name= @last_tx.user.name
               %td#last_tapper_amount= number_with_delimiter(@last_tx.amount)
               %td#last_tapper_tag= @last_tx.nfc_tag.name
-#fast_leader_board{:update_path => "#{update_poll_currency_path(@currency)}.js", :poll_path => "#{last_tx_currency_path(@currency)}.js", :last_tx => @last_tx.id}
+#fast_leader_board{:top_n => CurrenciesHelper::TOP_N, :update_path => "#{update_poll_currency_path(@currency)}.js", :poll_path => "#{last_tx_currency_path(@currency)}.js", :last_tx => @last_tx.id}
 = javascript_include_tag 'fast_leader_board'
