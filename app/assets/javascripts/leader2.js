@@ -58,7 +58,7 @@ function updatetags(tapped){
     $("#tagtaps"+i).html(tapped[i-1]["taps"]);
 
     if (tapped[i-1]["image"]==""){
-      $("#tagimage"+i).html("<img src='/assets/deflb1.png'>");
+      $("#tagimage"+i).html("<img src='/images/deflb1.png'>");
     }else{
       $("#tagimage"+i).html("<img src='" + tapped[i-1]["image"]+ "'>");
     }
@@ -79,7 +79,7 @@ function updatetappers(tappers){
     $("#taptaps"+i).html(tappers[i-1]["taps"]);
 
     if (tappers[i-1]["image"]==""){
-      $("#tapimage"+i).html("<img src='/assets/deflb1.png'>");
+      $("#tapimage"+i).html("<img src='/images/deflb1.png'>");
     }else{
       $("#tapimage"+i).html("<img src='" + tappers[i-1]["image"]+ "'>");
     }
