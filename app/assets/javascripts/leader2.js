@@ -89,6 +89,29 @@ function updatetappers(tappers){
 
 }
 
+function animatethead(){
+  $("#animateme").addClass("animate");
+  setTimeout(function(){
+    $("#animateme").removeClass("animate");
+}, 400);
+
+setTimeout(function(){
+  $("#animateme").addClass("animate");
+}, 600);
+
+setTimeout(function(){
+  $("#animateme").removeClass("animate");
+}, 1000);
+setTimeout(function(){
+  $("#animateme").addClass("animate");
+}, 1200);
+
+setTimeout(function(){
+  $("#animateme").removeClass("animate");
+}, 2000);
+
+
+}
 
 function updatelatest(latest){
 
@@ -100,10 +123,10 @@ function updatelatest(latest){
 
   if (latest[0]["image"]==""){
     $("#latestuserimage").html("<img src='/images/deflb1.png'>");
- 
+
   }else{
       $("#latestuserimage").html("<img src='" + latest[0]["image"]+ "'>");
   }
-
+ animatethead();
 
 };
