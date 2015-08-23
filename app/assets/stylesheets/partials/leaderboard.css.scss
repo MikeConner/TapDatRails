@@ -1,104 +1,91 @@
 .leaderboard {
-  background: darken($blush, 3%);;
-  padding: 1rem 0;
-
-  .stats .columns {
-    &:first-child {
-      padding-left: 0;
+    background: darken($blush, 3%);
+    padding: 1rem 0;
+    .stats .columns {
+        &:first-child {
+            padding-left: 0;
+        }
+        &:last-child {
+            padding-right: 0;
+        }
     }
-
-    &:last-child {
-      padding-right: 0;
-    }
-  }
-
-  h1 {
-    color: white;
-    font-weight: light;
-    text-transform: uppercase;
-    text-align: center;
-    font-size: rem-calc(18);
-    margin-bottom: 1rem;
-  }
-
-  table {
-    background: $oil;
-    margin: 0;
-    width: 100%;
-    border-spacing: inherit;
-    color: darken($steel, 3%);
-
-    thead {
-      background: darken($steel, 3%);
-
-      th {
-        font-weight: normal !important;
-        text-transform: uppercase;
-        color: #171717;
-      }
-    }
-
-    tr {
-      color: white;
-
-      &:first-child td {
+    h1 {
         color: white;
-      }
-
-      &:nth-of-type(even) {
-        background: lighten($steel, 5%);
-      }
-    }
-
-    td {
-      color: white;
-      font-weight: thin;
-      font-size: rem-calc(15px);
-      padding: 6px 14px;
-      text-transform: capitalize;
-
-      &:first-child {
+        font-weight: light;
+        text-transform: uppercase;
         text-align: center;
-      }
-
-      &:nth-child(2) {
-        width: 40px;
-        padding-left: 4px;
-      }
-
-      &:nth-child(3) {
-        padding-left: 4px;
-      }
+        font-size: rem-calc(18);
+        margin-bottom: 1rem;
     }
-
-    .pill {
-
-      border-radius: 0px;
-      padding: 6px 10px;
-      text-align: center;
-    }
-
-    .image {
-      height: 60px;
-      width: 60px;
-      // border: 2px solid white;
-      overflow: hidden;
-
-      img {
+    table {
+        background: $oil;
+        margin: 0;
         width: 100%;
-      }
+        border-spacing: inherit;
+        color: darken($steel, 3%);
+        thead {
+            background: darken($steel, 3%);
+            th {
+                font-weight: normal !important;
+                text-transform: uppercase;
+                color: #171717;
+            }
+        }
+        tr {
+            color: white;
+            &:first-child td {
+                color: white;
+            }
+            &:nth-of-type(even) {
+                background: lighten($steel, 5%);
+            }
+        }
+        td {
+            color: white;
+            font-weight: thin;
+            font-size: rem-calc(15px);
+            padding: 6px 14px;
+            text-transform: capitalize;
+            &:first-child {
+                text-align: center;
+            }
+            &:nth-child(2) {
+                width: 40px;
+                padding-left: 4px;
+            }
+            &:nth-child(3) {
+                padding-left: 4px;
+            }
+        }
+        .pill {
+            border-radius: 0;
+            padding: 6px 10px;
+            text-align: center;
+        }
+        .image {
+            height: 60px;
+            width: 60px;
+            background: white;
+
+            // border: 2px solid white;
+            overflow: hidden;
+            color: black;
+            img {
+                width: 100%;
+            }
+            span {
+                background: #212121;
+                color: white;
+                width: 60px;
+                text-align: center;
+                height: 60px;
+                display: block;
+                padding-top: 1.25rem;
+                font-size: 1.5rem;
+            }
+        }
     }
-
-  }
-
-
-  .animate{
-
-    background-color: #a81d44;
-
-  }
-
-
-
-
+    .animate {
+        background-color: #a81d44;
+    }
 }

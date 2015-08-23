@@ -13,12 +13,14 @@
             %th amount
             %th taps
         - if n >= 1
-          - for x in 0..5 do
+          - for x in 0..4 do
             %tr
               - if x < @tappers.length
                 %td= x+1
                 %td
-                  .image= image_tag @image_map[@tappers[x].user_id]
+                  .image
+                    %span= @names_map[@tappers[x].user_id].first(1)
+                    -# = image_tag @image_map[@tappers[x].user_id]
                 %td= @names_map[@tappers[x].user_id]
                 %td
                   .pill= number_with_delimiter(@tappers[x].satoshi)
@@ -38,10 +40,13 @@
             %th amount
             %th taps
         - if n >= 1
-          - for x in 0..5 do
+          - for x in 0..4 do
             %tr
               - if x < @tapped.length
                 %td= x+1
+                %td
+                  .image
+                    %span= @names_map[@tapped[x].nfc_tag_id]
                 %td= @names_map[@tapped[x].nfc_tag_id]
                 %td= number_with_delimiter(@tapped[x].satoshi)
                 %td= number_with_delimiter((@tapped[x].total || 0) / 100)
