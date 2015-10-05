@@ -2,13 +2,13 @@
 - n = [@tappers.length, @tapped.length].max
 - rows = 5
 
-%section.leaderboard{:style => "padding:2px 0;background-image: url('https://tapdat.s3.amazonaws.com/uploads/currency/icon/6/fl3.png'); background-repeat: no-repeat; background-size: contain; background-position-x: center;  "}
+%section.leaderboard{:style => "padding:2px 0;background-image: url('http://www.logoeps.com/wp-content/uploads/2012/11/pittsburgh-penguins-vector-logo.png'); background-repeat: no-repeat; background-size: contain; background-position-x: center;  "}
   .row
     %h1#demo
 
   .row.stats
     .small-6.columns
-      %h1 Big tippers
+      %h1 Top Performers
       %table{:style => "opacity:.9;"}
         %thead
           %tr
@@ -101,7 +101,7 @@
               -#= number_with_delimiter(@tappers[x].taps)
 
     .small-6.columns
-      %h1 top performers
+      %h1 MVPs
       %table{:style => "opacity:.9;"}
         %thead
           %tr
@@ -137,10 +137,10 @@
     .large-10.columns.small-centered
       %br
       %table{:style => "opacity:.9;"}
-        %caption Last Tapper
+        %caption Last Play
         %thead#animateme
           %tr
-            %th Latest tipper
+            %th Latest Play
             %th
             %th Amount
             %th Tag
