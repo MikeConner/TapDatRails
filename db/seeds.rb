@@ -121,3 +121,9 @@ tt.vouchers.create(:uid => "2b245051", :amount => 500)
 tt.vouchers.create(:uid => "bd0ccb78", :amount => 500)
 
 tt.single_code_generators.create(:code => 'DOUBLE-YOI', :value => 1000)
+
+if 0 == ActivityType.count
+  ActivityType.create(:name => 'Tipping')
+  ActivityType.create(:name => 'Scavenger Hunt')
+  ActivityType.create(:name => 'Charity')
+end

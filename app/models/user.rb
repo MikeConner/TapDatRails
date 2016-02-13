@@ -61,7 +61,12 @@ class User < ActiveRecord::Base
   SECRET_KEY_LEN = 16
   # User Roles (bitmask, if we need more than one)
   # Wimping out and not using Devise mechanisms
+  # I would prefer to, and should eventually refactor to that,...
+  #   but I'm afraid it's going to keep changing, so let's hold
+  #   off until things are more stable
   ADMIN_ROLE = 1
+  MANAGER_ROLE = 2    # A "club" user
+  STAFF_ROLE = 4
   
   mount_uploader :profile_image, ImageUploader
   mount_uploader :inbound_btc_qrcode, ImageUploader
@@ -75,6 +80,9 @@ class User < ActiveRecord::Base
   has_many :balances, :dependent => :destroy
   has_many :vouchers, :dependent => :restrict_with_error 
   has_many :payloads, -> { uniq }, :through => :transactions
+  # User might be a venue odmin or staff member
+  has_one :venue, :dependent => :nullify
+  has_one :staff_member, :dependent => :nullify
   
   validates :email, :uniqueness => { case_sensitive: false },
                     :format => { with: EMAIL_REGEX },
@@ -89,6 +97,14 @@ class User < ActiveRecord::Base
   
   def admin?
     1 == (self.role & ADMIN_ROLE)
+  end
+  
+  def manager?
+    1 == (self.role & MANAGER_ROLE)
+  end
+  
+  def performer?
+    1 == (self.role & PERFORMER_ROLE)
   end
   
   def currency_balance(currency)

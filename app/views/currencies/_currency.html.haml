@@ -2,7 +2,7 @@
   %td= currency.user.name
   - if currency.icon_processing?
     %td Pending Upload
-  - elsif !currency.icon.nil? and currency.icon.file.exists?
+  - elsif !currency.icon.nil? and !currency.icon.file.nil? and currency.icon.file.exists?
     %td.image= image_tag currency.icon.url, size: "80x80"
   - else
     %td

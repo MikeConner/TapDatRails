@@ -1,0 +1,11 @@
+= form_for @venue do |f|
+  .row
+    .large-12.columns
+      %h4 New Venue
+  .row
+    .large-12.columns
+      = render :partial => 'shared/error_messages', :locals => { :errors => @venue.errors, :name => 'Venue' }
+      = render :partial => 'create_venue_fields', :locals => { :f => f }
+  .row
+    .large-12.columns.small-centered
+      = f.submit 'Create Venue', :class => 'button'

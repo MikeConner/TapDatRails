@@ -293,10 +293,6 @@ class CurrenciesController < ApplicationController
     redirect_to currencies_path, :notice => 'Data Cleared'
   end
 
-
-
-
-
 def leader2
     @currency = Currency.find(params[:id])
     transactions = @currency.transaction_ids
@@ -321,17 +317,11 @@ def leader2
     @lasttx << {:amount => @last_tx.amount, :name => @last_tx.user.name, :image =>  @last_tx.user.mobile_profile_thumb_url || @last_tx.user.profile_image_url(:thumb).to_s, :yapa => @last_tx.payload.mobile_payload_image_url || @last_tx.payload.payload_image_url(:thumb).to_s,
     :tag => @last_tx.nfc_tag.name}
 
-
     respond_to do |format|
       format.html{ render :layout => 'leader'}
       format.json { render :json => [:tapped => @tappedlist, :tappers => @tapperlist, :latest => @lasttx ] }
     end
   end
-
-
-
-
-
 
 private
   def ensure_own_currency_or_admin

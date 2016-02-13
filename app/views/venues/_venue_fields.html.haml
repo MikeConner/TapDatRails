@@ -1,0 +1,19 @@
+.row
+  .large-12.columns
+    .field
+      = f.label :name
+      = f.text_field :name
+    .field 
+      = f.label :activity_type
+      = f.select :activity_type, options_from_collection_for_select(@activities, 'id', 'name')
+    .field
+      = f.label :main_image
+      = f.file_field :main_image
+.row
+  .large-12.columns
+    %h4 Staff Members
+    #denomination
+      = f.fields_for :staff_members do |staff_member_form|
+        = render :partial => 'staff_member', :locals => { :f => staff_member_form }
+      = add_staff_member(@venue, f)
+  

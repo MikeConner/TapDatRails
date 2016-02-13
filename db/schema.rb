@@ -11,10 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150325004630) do
+ActiveRecord::Schema.define(version: 20160213021853) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "activity_types", force: true do |t|
+    t.string   "name",       null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "balance_caches", force: true do |t|
+    t.string   "btc_address", limit: 36, null: false
+    t.integer  "satoshi",     limit: 8,  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "balance_caches", ["btc_address"], name: "index_balance_caches_on_btc_address", unique: true, using: :btree
 
   create_table "balances", force: true do |t|
     t.integer  "user_id"
@@ -190,6 +205,33 @@ ActiveRecord::Schema.define(version: 20150325004630) do
 
   add_index "single_code_generators", ["code"], name: "index_single_code_generators_on_code", unique: true, using: :btree
 
+  create_table "staff_images", force: true do |t|
+    t.integer  "staff_member_id"
+    t.string   "caption"
+    t.string   "profile_image"
+    t.boolean  "profile_image_processing"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "staff_members", force: true do |t|
+    t.integer  "venue_id"
+    t.integer  "user_id"
+    t.string   "display_name", null: false
+    t.string   "first_name"
+    t.string   "last_name"
+    t.integer  "age"
+    t.string   "body_type"
+    t.string   "ethnicity"
+    t.string   "sexuality"
+    t.string   "eye_color"
+    t.string   "hair_color"
+    t.string   "status"
+    t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "transaction_details", force: true do |t|
     t.integer  "transaction_id"
     t.integer  "subject_id",                                 null: false
@@ -258,6 +300,25 @@ ActiveRecord::Schema.define(version: 20150325004630) do
   add_index "users", ["phone_secret_key"], name: "index_users_on_phone_secret_key", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["slug"], name: "index_users_on_slug", unique: true, using: :btree
+
+  create_table "venues", force: true do |t|
+    t.integer  "user_id"
+    t.string   "name",                              null: false
+    t.string   "address_1"
+    t.string   "address_2"
+    t.string   "city"
+    t.string   "state"
+    t.integer  "zipcode"
+    t.string   "website"
+    t.string   "facebook"
+    t.string   "twitter"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "slug"
+    t.string   "main_image"
+    t.boolean  "main_image_processing"
+    t.integer  "activity_type_id",      default: 1, null: false
+  end
 
   create_table "vouchers", force: true do |t|
     t.integer  "currency_id"

@@ -1,0 +1,55 @@
+.staff_member.row
+  = f.hidden_field :_destroy
+  = content_tag(:a, 'X', :href => '#', :class => "close", :onclick => "if (confirm('Delete this staff member?')) remove_staff_member(this)")
+  - if f.object.main_image.nil?
+    = f.object.display_name
+  - else
+    = image_tag f.object.main_image.profile_image
+  .field
+    = f.label :type
+    = f.text_field :type
+  .field
+    = f.label :display_name
+    = f.text_field :display_name
+  .field
+    = f.label :first_name
+    = f.text_field :first_name
+  .field
+    = f.label :last_name
+    = f.text_field :last_name
+  .field
+    = f.label :age
+    = f.number_field :age
+  .field
+    = f.label :body_type
+    = f.text_field :body_type
+  .field
+    = f.label :ethnicity
+    = f.text_field :ethnicity
+  .field
+    = f.label :sexuality
+    = f.text_field :sexuality
+  .field
+    = f.label :eye_color
+    = f.text_field :eye_color
+  .field
+    = f.label :hair_color
+    = f.text_field :hair_color
+  .field
+    = f.label :status
+    = f.text_field :status
+= javascript_include_tag 'venue'
+-#
+  .large-2.columns
+    = f.label :value
+    = f.number_field :value, :min => 1
+  .large-2.columns
+    = f.label :image
+    = f.file_field :image
+    = f.object.image.file.nil? ? "" : f.object.image.file.filename
+  .large-2.columns
+    = f.label :remote_image_url, "or image URL"
+    = f.text_field :remote_image_url
+  .large-2.columns
+    = f.label :caption
+    = f.text_field :caption

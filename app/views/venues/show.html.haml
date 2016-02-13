@@ -1,0 +1,4 @@
+.row
+  .large-12.columns
+    %h1= link_to @venue.name, edit_venue_path(@venue)
+    %h3= link_to @venue.currency.name, edit_currency_path(@venue.currency)

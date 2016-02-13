@@ -31,7 +31,8 @@ Rails.application.routes.draw do
   resources :vouchers, :except => [:edit, :update]
   resources :single_code_generators, :only => [:index, :show, :destroy]
   resources :nfc_tags
-
+  resources :venues, :except => [:index, :destroy]
+  
   get "/how_it_works" => "static_pages#how_it_works"
   get "/legal" => "static_pages#legal"
   get "/privacy" => "static_pages#privacy"
@@ -40,6 +41,7 @@ Rails.application.routes.draw do
   get "/thumb_dimensions" => "static_pages#thumb_dimensions"
   # Additional simple path for tag-reading performance
   get "/tag/:id" => "nfc_tags#show"
+  get '/:id' => "venues#show"
   
   namespace :mobile do
     api :version => 1, :module => "v1" do

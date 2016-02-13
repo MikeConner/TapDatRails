@@ -1,0 +1,11 @@
+= form_for @venue do |f|
+  .row
+    .large-12.columns
+      %h4 Edit Venue
+  .row
+    .large-12.columns
+      = render :partial => 'shared/error_messages', :locals => { :errors => @venue.errors, :name => 'Venue' }
+      = render :partial => 'venue_fields', :locals => { :f => f }
+  .row
+    .large-12.columns.small-centered
+      = f.submit 'Update Venue', :class => 'button'
