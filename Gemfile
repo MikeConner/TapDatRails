@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
-ruby '2.1.5'
+ruby '2.3.0'
 
-gem 'rails', '4.1.8'
+gem 'rails', '4.1.15'
 gem 'pg', '0.17.1'
 gem 'devise', '3.4.1'
 gem 'devise-async', '0.9.0'
@@ -44,7 +44,7 @@ gem 'delayed_job_active_record', '4.1.0'
 gem 'coinbase', '2.1.1'
 gem 'friendly_id', '5.1.0'
 gem 'rqrcode-rails3', '0.1.7'
-gem 'bcrypt-ruby', '3.0.1'
+gem 'bcrypt', '3.1.11'
 
 gem 'mechanize', '2.7.3'
 
